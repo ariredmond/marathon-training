@@ -1,12 +1,1432 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>My Website</title>
-  </head>
-  <body>
-    <h1>Hello! This is my website.</h1>
-    <p>More coming soon...</p>
-  </body>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ariana's 18-Week Marathon Plan | 3:13 → 3:05</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;600;700;800&family=Barlow:wght@300;400;500;600&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0e0e0f;
+    --paper: #f4f1eb;
+    --cream: #ede8df;
+    --red: #c0392b;
+    --red-light: #e74c3c;
+    --amber: #c07820;
+    --green: #1e6b45;
+    --blue: #1a4872;
+    --muted: #8a8278;
+    --border: #d8d2c8;
+    --card-bg: #faf8f4;
+    --dark: #1a1814;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Barlow', sans-serif;
+    font-weight: 400;
+    min-height: 100vh;
+  }
+
+  /* HERO */
+  .hero {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 56px 48px 48px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--red) 0%, var(--amber) 50%, transparent 100%);
+  }
+  .hero-eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--red-light);
+    margin-bottom: 16px;
+  }
+  .hero-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: clamp(64px, 10vw, 120px);
+    line-height: 0.88;
+    letter-spacing: -1px;
+    margin-bottom: 8px;
+  }
+  .hero-title .arrow { color: #444; margin: 0 8px; }
+  .hero-title .goal { color: var(--red-light); }
+  .hero-subtitle {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 300;
+    font-size: 22px;
+    letter-spacing: 2px;
+    color: #888;
+    margin-bottom: 36px;
+    text-transform: uppercase;
+  }
+  .hero-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0;
+    border-top: 1px solid #2a2a2a;
+    padding-top: 24px;
+  }
+  .hero-stat {
+    padding: 0 32px 0 0;
+    margin-right: 32px;
+    border-right: 1px solid #2a2a2a;
+  }
+  .hero-stat:last-child { border-right: none; }
+  .hs-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #666;
+    margin-bottom: 4px;
+  }
+  .hs-val {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 24px;
+    letter-spacing: 1px;
+    color: var(--paper);
+  }
+
+  /* PACE BAR */
+  .pace-bar {
+    background: var(--dark);
+    padding: 20px 48px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0;
+    align-items: center;
+    border-bottom: 1px solid #2a2a2a;
+  }
+  .pace-bar-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #555;
+    margin-right: 32px;
+    white-space: nowrap;
+  }
+  .pace-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+  }
+  .pace-item {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+  }
+  .pi-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 1px;
+    color: #555;
+    text-transform: uppercase;
+  }
+  .pi-val {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 600;
+    font-size: 17px;
+    letter-spacing: 0.5px;
+  }
+  .p-easy { color: #4aaa70; }
+  .p-mp { color: #f0a020; }
+  .p-tempo { color: #e07020; }
+  .p-10k { color: #d04020; }
+  .p-5k { color: #c03020; }
+
+  /* NAV */
+  .nav {
+    background: var(--paper);
+    border-bottom: 2px solid var(--border);
+    padding: 0 48px;
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .nav::-webkit-scrollbar { display: none; }
+  .nav-btn {
+    padding: 14px 20px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    cursor: pointer;
+    border: none;
+    border-bottom: 3px solid transparent;
+    background: none;
+    white-space: nowrap;
+    transition: all 0.15s;
+    margin-bottom: -2px;
+  }
+  .nav-btn:hover { color: var(--ink); }
+  .nav-btn.active { color: var(--red); border-bottom-color: var(--red); font-weight: 500; }
+
+  /* MAIN */
+  .main { padding: 40px 48px; max-width: 1280px; }
+
+  /* PHASE INTRO */
+  .phase-intro {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 32px;
+    align-items: start;
+    margin-bottom: 36px;
+    padding-bottom: 28px;
+    border-bottom: 1px solid var(--border);
+  }
+  .phase-number {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: 96px;
+    line-height: 0.85;
+    color: var(--border);
+    letter-spacing: -2px;
+    user-select: none;
+  }
+  .phase-text {}
+  .phase-tag {
+    display: inline-block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 2px;
+    margin-bottom: 10px;
+  }
+  .pt-recovery { background: #e8f4ee; color: var(--green); }
+  .pt-base { background: #fef3e2; color: var(--amber); }
+  .pt-build { background: #fde8e5; color: var(--red); }
+  .pt-peak { background: #1a1814; color: #e07050; }
+  .pt-taper { background: #e5edf5; color: var(--blue); }
+
+  .phase-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 42px;
+    letter-spacing: 0px;
+    line-height: 1;
+    margin-bottom: 10px;
+    color: var(--ink);
+  }
+  .phase-desc {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.7;
+    max-width: 640px;
+    font-weight: 400;
+  }
+
+  /* WEEK CARDS */
+  .weeks { display: flex; flex-direction: column; gap: 12px; }
+
+  .wk {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .wk.quality-sat { border-left: 3px solid var(--amber); }
+  .wk.race-wk { border-left: 3px solid var(--red); }
+  .wk.cutback-wk { border-left: 3px solid var(--green); }
+
+  .wk-head {
+    display: grid;
+    grid-template-columns: 56px 1fr auto auto;
+    align-items: center;
+    gap: 16px;
+    padding: 14px 20px;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.1s;
+  }
+  .wk-head:hover { background: var(--cream); }
+
+  .wk-num {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: 36px;
+    color: var(--border);
+    line-height: 1;
+    text-align: center;
+  }
+  .wk-num.hot { color: var(--red); }
+
+  .wk-meta {}
+  .wk-name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 600;
+    font-size: 17px;
+    color: var(--ink);
+    letter-spacing: 0.3px;
+  }
+  .wk-date {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    margin-top: 2px;
+    letter-spacing: 0.5px;
+  }
+
+  .wk-badges { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+  .badge {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 2px;
+    white-space: nowrap;
+  }
+  .b-mi { background: var(--cream); color: var(--muted); border: 1px solid var(--border); }
+  .b-peak { background: #fde8e5; color: var(--red); border: 1px solid #f5c0b8; }
+  .b-cut { background: #e8f4ee; color: var(--green); border: 1px solid #b8d8c4; }
+  .b-race { background: #1a1814; color: #e07050; border: 1px solid #3a3028; }
+  .b-taper { background: #e5edf5; color: var(--blue); border: 1px solid #b8cfe0; }
+  .b-6day { background: #f5f0e8; color: var(--amber); border: 1px solid #e0d0b0; }
+
+  .wk-toggle { color: var(--muted); font-size: 16px; transition: transform 0.2s; }
+  .wk.open .wk-toggle { transform: rotate(180deg); }
+
+  /* WEEK BODY */
+  .wk-body { display: none; padding: 0 20px 20px; }
+  .wk.open .wk-body { display: block; }
+
+  .day-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+    margin-top: 16px;
+  }
+
+  @media (max-width: 900px) {
+    .day-grid { grid-template-columns: repeat(4, 1fr); }
+  }
+  @media (max-width: 560px) {
+    .day-grid { grid-template-columns: repeat(2, 1fr); }
+    .main { padding: 20px; }
+    .hero { padding: 36px 24px 36px; }
+    .nav { padding: 0 16px; }
+    .pace-bar { padding: 16px 24px; }
+  }
+
+  .day {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 10px 12px;
+    min-height: 100px;
+  }
+  .day.rest { background: var(--cream); opacity: 0.6; }
+  .day.easy {}
+  .day.workout { border-top: 2px solid var(--amber); }
+  .day.long-easy { border-top: 2px solid #aad0b8; }
+  .day.long-quality { border-top: 2px solid var(--red); }
+  .day.race { background: #1a1814; color: var(--paper); border: 1px solid #3a2a20; }
+  .day.off { background: var(--cream); opacity: 0.5; }
+
+  .d-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 5px;
+  }
+  .day.race .d-label { color: #888; }
+
+  .d-tag {
+    display: inline-block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 7px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 2px 5px;
+    border-radius: 2px;
+    margin-bottom: 4px;
+  }
+  .dt-easy { background: #e8f4ee; color: var(--green); }
+  .dt-workout { background: #fef3e2; color: var(--amber); }
+  .dt-long { background: #e8f4ee; color: var(--green); }
+  .dt-longq { background: #fde8e5; color: var(--red); }
+  .dt-rest { background: var(--cream); color: var(--muted); }
+  .dt-race { background: #3a2010; color: #e07050; }
+  .dt-thu { background: #f0f0f8; color: #6060a0; }
+
+  .d-main {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 1.3;
+    color: var(--ink);
+    margin-bottom: 4px;
+  }
+  .day.race .d-main { color: var(--paper); }
+
+  .d-detail {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+  .day.race .d-detail { color: #aaa; }
+
+  .d-miles {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    color: var(--amber);
+    margin-top: 6px;
+  }
+  .day.race .d-miles { color: #e07050; }
+  .day.rest .d-miles, .day.off .d-miles { display: none; }
+
+  /* COACH NOTE */
+  .coach-note {
+    margin-top: 14px;
+    padding: 12px 16px;
+    background: #f8f5ef;
+    border-left: 3px solid var(--amber);
+    border-radius: 0 3px 3px 0;
+    font-size: 12px;
+    color: #666;
+    line-height: 1.7;
+  }
+  .coach-note strong { color: var(--ink); font-weight: 600; }
+
+  /* PHASE SECTIONS */
+  .phase { display: none; }
+  .phase.active { display: block; }
+
+  /* NOTES PANEL */
+  .notes {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 48px;
+    margin-top: 0;
+  }
+  .notes h2 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 36px;
+    letter-spacing: 1px;
+    margin-bottom: 28px;
+    color: var(--paper);
+  }
+  .notes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 20px;
+  }
+  .note {
+    background: #1a1814;
+    border: 1px solid #2a2820;
+    border-radius: 4px;
+    padding: 20px;
+  }
+  .note h4 {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--red-light);
+    margin-bottom: 10px;
+  }
+  .note p, .note li {
+    font-size: 12px;
+    color: #999;
+    line-height: 1.8;
+  }
+  .note ul { padding-left: 14px; }
+
+  /* DANIELS KEY */
+  .jd-key {
+    background: #f8f5ef;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 16px 20px;
+    margin-bottom: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: center;
+  }
+  .jd-key-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-right: 8px;
+  }
+  .jd-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+  }
+  .jd-dot {
+    width: 10px; height: 10px;
+    border-radius: 1px;
+    flex-shrink: 0;
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-eyebrow">Ariana · Jack Daniels Method · 18 Weeks</div>
+  <div class="hero-title">
+    3:13 <span class="arrow">→</span><span class="goal">3:05</span>
+  </div>
+  <div class="hero-subtitle">Marathon Training Plan · October 11, 2026</div>
+  <div class="hero-stats">
+    <div class="hero-stat">
+      <div class="hs-label">Race Date</div>
+      <div class="hs-val">Oct 11, 2026</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hs-label">Plan Start</div>
+      <div class="hs-val">Jun 15, 2026</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hs-label">Goal Pace</div>
+      <div class="hs-val">7:04 /mi</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hs-label">Peak Mileage</div>
+      <div class="hs-val">~60 mpw</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hs-label">Long Run Peak</div>
+      <div class="hs-val">22 mi</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hs-label">Tune-Up Race</div>
+      <div class="hs-val">Aug 23 HM</div>
+    </div>
+  </div>
+</div>
+
+<div class="pace-bar">
+  <div class="pace-bar-label">Pace Guide</div>
+  <div class="pace-items">
+    <div class="pace-item"><span class="pi-label">Easy</span><span class="pi-val p-easy">8:30–9:15</span></div>
+    <div class="pace-item"><span class="pi-label">MP Goal</span><span class="pi-val p-mp">7:04</span></div>
+    <div class="pace-item"><span class="pi-label">Tempo/LT</span><span class="pi-val p-tempo">6:40–6:50</span></div>
+    <div class="pace-item"><span class="pi-label">HM / T</span><span class="pi-val p-tempo">6:50–7:00</span></div>
+    <div class="pace-item"><span class="pi-label">10K</span><span class="pi-val p-10k">6:20–6:30</span></div>
+    <div class="pace-item"><span class="pi-label">5K</span><span class="pi-val p-5k">6:05–6:15</span></div>
+    <div class="pace-item"><span class="pi-label">Yasso 800</span><span class="pi-val p-5k">3:05</span></div>
+  </div>
+</div>
+
+<nav class="nav">
+  <button class="nav-btn active" onclick="show('p1',this)">① Recovery</button>
+  <button class="nav-btn" onclick="show('p2',this)">② Base Build</button>
+  <button class="nav-btn" onclick="show('p3',this)">③ Build</button>
+  <button class="nav-btn" onclick="show('p4',this)">④ Peak</button>
+  <button class="nav-btn" onclick="show('p5',this)">⑤ Taper</button>
+  <button class="nav-btn" onclick="show('pn',this)">✦ Coach Notes</button>
+</nav>
+
+<div class="main">
+
+<!-- ===== PHASE 1: RECOVERY ===== -->
+<div id="p1" class="phase active">
+  <div class="phase-intro">
+    <div class="phase-number">01</div>
+    <div class="phase-text">
+      <span class="phase-tag pt-recovery">Phase 1 · Weeks 1–3 · Jun 15–Jul 5</span>
+      <div class="phase-title">Post-Marathon Recovery</div>
+      <p class="phase-desc">You raced Glass City on April 26. By June 15 you'll be at 35–40 mpw base — so these weeks aren't rebuilding from zero, they're a controlled ramp into structure. No real quality until Week 3. Easy running only, long runs capped at 15 miles. One gentle fartlek in Week 3 reawakens the neuromuscular system without stress. 5 days running throughout.</p>
+    </div>
+  </div>
+
+  <div class="jd-key">
+    <span class="jd-key-label">Key</span>
+    <div class="jd-item"><div class="jd-dot" style="background:#e8f4ee;border:1px solid #b8d8c4"></div>Easy Run</div>
+    <div class="jd-item"><div class="jd-dot" style="background:white;border-top:2px solid #f0a020;border-left:1px solid #d8d2c8;border-right:1px solid #d8d2c8;border-bottom:1px solid #d8d2c8"></div>Wed Workout (Q1)</div>
+    <div class="jd-item"><div class="jd-dot" style="background:white;border-top:2px solid #c0392b;border-left:1px solid #d8d2c8;border-right:1px solid #d8d2c8;border-bottom:1px solid #d8d2c8"></div>Sat Long w/ Quality (Q2)</div>
+    <div class="jd-item"><div class="jd-dot" style="background:white;border-top:2px solid #aad0b8;border-left:1px solid #d8d2c8;border-right:1px solid #d8d2c8;border-bottom:1px solid #d8d2c8"></div>Sat Easy Long</div>
+    <div class="jd-item"><div class="jd-dot" style="background:#f0f0f8;border:1px solid #c0c0d8"></div>Thu Easy (6-day weeks)</div>
+  </div>
+
+  <div class="weeks">
+
+    <!-- W1 -->
+    <div class="wk" id="w1">
+      <div class="wk-head" onclick="tog('w1')">
+        <div class="wk-num">01</div>
+        <div class="wk-meta">
+          <div class="wk-name">Return to Running</div>
+          <div class="wk-date">Jun 15 – Jun 21</div>
+        </div>
+        <div class="wk-badges"><span class="badge b-mi">~32 mi</span></div>
+        <div class="wk-toggle">▾</div>
+      </div>
+      <div class="wk-body">
+        <div class="day-grid">
+          <div class="day easy">
+            <div class="d-label">Mon</div><span class="d-tag dt-easy">Easy</span>
+            <div class="d-main">Easy Run</div>
+            <div class="d-detail">8:30–9:15/mi</div>
+            <div class="d-miles">4 mi</div>
+          </div>
+          <div class="day easy">
+            <div class="d-label">Tue</div><span class="d-tag dt-easy">Easy</span>
+            <div class="d-main">Easy Run</div>
+            <div class="d-detail">8:30–9:15/mi</div>
+            <div class="d-miles">4 mi</div>
+          </div>
+          <div class="day easy">
+            <div class="d-label">Wed</div><span class="d-tag dt-easy">Easy</span>
+            <div class="d-main">Easy Run</div>
+            <div class="d-detail">No workout — easy only</div>
+            <div class="d-miles">6 mi</div>
+          </div>
+          <div class="day off">
+            <div class="d-label">Thu</div><span class="d-tag dt-rest">Off</span>
+            <div class="d-main">Rest</div>
+          </div>
+          <div class="day easy">
+            <div class="d-label">Fri</div><span class="d-tag dt-easy">Easy</span>
+            <div class="d-main">Easy Run</div>
+            <div class="d-detail">8:30–9:15/mi</div>
+            <div class="d-miles">5 mi</div>
+          </div>
+          <div class="day long-easy">
+            <div class="d-label">Sat</div><span class="d-tag dt-long">Long</span>
+            <div class="d-main">Easy Long Run</div>
+            <div class="d-detail">Conversational pace only</div>
+            <div class="d-miles">13 mi</div>
+          </div>
+          <div class="day rest">
+            <div class="d-label">Sun</div><span class="d-tag dt-rest">Rest</span>
+            <div class="d-main">Rest — every week</div>
+          </div>
+        </div>
+        <div class="coach-note"><strong>Note:</strong> If legs still feel heavy from April 26, start even easier. There's no shame in jogging these miles. The plan has buffer built in — arriving at Week 1 comfortable at 35+ mpw means this week is simply maintenance, not a grind.</div>
+      </div>
+    </div>
+
+    <!-- W2 -->
+    <div class="wk" id="w2">
+      <div class="wk-head" onclick="tog('w2')">
+        <div class="wk-num">02</div>
+        <div class="wk-meta">
+          <div class="wk-name">Rebuilding Rhythm</div>
+          <div class="wk-date">Jun 22 – Jun 28</div>
+        </div>
+        <div class="wk-badges"><span class="badge b-mi">~37 mi</span></div>
+        <div class="wk-toggle">▾</div>
+      </div>
+      <div class="wk-body">
+        <div class="day-grid">
+          <div class="day easy">
+            <div class="d-label">Mon</div><span class="d-tag dt-easy">Easy</span>
+            <div class="d-main">Easy Run</div>
+            <div class="d-detail">8:30–9:15/mi</div>
+            <div class="d-miles">5 mi</div>
+          </div>
+          <div class="day easy">
+            <div class="d-label">Tue</div><span class="d-tag dt-easy">Easy</span>
+            <div class="d-main">Easy Run</div>
+            <div class="d-detail">8:30–9:15/mi</div>
+            <div class="d-miles">5 mi</div>
+          </div>
+          <div class="day easy">
+            <div class="d-label">Wed</div><span class="d-tag dt-easy">Easy</span>
+            <div class="d-main">Easy + 6×20sec Strides</div>
+            <div class="d-detail">Easy run · strides at end only</div>
+            <div class="d-miles">7 mi</div>
+          </div>
+          <div class="day off">
+            <div class="d-label">Thu</div><span class="d-tag dt-rest">Off</span>
+            <div class="d-main">Rest</div>
+          </div>
+          <div class="day easy">
+            <div class="d-label">Fri</div><span class="d-tag dt-easy">Easy</span>
+            <div class="d-main">Easy Run</div>
+            <div class="d-detail">8:30–9:15/mi</div>
+            <div class="d-miles">6 mi</div>
+          </div>
+          <div class="day long-easy">
+            <div class="d-label">Sat</div><span class="d-tag dt-long">Long</span>
+            <div class="d-main">Easy Long Run</div>
+            <div class="d-detail">All easy — no pace pressure</div>
+            <div class="d-miles">14 mi</div>
+          </div>
+          <div class="day rest">
+            <div class="d-label">Sun</div><span class="d-tag dt-rest">Rest</span>
+            <div class="d-main">Rest</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- W3 -->
+    <div class="wk" id="w3">
+      <div class="wk-head" onclick="tog('w3')">
+        <div class="wk-num">03</div>
+        <div class="wk-meta">
+          <div class="wk-name">Transition — First Light Workout</div>
+          <div class="wk-date">Jun 29 – Jul 5</div>
+        </div>
+        <div class="wk-badges"><span class="badge b-mi">~39 mi</span></div>
+        <div class="wk-toggle">▾</div>
+      </div>
+      <div class="wk-body">
+        <div class="day-grid">
+          <div class="day easy">
+            <div class="d-label">Mon</div><span class="d-tag dt-easy">Easy</span>
+            <div class="d-main">Easy Run</div>
+            <div class="d-detail">8:30–9:15/mi</div>
+            <div class="d-miles">5 mi</div>
+          </div>
+          <div class="day easy">
+            <div class="d-label">Tue</div><span class="d-tag dt-easy">Easy</span>
+            <div class="d-main">Easy Run</div>
+            <div class="d-detail">8:30–9:15/mi</div>
+            <div class="d-miles">5 mi</div>
+          </div>
+          <div class="day workout">
+            <div class="d-label">Wed · Q1</div><span class="d-tag dt-workout">Fartlek</span>
+            <div class="d-main">Introductory Fartlek</div>
+            <div class="d-detail">2mi WU · 5×3min @ 10K effort / 90sec jog · 2mi CD</div>
+            <div class="d-miles">8 mi</div>
+          </div>
+          <div class="day off">
+            <div class="d-label">Thu</div><span class="d-tag dt-rest">Off</span>
+            <div class="d-main">Rest</div>
+          </div>
+          <div class="day easy">
+            <div class="d-label">Fri</div><span class="d-tag dt-easy">Easy</span>
+            <div class="d-main">Easy Run</div>
+            <div class="d-detail">8:30–9:15/mi</div>
+            <div class="d-miles">6 mi</div>
+          </div>
+          <div class="day long-easy">
+            <div class="d-label">Sat</div><span class="d-tag dt-long">Long</span>
+            <div class="d-main">Easy Long Run</div>
+            <div class="d-detail">All easy — build aerobic base</div>
+            <div class="d-miles">15 mi</div>
+          </div>
+          <div class="day rest">
+            <div class="d-label">Sun</div><span class="d-tag dt-rest">Rest</span>
+            <div class="d-main">Rest</div>
+          </div>
+        </div>
+        <div class="coach-note"><strong>Fartlek:</strong> No GPS pacing — run entirely by effort. This is deliberate. The goal is to wake up the legs without the neuromuscular stress of hitting specific splits. If 3min feels easy, good. If it feels hard, back off.</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===== PHASE 2: BASE BUILD ===== -->
+<div id="p2" class="phase">
+  <div class="phase-intro">
+    <div class="phase-number">02</div>
+    <div class="phase-text">
+      <span class="phase-tag pt-base">Phase 2 · Weeks 4–7 · Jul 6–Aug 2</span>
+      <div class="phase-title">Base Build</div>
+      <p class="phase-desc">Mileage climbs from 44 to 54 mpw. Workouts follow the Jack Daniels progression: Cruise Intervals → Tempo Intervals → Continuous Tempo. Saturday long runs stay easy — quality is Wednesday only in this phase. One cutback week (Week 6) absorbs the load. Thursday off throughout — 5-day weeks.</p>
+    </div>
+  </div>
+  <div class="weeks">
+
+    <!-- W4 -->
+    <div class="wk" id="w4">
+      <div class="wk-head" onclick="tog('w4')">
+        <div class="wk-num">04</div>
+        <div class="wk-meta">
+          <div class="wk-name">Cruise Intervals — LT Foundation</div>
+          <div class="wk-date">Jul 6 – Jul 12</div>
+        </div>
+        <div class="wk-badges"><span class="badge b-mi">~44 mi</span></div>
+        <div class="wk-toggle">▾</div>
+      </div>
+      <div class="wk-body">
+        <div class="day-grid">
+          <div class="day easy"><div class="d-label">Mon</div><span class="d-tag dt-easy">Easy</span><div class="d-main">Easy Run</div><div class="d-detail">8:30–9:00/mi</div><div class="d-miles">6 mi</div></div>
+          <div class="day easy"><div class="d-label">Tue</div><span class="d-tag dt-easy">Easy</span><div class="d-main">Easy Run</div><div class="d-detail">8:30–9:00/mi</div><div class="d-miles">6 mi</div></div>
+          <div class="day workout">
+            <div class="d-label">Wed · Q1</div><span class="d-tag dt-workout">Cruise Intervals</span>
+            <div class="d-main">McMillan #1: Cruise Intervals</div>
+            <div class="d-detail">2mi WU · 6×1000m @ 6:50–6:30 (HM→10K) / 200m jog · 2mi CD</div>
+            <div class="d-miles">9 mi</div>
+          </div>
+          <div class="day off"><div class="d-label">Thu</div><span class="d-tag dt-rest">Off</span><div class="d-main">Rest</div></div>
+          <div class="day easy"><div class="d-label">Fri</div><span class="d-tag dt-easy">Easy</span><div class="d-main">Easy Run</div><div class="d-detail">8:30–9:00/mi</div><div class="d-miles">7 mi</div></div>
+          <div class="day long-easy">
+            <div class="d-label">Sat</div><span class="d-tag dt-long">Easy Long</span>
+            <div class="d-main">Easy Long Run</div>
+            <div class="d-detail">8:45–9:15/mi · all aerobic</div>
+            <div class="d-miles">16 mi</div>
+          </div>
+          <div class="day rest"><div class="d-label">Sun</div><span class="d-tag dt-rest">Rest</span><div class="d-main">Rest</div></div>
+        </div>
+        <div class="coach-note"><strong>Cruise Intervals (Daniels E+T):</strong> Start all 6 reps at HM pace (6:50). Only push to 10K pace (6:30) on the final 1–2 reps if feeling strong. Volume over speed — completing 6 reps at 6:50 beats 4 reps at 6:25.</div>
+      </div>
+    </div>
+
+    <!-- W5 -->
+    <div class="wk" id="w5">
+      <div class="wk-head" onclick="tog('w5')">
+        <div class="wk-num">05</div>
+        <div class="wk-meta">
+          <div class="wk-name">Tempo Intervals — LT Extension</div>
+          <div class="wk-date">Jul 13 – Jul 19</div>
+        </div>
+        <div class="wk-badges"><span class="badge b-mi">~48 mi</span></div>
+        <div class="wk-toggle">▾</div>
+      </div>
+      <div class="wk-body">
+        <div class="day-grid">
+          <div class="day easy"><div class="d-label">Mon</div><span class="d-tag dt-easy">Easy</span><div class="d-main">Easy Run</div><div class="d-detail">8:30–9:00/mi</div><div class="d-miles">6 mi</div></div>
+          <div class="day easy"><div class="d-label">Tue</div><span class="d-tag dt-easy">Easy</span><div class="d-main">Easy Run</div><div class="d-detail">8:30–9:00/mi</div><div class="d-miles">7 mi</div></div>
+          <div class="day workout">
+            <div class="d-label">Wed · Q1</div><span class="d-tag dt-workout">Tempo Intervals</span>
+            <div class="d-main">McMillan #2: Tempo Intervals</div>
+            <div class="d-detail">2mi WU · 4×2000m @ 6:50–6:25 (HM→10K) / 400m jog · 1.5mi CD</div>
+            <div class="d-miles">10 mi</div>
+          </div>
+          <div class="day off"><div class="d-label">Thu</div><span class="d-tag dt-rest">Off</span><div class="d-main">Rest</div></div>
+          <div class="day easy"><div class="d-label">Fri</div><span class="d-tag dt-easy">Easy</span><div class="d-main">Easy Run</div><div class="d-detail">8:30–9:00/mi</div><div class="d-miles">8 mi</div></div>
+          <div class="day long-easy">
+            <div class="d-label">Sat</div><span class="d-tag dt-long">Easy Long</span>
+            <div class="d-main">Easy Long Run</div>
+            <div class="d-detail">Easy throughout · last 2mi progressing to 7:45</div>
+            <div class="d-miles">17 mi</div>
+          </div>
+          <div class="day rest"><div class="d-label">Sun</div><span class="d-tag dt-rest">Rest</span><div class="d-main">Rest</div></div>
+        </div>
+        <div class="coach-note"><strong>Tempo Intervals:</strong> Double the repeat distance from Week 4. Make your last two reps your strongest. Start at HM pace — only press to 10K effort on rep 3 and 4 if the first two felt controlled.</div>
+      </div>
+    </div>
+
+    <!-- W6 CUTBACK -->
+    <div class="wk cutback-wk" id="w6">
+      <div class="wk-head" onclick="tog('w6')">
+        <div class="wk-num">06</div>
+        <div class="wk-meta">
+          <div class="wk-name">Cutback Week — Active Recovery</div>
+          <div class="wk-date">Jul 20 – Jul 26</div>
+        </div>
+        <div class="wk-badges"><span class="badge b-mi">~39 mi</span><span class="badge b-cut">Cutback</span></div>
+        <div class="wk-toggle">▾</div>
+      </div>
+      <div class="wk-body">
+        <div class="day-grid">
+          <div class="day easy"><div class="d-label">Mon</div><span class="d-tag dt-easy">Easy</span><div class="d-main">Easy Run</div><div class="d-detail">8:45–9:15/mi</div><div class="d-miles">5 mi</div></div>
+          <div class="day easy"><div class="d-label">Tue</div><span class="d-tag dt-easy">Easy</span><div class="d-main">Easy Run</div><div class="d-detail">8:45–9:15/mi</div><div class="d-miles">5 mi</div></div>
+          <div class="day workout">
+            <div class="d-label">Wed · Q1</div><span class="d-tag dt-workout">Fartlek</span>
+            <div class="d-main">Free-Form Fartlek</div>
+            <div class="d-detail">2mi WU · 8×90sec effort / 60sec jog (no GPS pace) · 2mi CD</div>
+            <div class="d-miles">8 mi</div>
+          </div>
+          <div class="day off"><div class="d-label">Thu</div><span class="d-tag dt-rest">Off</span><div class="d-main">Rest</div></div>
+          <div class="day easy"><div class="d-label">Fri</div><span class="d-tag dt-easy">Easy</span><div class="d-main">Easy Run</div><div class="d-detail">8:45–9:15/mi</div><div class="d-miles">6 mi</div></div>
+          <div class="day long-easy">
+            <div class="d-label">Sat</div><span class="d-tag dt-long">Easy Long</span>
+            <div class="d-main">Easy Long Run</div>
+            <div class="d-detail">All easy · no pace targets</div>
+            <div class="d-miles">15 mi</div>
+          </div>
+          <div class="day rest"><div class="d-label">Sun</div><span class="d-tag dt-rest">Rest</span><div class="d-main">Rest</div></div>
+        </div>
+        <div class="coach-note"><strong>Cutback Week:</strong> This is where fitness from Weeks 4–5 is absorbed. Do not skip or inflate. Fartlek is run entirely by feel — no watch pacing. This is recovery with a pulse, not a training session.</div>
+      </div>
+    </div>
+
+    <!-- W7 -->
+    <div class="wk" id="w7">
+      <div class="wk-head" onclick="tog('w7')">
+        <div class="wk-num">07</div>
+        <div class="wk-meta">
+          <div class="wk-name">Continuous Tempo — First Real LT Test</div>
+          <div class="wk-date">Jul 27 – Aug 2</div>
+        </div>
+        <div class="wk-badges"><span class="badge b-mi">~54 mi</span><span class="badge b-6day">6 Days</span></div>
+        <div class="wk-toggle">▾</div>
+      </div>
+      <div class="wk-body">
+        <div class="day-grid">
+          <div class="day easy"><div class="d-label">Mon</div><span class="d-tag dt-easy">Easy</span><div class="d-main">Easy Run</div><div class="d-detail">8:30–9:00/mi</div><div class="d-miles">7 mi</div></div>
+          <div class="day easy"><div class="d-label">Tue</div><span class="d-tag dt-easy">Easy</span><div class="d-main">Easy Run</div><div class="d-detail">8:30–9:00/mi</div><div class="d-miles">7 mi</div></div>
+          <div class="day workout">
+            <div class="d-label">Wed · Q1</div><span class="d-tag dt-workout">Tempo Run</span>
+            <div class="d-main">Continuous Tempo Run</div>
+            <div class="d-detail">2mi WU · 5mi @ 6:45–6:50/mi (HM pace) · 2mi CD</div>
+            <div class="d-miles">9 mi</div>
+          </div>
+          <div class="day easy">
+            <div class="d-label">Thu</div><span class="d-tag dt-thu">+6th Day</span>
+            <div class="d-main">Easy Recovery Run</div>
+            <div class="d-detail">8:45–9:15/mi · genuinely easy</div>
+            <div class="d-miles">5 mi</div>
+          </div>
+          <div class="day easy"><div class="d-label">Fri</div><span class="d-tag dt-easy">Easy</span><div class="d-main">Easy Run</div><div class="d-detail">8:30–9:00/mi</div><div class="d-miles">8 mi</div></div>
+          <div class="day long-easy">
+            <div class="d-label">Sat</div><span class="d-tag dt-long">Easy Long</span>
+            <div class="d-main">Easy Long Run</div>
+            <div class="d-detail">Easy throughout · strong finish last 2mi</div>
+            <div class="d-miles">18 mi</div>
+          </div>
+          <div class="day rest"><div class="d-label">Sun</div><span class="d-tag dt-rest">Rest</span><div class="d-main">Rest</div></div>
+        </div>
+        <div class="coach-note"><strong>Continuous Tempo — Daniels T Pace:</strong> First 5-mile no-break tempo of the plan. Must hold HM pace (6:45–6:50) for the full 5 miles. If mile 1 feels hard, back off 5 sec/mi. This should feel uncomfortable but sustainable — not a race effort. Thursday is your first 6th day; keep it to 8:45–9:15/mi, no exceptions.</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===== PHASE 3: BUILD ===== -->
+<div id="p3" class="phase">
+  <div class="phase-intro">
+    <div class="phase-number">03</div>
+    <div class="phase-text">
+      <span class="phase-tag pt-build">Phase 3 · Weeks 8–12 · Aug 3–Aug 30</span>
+      <div class="phase-title">Marathon-Specific Build</div>
+      <p class="phase-desc">The plan's engine room. Mileage hits 57–58 mpw. Two quality days per week begin — Wednesday workout plus Saturday long runs with embedded MP miles (Daniels M-pace work). First 20-miler in Week 8. Tune-up half marathon August 23 (Week 10) as fitness test targeting 1:28–1:30. Cutback Week 11 follows the race. 6-day weeks throughout.</p>
+    </div>
+  </div>
+  <div class="weeks">
+
+    <!-- W8 -->
+    <div class="wk quality-sat" id="w8">
+      <div class="wk-head" onclick="tog('w8')">
+        <div class="wk-num">08</div>
+        <div class="wk-meta">
+          <div class="wk-name">Yasso 800s + First 20-Miler</div>
+          <div class="wk-date">Aug 3 – Aug 9</div>
+        </div>
+        <div class="wk-badges"><span class="badge b-mi">~57 mi</span><span class="badge b-6day">6 Days</span></div>
+        <div class="wk-toggle">▾</div>
+      </div>
+      <div class="wk-body">
+        <div class="day-grid">
+          <div class="day easy"><div class="d-label">Mon</div><span class="d-tag dt-easy">Easy</span><div class="d-main">Easy Run</div><div class="d-detail">8:30–9:00/mi</div><div class="d-miles">7 mi</div></div>
+          <div class="day easy"><div class="d-label">Tue</div><span class="d-tag dt-easy">Easy</span><div class="d-main">Easy Run</div><div class="d-detail">8:30–9:00/mi</div><div class="d-miles">7 mi</div></div>
+          <div class="day workout">
+            <div class="d-label">Wed · Q1</div><span class="d-tag dt-workout">Yasso 800s</span>
+            <div class="d-main">McMillan #3: Yasso 800s</div>
+            <div class="d-detail">2mi WU · 8×800m @ 3:05 / 3:05 jog recovery · 2mi CD</div>
+            <div class="d-miles">10 mi</div>
+          </div>
+          <div class="day easy">
+            <div class="d-label">Thu</div><span class="d-tag dt-thu">+6th Day</span>
+            <div class="d-main">Easy Recovery</div>
+            <div class="d-detail">8:45–9:15/mi · very easy</div>
+            <div class="d-miles">5 mi</div>
+          </div>
+          <div class="day easy"><div class="d-label">Fri</div><span class="d-tag dt-easy">Easy</span><div class="d-main">Easy Run</div><div class="d-detail">8:30–9:00/mi</div><div class="d-miles">8 mi</div></div>
+          <div class="day long-easy">
+            <div class="d-label">Sat · 20mi</div><span class="d-tag dt-long">Long — Easy</span>
+            <div class="d-main">First 20-Miler — All Easy</div>
+            <div class="d-detail">8:45–9:15/mi throughout · time on feet only · practice nutrition every 40min</div>
+            <div class="d-miles">20 mi</div>
+          </div>
+          <div class="day rest"><div class="d-label">Sun</div><span class="d-tag dt-rest">Rest</span><div class="d-main">Rest</div></div>
+        </div>
+        <div class="coach-note"><strong>First 20-Miler stays easy (Daniels principle):</strong> No MP miles in your first 20-miler. Time on feet and glycogen management are the only goals. Practice your exact race nutrition protocol — gels, timing, hydration. Yasso 800s at 3:05 may feel hard; that's normal at this stage. Start at 3:08 and negative split if needed.</div>
+      </div>
+    </div>
+
+    <!-- W9 -->
+    <div class="wk quality-sat" id="w9">
+      <div class="wk-head" onclick="tog('w9')">
+        <div class="wk-num">09</div>
+        <div class="wk-meta">
+          <div class="wk-name">Goal Pace Run + Long w/ MP Finish</div>
+          <div class="wk-date">Aug 10 – Aug 16</div>
+        </div>
+        <div class="wk-badges"><span class="badge b-mi">~58 mi</span><span class="badge b-6day">6 Days</span></div>
+        <div class="wk-toggle">▾</div>
+      </div>
+      <div class="wk-body">
+        <div class="day-grid">
+          <div class="day easy"><div class="d-label">Mon</div><span class="d-tag dt-easy">Easy</span><div class="d-main">Easy Run</div><div class="d-detail">8:30–9:00/mi</div><div class="d-miles">7 mi</div></div>
+          <div class="day easy"><div class="d-label">Tue</div><span class="d-tag dt-easy">Easy</span><div class="d-main">Easy Run</div><div class="d-detail">8:30–9:00/mi</div><div class="d-miles">7 mi</div></div>
+          <div class="day workout">
+            <div class="d-label">Wed · Q1</div><span class="d-tag dt-workout">Goal Pace</span>
+            <div class="d-main">McMillan #5: Goal Pace Run</div>
+            <div class="d-detail">2mi WU · 10mi @ 7:04–7:10 (goal MP) · 1mi CD</div>
+            <div class="d-miles">13 mi</div>
+          </div>
+          <div class="day easy">
+            <div class="d-label">Thu</div><span class="d-tag dt-thu">+6th Day</span>
+            <div class="d-main">Easy Recovery</div>
+            <div class="d-detail">8:45–9:15/mi</div>
+            <div class="d-miles">6 mi</div>
+          </div>
+          <div class="day easy"><div class="d-label">Fri</div><span class="d-tag dt-easy">Easy</span><div class="d-main">Easy Run</div><div class="d-detail">8:30–9:00/mi</div><div class="d-miles">7 mi</div></div>
+          <div class="day long-quality">
+            <div class="d-label">Sat · Q2</div><span class="d-tag dt-longq">Long + MP</span>
+            <div class="d-main">Long Run w/ MP Finish</div>
+            <div class="d-detail">12mi easy (8:45–9:15) · last 6mi @ 7:04–7:10 (MP)</div>
+            <div class="d-miles">18 mi</div>
+          </div>
+          <div class="day rest"><div class="d-label">Sun</div><span class="d-tag dt-rest">Rest</span><div class="d-main">Rest</div></div>
+        </div>
+        <div class="coach-note"><strong>Two quality days this week:</strong> 10mi @ MP on Wednesday is the most important single workout of the cycle — wear race shoes, use race nutrition, dress rehearsal. Saturday's MP finish on tired legs is your first taste of late-race demands. The combination is demanding; Thursday easy run must be genuinely easy.</div>
+      </div>
+    </div>
+
+    <!-- W10 HALF MARATHON -->
+    <div class="wk race-wk" id="w10">
+      <div class="wk-head" onclick="tog('w10')">
+        <div class="wk-num hot">10</div>
+        <div class="wk-meta">
+          <div class="wk-name">⭐ Tune-Up Half Marathon — Aug 23</div>
+          <div class="wk-date">Aug 17 – Aug 23</div>
+        </div>
+        <div class="wk-badges"><span class="badge b-mi">~42 mi</span><span class="badge b-race">Race</span></div>
+        <div class="wk-toggle">▾</div>
+      </div>
+      <div class="wk-body">
+        <div class="day-grid">
+          <div class="day easy"><div class="d-label">Mon</div><span class="d-tag dt-easy">Easy</span><div class="d-main">Easy Run</div><div class="d-detail">8:45–9:15/mi</div><div class="d-miles">6 mi</div></div>
+          <div class="day easy"><div class="d-label">Tue</div><span class="d-tag dt-easy">Easy</span><div class="d-main">Easy Run</div><div class="d-detail">8:45–9:15/mi</div><div class="d-miles">6 mi</div></div>
+          <div class="day workout">
+            <div class="d-label">Wed</div><span class="d-tag dt-workout">Pre-Race</span>
+            <div class="d-main">Shakeout + Strides</div>
+            <div class="d-detail">3mi easy · 6×20sec strides @ HM effort · 2mi easy</div>
+            <div class="d-miles">6 mi</div>
+          </div>
+          <div class="day off"><div class="d-label">Thu</div><span class="d-tag dt-rest">Off</span><div class="d-main">Rest</div></div>
+          <div class="day easy"><div class="d-label">Fri</div><span class="d-tag dt-easy">Easy</span><div class="d-main">Easy Shakeout</div><div class="d-detail">Very easy · 8:50–9:15/mi</div><div class="d-miles">5 mi</div></div>
+          <div class="day race">
+            <div class="d-label">Sat · Race Day</div><span class="d-tag dt-race">🏁 Race</span>
+            <div class="d-main">Half Marathon</div>
+            <div class="d-detail">Target 1:28–1:30 · Miles 1–4 @ 6:52–6:55 · Build to 6:40s final 5K</div>
+            <div class="d-miles">13.1 mi</div>
+          </div>
+          <div class="day rest"><div class="d-label">Sun</div><span class="d-tag dt-rest">Rest</span><div class="d-main">Rest</div></div>
+        </div>
+        <div class="coach-note"><strong>Race Strategy:</strong> A sub-1:30 puts you on 3:05 track. Do NOT go out at HM PR effort — this is a fitness test, not a max effort. Conservative miles 1–4 (6:52–6:55), build through the middle, press only in the final 5K. A 1:28:30 via McMillan projects to ~3:03 marathon fitness. The data from this race recalibrates all remaining paces.</div>
+      </div>
+    </div>
+
+    <!-- W11 CUTBACK -->
+    <div class="wk cutback-wk" id="w11">
+      <div class="wk-head" onclick="tog('w11')">
+        <div class="wk-num">11</div>
+        <div class="wk-meta">
+          <div class="wk-name">Post-Race Cutback — Absorb</div>
+          <div class="wk-date">Aug 24 – Aug 30</div>
+        </div>
+        <div class="wk-badges"><span class="badge b-mi">~45 mi</span><span class="badge b-cut">Cutback</span></div>
+        <div class="wk-toggle">▾</div>
+      </div>
+      <div class="wk-body">
+        <div class="day-grid">
+          <div class="day easy"><div class="d-label">Mon</div><span class="d-tag dt-easy">Easy</span><div class="d-main">Easy Run</div><div class="d-detail">8:45–9:15/mi</div><div class="d-miles">6 mi</div></div>
+          <div class="day easy"><div class="d-label">Tue</div><span class="d-tag dt-easy">Easy</span><div class="d-main">Easy Run</div><div class="d-detail">8:45–9:15/mi</div><div class="d-miles">6 mi</div></div>
+          <div class="day workout">
+            <div class="d-label">Wed · Q1</div><span class="d-tag dt-workout">Tolerance</span>
+            <div class="d-main">TP Steady-State Intervals</div>
+            <div class="d-detail">2mi WU · 3×1.5mi @ 6:40–6:50 (10K–HM effort) / 2:30 jog · 2mi CD</div>
+            <div class="d-miles">10 mi</div>
+          </div>
+          <div class="day off"><div class="d-label">Thu</div><span class="d-tag dt-rest">Off</span><div class="d-main">Rest</div></div>
+          <div class="day easy"><div class="d-label">Fri</div><span class="d-tag dt-easy">Easy</span><div class="d-main">Easy Run</div><div class="d-detail">8:30–9:00/mi</div><div class="d-miles">7 mi</div></div>
+          <div class="day long-easy">
+            <div class="d-label">Sat</div><span class="d-tag dt-long">Easy Long</span>
+            <div class="d-main">Easy Long Run</div>
+            <div class="d-detail">All easy — back off after race week</div>
+            <div class="d-miles">16 mi</div>
+          </div>
+          <div class="day rest"><div class="d-label">Sun</div><span class="d-tag dt-rest">Rest</span><div class="d-main">Rest</div></div>
+        </div>
+        <div class="coach-note"><strong>Post-race cutback:</strong> Thursday off this week regardless of how good you feel after the race. The half took more out of you than an easy run would. Saturday long run is all easy — no MP segments. One quality session only this week.</div>
+      </div>
+    </div>
+
+    <!-- W12 -->
+    <div class="wk quality-sat" id="w12">
+      <div class="wk-head" onclick="tog('w12')">
+        <div class="wk-num">12</div>
+        <div class="wk-meta">
+          <div class="wk-name">400m Repeats + Second 20-Miler w/ MP</div>
+          <div class="wk-date">Aug 31 – Sep 6</div>
+        </div>
+        <div class="wk-badges"><span class="badge b-mi">~58 mi</span><span class="badge b-6day">6 Days</span></div>
+        <div class="wk-toggle">▾</div>
+      </div>
+      <div class="wk-body">
+        <div class="day-grid">
+          <div class="day easy"><div class="d-label">Mon</div><span class="d-tag dt-easy">Easy</span><div class="d-main">Easy Run</div><div class="d-detail">8:30–9:00/mi</div><div class="d-miles">7 mi</div></div>
+          <div class="day easy"><div class="d-label">Tue</div><span class="d-tag dt-easy">Easy</span><div class="d-main">Easy Run</div><div class="d-detail">8:30–9:00/mi</div><div class="d-miles">7 mi</div></div>
+          <div class="day workout">
+            <div class="d-label">Wed · Q1</div><span class="d-tag dt-workout">400m Repeats</span>
+            <div class="d-main">McMillan #7: Quarters</div>
+            <div class="d-detail">2mi WU · 16×400m @ 5K pace (6:05–6:15) / 400m jog · 2mi CD</div>
+            <div class="d-miles">11 mi</div>
+          </div>
+          <div class="day easy">
+            <div class="d-label">Thu</div><span class="d-tag dt-thu">+6th Day</span>
+            <div class="d-main">Easy Recovery</div>
+            <div class="d-detail">8:45–9:15/mi · very easy</div>
+            <div class="d-miles">6 mi</div>
+          </div>
+          <div class="day easy"><div class="d-label">Fri</div><span class="d-tag dt-easy">Easy</span><div class="d-main">Easy Run</div><div class="d-detail">8:30–9:00/mi</div><div class="d-miles">7 mi</div></div>
+          <div class="day long-quality">
+            <div class="d-label">Sat · Q2 · 20mi</div><span class="d-tag dt-longq">Long + MP</span>
+            <div class="d-main">20-Miler w/ MP Miles</div>
+            <div class="d-detail">14mi easy → 6mi @ 7:04–7:10 (MP) — Daniels M-pace finish</div>
+            <div class="d-miles">20 mi</div>
+          </div>
+          <div class="day rest"><div class="d-label">Sun</div><span class="d-tag dt-rest">Rest</span><div class="d-main">Rest</div></div>
+        </div>
+        <div class="coach-note"><strong>Second 20-Miler — first with MP miles:</strong> The 6-mile MP finish (miles 15–20 at 7:04) after 14 easy miles is the Daniels M-pace block in its purest form. This is your most race-specific long run so far. Fuel aggressively throughout — gel every 40min. 400m quarters on Wednesday build the speed reserve that makes MP feel easier.</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===== PHASE 4: PEAK ===== -->
+<div id="p4" class="phase">
+  <div class="phase-intro">
+    <div class="phase-number">04</div>
+    <div class="phase-text">
+      <span class="phase-tag pt-peak">Phase 4 · Weeks 13–15 · Sep 7–Sep 27</span>
+      <div class="phase-title">Peak Block</div>
+      <p class="phase-desc">Three weeks at 58–62 mpw. Two quality days every week — Wednesday workout escalates to the hardest sessions of the plan, Saturday long runs carry 6 miles of MP work. The 22-miler arrives in Week 14 alongside Yasso 800s Round 2 (10 reps). This is where the 3:05 is earned. Protect your sleep and nutrition.</p>
+    </div>
+  </div>
+  <div class="weeks">
+
+    <!-- W13 -->
+    <div class="wk quality-sat" id="w13">
+      <div class="wk-head" onclick="tog('w13')">
+        <div class="wk-num hot">13</div>
+        <div class="wk-meta">
+          <div class="wk-name">Extended Tempo + Third 20-Miler w/ MP</div>
+          <div class="wk-date">Sep 7 – Sep 13</div>
+        </div>
+        <div class="wk-badges"><span class="badge b-mi">~60 mi</span><span class="badge b-peak">Peak</span><span class="badge b-6day">6 Days</span></div>
+        <div class="wk-toggle">▾</div>
+      </div>
+      <div class="wk-body">
+        <div class="day-grid">
+          <div class="day easy"><div class="d-label">Mon</div><span class="d-tag dt-easy">Easy</span><div class="d-main">Easy Run</div><div class="d-detail">8:30–9:00/mi</div><div class="d-miles">8 mi</div></div>
+          <div class="day easy"><div class="d-label">Tue</div><span class="d-tag dt-easy">Easy</span><div class="d-main">Easy Run</div><div class="d-detail">8:30–9:00/mi</div><div class="d-miles">7 mi</div></div>
+          <div class="day workout">
+            <div class="d-label">Wed · Q1</div><span class="d-tag dt-workout">Long Tempo</span>
+            <div class="d-main">Extended Continuous Tempo</div>
+            <div class="d-detail">2mi WU · 7mi @ 6:40–6:50 progressive (start 6:50, finish 6:40) · 2mi CD</div>
+            <div class="d-miles">11 mi</div>
+          </div>
+          <div class="day easy">
+            <div class="d-label">Thu</div><span class="d-tag dt-thu">+6th Day</span>
+            <div class="d-main">Easy Recovery</div>
+            <div class="d-detail">8:45–9:15/mi</div>
+            <div class="d-miles">6 mi</div>
+          </div>
+          <div class="day easy"><div class="d-label">Fri</div><span class="d-tag dt-easy">Easy</span><div class="d-main">Easy Run</div><div class="d-detail">8:30–9:00/mi</div><div class="d-miles">8 mi</div></div>
+          <div class="day long-quality">
+            <div class="d-label">Sat · Q2 · 20mi</div><span class="d-tag dt-longq">Long + MP</span>
+            <div class="d-main">20-Miler w/ MP Miles</div>
+            <div class="d-detail">14mi easy → 6mi @ 7:04–7:10 (MP)</div>
+            <div class="d-miles">20 mi</div>
+          </div>
+          <div class="day rest"><div class="d-label">Sun</div><span class="d-tag dt-rest">Rest</span><div class="d-main">Rest</div></div>
+        </div>
+        <div class="coach-note"><strong>Hardest tempo of the cycle:</strong> 7 miles continuous at LT pace, progressive. Start at 6:50 — if miles 1–3 feel easy, you're doing it right. Only press to 6:40 on miles 6 and 7. The MP finish on Saturday (6 miles at 7:04) after a 7-mile tempo midweek is the highest combined quality load of the plan. Thursday recovery run must be slow.</div>
+      </div>
+    </div>
+
+    <!-- W14 -->
+    <div class="wk quality-sat" id="w14">
+      <div class="wk-head" onclick="tog('w14')">
+        <div class="wk-num hot">14</div>
+        <div class="wk-meta">
+          <div class="wk-name">⭐ Yasso 800s ×10 + 22-Mile Peak Long Run</div>
+          <div class="wk-date">Sep 14 – Sep 20</div>
+        </div>
+        <div class="wk-badges"><span class="badge b-mi">~62 mi</span><span class="badge b-peak">Peak</span><span class="badge b-6day">6 Days</span></div>
+        <div class="wk-toggle">▾</div>
+      </div>
+      <div class="wk-body">
+        <div class="day-grid">
+          <div class="day easy"><div class="d-label">Mon</div><span class="d-tag dt-easy">Easy</span><div class="d-main">Easy Run</div><div class="d-detail">8:30–9:00/mi</div><div class="d-miles">8 mi</div></div>
+          <div class="day easy"><div class="d-label">Tue</div><span class="d-tag dt-easy">Easy</span><div class="d-main">Easy Run</div><div class="d-detail">8:30–9:00/mi</div><div class="d-miles">7 mi</div></div>
+          <div class="day workout">
+            <div class="d-label">Wed · Q1</div><span class="d-tag dt-workout">Yasso 800s</span>
+            <div class="d-main">Yasso 800s — Round 2</div>
+            <div class="d-detail">2mi WU · 10×800m @ 3:05 / 3:05 jog recovery · 2mi CD</div>
+            <div class="d-miles">11 mi</div>
+          </div>
+          <div class="day easy">
+            <div class="d-label">Thu</div><span class="d-tag dt-thu">+6th Day</span>
+            <div class="d-main">Easy Recovery</div>
+            <div class="d-detail">8:45–9:15/mi · critical recovery day</div>
+            <div class="d-miles">7 mi</div>
+          </div>
+          <div class="day easy"><div class="d-label">Fri</div><span class="d-tag dt-easy">Easy</span><div class="d-main">Easy Run</div><div class="d-detail">8:30–9:00/mi</div><div class="d-miles">7 mi</div></div>
+          <div class="day long-quality">
+            <div class="d-label">Sat · Q2 · 22mi</div><span class="d-tag dt-longq">22mi + MP</span>
+            <div class="d-main">22-Mile Peak Long Run</div>
+            <div class="d-detail">16mi easy (8:45–9:15) → 6mi @ 7:04–7:10 (MP) — fuel every 35min</div>
+            <div class="d-miles">22 mi</div>
+          </div>
+          <div class="day rest"><div class="d-label">Sun</div><span class="d-tag dt-rest">Rest</span><div class="d-main">Rest</div></div>
+        </div>
+        <div class="coach-note"><strong>The centerpiece week:</strong> 10 Yasso 800s @ 3:05 + 22-miler with 6-mile MP finish in the same week. This is your proof-of-fitness week. If you complete 10×3:05 comfortably and finish the 22-miler strong, you are ready for 3:05. Thursday is non-negotiable easy — it is the bridge between Wednesday quality and Saturday's peak long run. Fuel the 22-miler every 35 minutes.</div>
+      </div>
+    </div>
+
+    <!-- W15 -->
+    <div class="wk quality-sat" id="w15">
+      <div class="wk-head" onclick="tog('w15')">
+        <div class="wk-num hot">15</div>
+        <div class="wk-meta">
+          <div class="wk-name">Extended Goal Pace Run + Final 20-Miler</div>
+          <div class="wk-date">Sep 21 – Sep 27</div>
+        </div>
+        <div class="wk-badges"><span class="badge b-mi">~60 mi</span><span class="badge b-peak">Peak</span><span class="badge b-6day">6 Days</span></div>
+        <div class="wk-toggle">▾</div>
+      </div>
+      <div class="wk-body">
+        <div class="day-grid">
+          <div class="day easy"><div class="d-label">Mon</div><span class="d-tag dt-easy">Easy</span><div class="d-main">Easy Run</div><div class="d-detail">8:30–9:00/mi</div><div class="d-miles">8 mi</div></div>
+          <div class="day easy"><div class="d-label">Tue</div><span class="d-tag dt-easy">Easy</span><div class="d-main">Easy Run</div><div class="d-detail">8:30–9:00/mi</div><div class="d-miles">7 mi</div></div>
+          <div class="day workout">
+            <div class="d-label">Wed · Q1</div><span class="d-tag dt-workout">Goal Pace</span>
+            <div class="d-main">Extended Goal Pace Run</div>
+            <div class="d-detail">2mi WU · 12mi @ 7:04–7:10 (goal MP) · 1mi CD</div>
+            <div class="d-miles">15 mi</div>
+          </div>
+          <div class="day easy">
+            <div class="d-label">Thu</div><span class="d-tag dt-thu">+6th Day</span>
+            <div class="d-main">Easy Recovery</div>
+            <div class="d-detail">8:45–9:15/mi</div>
+            <div class="d-miles">6 mi</div>
+          </div>
+          <div class="day easy"><div class="d-label">Fri</div><span class="d-tag dt-easy">Easy</span><div class="d-main">Easy Run</div><div class="d-detail">8:30–9:00/mi</div><div class="d-miles">7 mi</div></div>
+          <div class="day long-quality">
+            <div class="d-label">Sat · Q2 · 20mi</div><span class="d-tag dt-longq">Long + MP</span>
+            <div class="d-main">Final 20-Miler w/ MP Miles</div>
+            <div class="d-detail">14mi easy → 6mi @ 7:04–7:10 (MP) — last long run before taper</div>
+            <div class="d-miles">20 mi</div>
+          </div>
+          <div class="day rest"><div class="d-label">Sun</div><span class="d-tag dt-rest">Rest</span><div class="d-main">Rest</div></div>
+        </div>
+        <div class="coach-note"><strong>Final peak week — the hay goes in the barn:</strong> 12 miles at MP on Wednesday is your ultimate confidence workout. After this, you are done building. The final 20-miler on Saturday with 6 miles at goal pace is the last hard long run. After this weekend, the taper begins and you do not add extra miles for any reason. Trust what you have built.</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===== PHASE 5: TAPER ===== -->
+<div id="p5" class="phase">
+  <div class="phase-intro">
+    <div class="phase-number">05</div>
+    <div class="phase-text">
+      <span class="phase-tag pt-taper">Phase 5 · Weeks 16–18 · Sep 28–Oct 11</span>
+      <div class="phase-title">Taper — Trust the Work</div>
+      <p class="phase-desc">Three weeks: 43 → 35 → 12+race. Volume drops sharply, intensity stays. You keep the sharpness, shed the fatigue. Thursday drops off in taper weeks — back to 5 days. The biggest taper mistake is adding miles out of anxiety. Resist it. Restless legs and feeling "flat" in Week 16 is a sign the taper is working — glycogen stores are replenishing.</p>
+    </div>
+  </div>
+  <div class="weeks">
+
+    <!-- W16 -->
+    <div class="wk" id="w16">
+      <div class="wk-head" onclick="tog('w16')">
+        <div class="wk-num">16</div>
+        <div class="wk-meta">
+          <div class="wk-name">Taper 1 — Volume Down, Edge Stays</div>
+          <div class="wk-date">Sep 28 – Oct 4</div>
+        </div>
+        <div class="wk-badges"><span class="badge b-mi">~43 mi</span><span class="badge b-taper">Taper</span></div>
+        <div class="wk-toggle">▾</div>
+      </div>
+      <div class="wk-body">
+        <div class="day-grid">
+          <div class="day easy"><div class="d-label">Mon</div><span class="d-tag dt-easy">Easy</span><div class="d-main">Easy Run</div><div class="d-detail">8:30–9:00/mi</div><div class="d-miles">6 mi</div></div>
+          <div class="day easy"><div class="d-label">Tue</div><span class="d-tag dt-easy">Easy</span><div class="d-main">Easy Run</div><div class="d-detail">8:30–9:00/mi</div><div class="d-miles">7 mi</div></div>
+          <div class="day workout">
+            <div class="d-label">Wed · Q1</div><span class="d-tag dt-workout">Cruise Intervals</span>
+            <div class="d-main">Cruise Intervals — Sharpened</div>
+            <div class="d-detail">2mi WU · 6×1000m @ 10K pace (6:20–6:30) / 200m jog · 2mi CD</div>
+            <div class="d-miles">9 mi</div>
+          </div>
+          <div class="day off"><div class="d-label">Thu</div><span class="d-tag dt-rest">Off</span><div class="d-main">Rest</div></div>
+          <div class="day easy"><div class="d-label">Fri</div><span class="d-tag dt-easy">Easy</span><div class="d-main">Easy Run</div><div class="d-detail">8:30–9:00/mi</div><div class="d-miles">7 mi</div></div>
+          <div class="day long-quality">
+            <div class="d-label">Sat · Q2</div><span class="d-tag dt-longq">Long + MP</span>
+            <div class="d-main">Long Run w/ MP Finish</div>
+            <div class="d-detail">10mi easy → 4mi @ 7:04 (MP) — taper sharpener</div>
+            <div class="d-miles">14 mi</div>
+          </div>
+          <div class="day rest"><div class="d-label">Sun</div><span class="d-tag dt-rest">Rest</span><div class="d-main">Rest</div></div>
+        </div>
+        <div class="coach-note"><strong>Taper note:</strong> Cruise intervals are now run entirely at 10K pace (not building from 15K pace as in Week 4) — you're sharper now and the shorter taper workout should feel crisp. The 4 miles at MP on Saturday should feel almost effortless if the taper is working. If it feels hard, that's fine too — trust the process.</div>
+      </div>
+    </div>
+
+    <!-- W17 -->
+    <div class="wk" id="w17">
+      <div class="wk-head" onclick="tog('w17')">
+        <div class="wk-num">17</div>
+        <div class="wk-meta">
+          <div class="wk-name">Taper 2 — Race Sharpening</div>
+          <div class="wk-date">Oct 5 – Oct 11</div>
+        </div>
+        <div class="wk-badges"><span class="badge b-mi">~35 mi</span><span class="badge b-taper">Taper</span></div>
+        <div class="wk-toggle">▾</div>
+      </div>
+      <div class="wk-body">
+        <div class="day-grid">
+          <div class="day easy"><div class="d-label">Mon</div><span class="d-tag dt-easy">Easy</span><div class="d-main">Easy Run + Strides</div><div class="d-detail">Easy + 6×20sec strides at end</div><div class="d-miles">6 mi</div></div>
+          <div class="day easy"><div class="d-label">Tue</div><span class="d-tag dt-easy">Easy</span><div class="d-main">Easy Run</div><div class="d-detail">8:45–9:15/mi</div><div class="d-miles">5 mi</div></div>
+          <div class="day workout">
+            <div class="d-label">Wed · Q1</div><span class="d-tag dt-workout">MP Fartlek</span>
+            <div class="d-main">Race-Pace Tune</div>
+            <div class="d-detail">2mi WU · 6×2min @ 7:04 (MP) / 1min easy · 2mi CD</div>
+            <div class="d-miles">7 mi</div>
+          </div>
+          <div class="day off"><div class="d-label">Thu</div><span class="d-tag dt-rest">Off</span><div class="d-main">Rest</div></div>
+          <div class="day easy"><div class="d-label">Fri</div><span class="d-tag dt-easy">Easy</span><div class="d-main">Easy Run</div><div class="d-detail">8:45–9:15/mi · very easy</div><div class="d-miles">5 mi</div></div>
+          <div class="day long-easy">
+            <div class="d-label">Sat</div><span class="d-tag dt-long">Moderate Long</span>
+            <div class="d-main">Moderate Long Run</div>
+            <div class="d-detail">Easy throughout · last 2mi @ MP just to feel it</div>
+            <div class="d-miles">12 mi</div>
+          </div>
+          <div class="day rest"><div class="d-label">Sun</div><span class="d-tag dt-rest">Rest</span><div class="d-main">Rest</div></div>
+        </div>
+        <div class="coach-note"><strong>Final quality week:</strong> Wednesday MP fartlek is your last real session before the race. Keep it short and crisp — the goal is to confirm MP feels automatic, not to build fitness. Begin carb-loading Thursday. Sleep is your biggest performance enhancer this week.</div>
+      </div>
+    </div>
+
+    <!-- W18 RACE WEEK -->
+    <div class="wk race-wk" id="w18">
+      <div class="wk-head" onclick="tog('w18')">
+        <div class="wk-num hot">18</div>
+        <div class="wk-meta">
+          <div class="wk-name">🏁 Race Week — October 11, 2026</div>
+          <div class="wk-date">Oct 5 – Oct 11</div>
+        </div>
+        <div class="wk-badges"><span class="badge b-mi">~12 mi</span><span class="badge b-race">Race Day</span></div>
+        <div class="wk-toggle">▾</div>
+      </div>
+      <div class="wk-body">
+        <div class="day-grid">
+          <div class="day off"><div class="d-label">Mon</div><span class="d-tag dt-rest">Rest</span><div class="d-main">Full Rest</div><div class="d-detail">Carb-loading begins</div></div>
+          <div class="day easy"><div class="d-label">Tue</div><span class="d-tag dt-easy">Easy</span><div class="d-main">Easy + Strides</div><div class="d-detail">Very easy · 4×15sec strides at end</div><div class="d-miles">4 mi</div></div>
+          <div class="day workout">
+            <div class="d-label">Wed</div><span class="d-tag dt-workout">Final Tune</span>
+            <div class="d-main">3mi Easy + 4×1min @ MP</div>
+            <div class="d-detail">Confirm legs feel fresh · no heroics</div>
+            <div class="d-miles">5 mi</div>
+          </div>
+          <div class="day off"><div class="d-label">Thu</div><span class="d-tag dt-rest">Rest</span><div class="d-main">Rest + Carb Load</div><div class="d-detail">Heavy carb-loading day</div></div>
+          <div class="day easy"><div class="d-label">Fri</div><span class="d-tag dt-easy">Shakeout</span><div class="d-main">20min Shakeout</div><div class="d-detail">Very easy · 3×15sec strides only</div><div class="d-miles">3 mi</div></div>
+          <div class="day rest"><div class="d-label">Sat</div><span class="d-tag dt-rest">Rest</span><div class="d-main">Rest — Race Eve</div><div class="d-detail">Eat well · sleep early · trust everything</div></div>
+          <div class="day race">
+            <div class="d-label">Sun · Oct 11</div><span class="d-tag dt-race">🏁 RACE</span>
+            <div class="d-main">MARATHON — 3:05:00</div>
+            <div class="d-detail">Mi 1–6 @ 7:08–7:10 · Mi 7–13 @ 7:05–7:08 · Mi 14–20 @ 7:02–7:06 · Mi 21–26.2: everything you have</div>
+            <div class="d-miles">26.2 mi</div>
+          </div>
+        </div>
+        <div class="coach-note"><strong>Race Day Strategy — negative split execution:</strong> Miles 1–6 at 7:08–7:10 feels embarrassingly slow. Do it anyway. A conservative first 13.1 (~1:33–1:34) sets up a strong second half. You have 18 weeks of work behind you. Run the plan, not the crowd.</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===== COACH NOTES ===== -->
+<div id="pn" class="phase">
+  <div class="phase-intro">
+    <div class="phase-number">✦</div>
+    <div class="phase-text">
+      <span class="phase-tag pt-base">Coaching Guidelines</span>
+      <div class="phase-title">How to Execute This Plan</div>
+      <p class="phase-desc">Jack Daniels' method works because of discipline on easy days as much as effort on hard days. Read these before the plan starts.</p>
+    </div>
+  </div>
+  <div class="notes-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;">
+    <div class="note" style="background:#f8f5ef;border-color:var(--border);">
+      <h4 style="color:var(--red);">Jack Daniels Easy Pace Rule</h4>
+      <p style="color:#555;">Easy runs must be genuinely easy — 8:30 to 9:15/mi. This isn't a suggestion. Daniels defines easy as 59–74% of max heart rate. If you run Monday's easy run at 8:00/mi because you feel good, you are stealing recovery from Wednesday's workout. The easy days are where adaptation happens — not the hard ones.</p>
+    </div>
+    <div class="note" style="background:#f8f5ef;border-color:var(--border);">
+      <h4 style="color:var(--red);">The Thursday Rule</h4>
+      <p style="color:#555;">On 6-day weeks, Thursday is always 8:45–9:15/mi with no exceptions. It sits between Wednesday's quality session and Friday's easy run. Its only job is to add volume without stress. If Thursday ever feels like a workout, you're running it too fast. Treat it as active recovery.</p>
+    </div>
+    <div class="note" style="background:#f8f5ef;border-color:var(--border);">
+      <h4 style="color:var(--red);">Two Quality Days</h4>
+      <p style="color:#555;">From Week 9 onward, Wednesday workout + Saturday MP long run = 2 quality days. Your V.O2 plan already trained you for this pattern. The key is that the days between (Thursday, Friday) must be easy enough to allow Wednesday's quality to be fully absorbed before Saturday's quality session. Never compress recovery between quality days.</p>
+    </div>
+    <div class="note" style="background:#f8f5ef;border-color:var(--border);">
+      <h4 style="color:var(--red);">Long Run MP Miles</h4>
+      <p style="color:#555;">The 6-mile MP finish structure (miles 15–20 at 7:04) is Daniels M-pace work at its most effective — goal pace on tired legs. Never start the MP block early. Run miles 1–14 genuinely easy even if you feel great. The adaptation happens specifically in that fatigued state. Fuel every 35–40 minutes throughout.</p>
+    </div>
+    <div class="note" style="background:#f8f5ef;border-color:var(--border);">
+      <h4 style="color:var(--red);">Cutback Weeks</h4>
+      <p style="color:#555;">Weeks 6 and 11 are non-negotiable down weeks. Do not make them up. Fitness is not lost in one low week — it's absorbed. Skipping a cutback week doesn't accelerate the plan; it compounds fatigue and delays adaptation. Week 11 is especially important because it follows a race.</p>
+    </div>
+    <div class="note" style="background:#f8f5ef;border-color:var(--border);">
+      <h4 style="color:var(--red);">Tune-Up Half: Aug 23</h4>
+      <p style="color:#555;">Target 1:28–1:30. Start miles 1–4 at 6:52–6:55 no matter how good you feel. Build through miles 5–9. Press in the final 5K. A sub-1:29 half confirms 3:05 marathon shape. The result recalibrates your training paces for the final 8 weeks — if you run 1:26, your easy pace stays the same but your MP drops to ~7:00.</p>
+    </div>
+    <div class="note" style="background:#f8f5ef;border-color:var(--border);">
+      <h4 style="color:var(--red);">Taper Madness</h4>
+      <p style="color:#555;">In Weeks 16–18 you will feel sluggish, anxious, and convinced you've lost fitness. Your legs may feel heavy and dead. This is normal — glycogen stores are replenishing and muscle damage is repairing. The restlessness is the taper working. Stick to prescribed miles exactly. Do not add extra runs.</p>
+    </div>
+    <div class="note" style="background:#f8f5ef;border-color:var(--border);">
+      <h4 style="color:var(--red);">Race Day Execution</h4>
+      <p style="color:#555;">Miles 1–6 at 7:08–7:10/mi. Miles 7–13 at 7:05–7:08. Miles 14–20 at 7:02–7:06. Miles 21–26.2: race. First half should clock ~1:33–1:34. A runner who goes out at 7:00 and blows up at mile 20 runs 3:20. A runner who goes out at 7:08 and finishes strong runs 3:04. Patience in the first 10K is the race.</p>
+    </div>
+  </div>
+</div>
+
+</div><!-- end main -->
+
+<script>
+function tog(id) {
+  const el = document.getElementById(id);
+  el.classList.toggle('open');
+}
+function show(phase, btn) {
+  document.querySelectorAll('.phase').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(phase).classList.add('active');
+  btn.classList.add('active');
+  window.scrollTo({ top: document.querySelector('.nav').offsetTop - 4, behavior: 'smooth' });
+}
+</script>
+</body>
 </html>

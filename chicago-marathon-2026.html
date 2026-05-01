@@ -1,0 +1,1239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Chicago Marathon 2026 — Ari's Training Plan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=JetBrains+Mono:wght@400;500;700&family=Lora:ital@1&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --bg: #09090b;
+  --surface: #111113;
+  --surface2: #18181b;
+  --surface3: #27272a;
+  --border: #3f3f46;
+  --text: #fafafa;
+  --muted: #a1a1aa;
+  --accent: #f97316;
+  --accent2: #38bdf8;
+  --green: #4ade80;
+  --blue: #38bdf8;
+  --amber: #fbbf24;
+  --orange: #f97316;
+  --purple: #c084fc;
+  --pink: #f472b6;
+  --lime: #a3e635;
+  --red: #f87171;
+  --gray: #374151;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Lora',serif;font-size:16px;line-height:1.6;min-height:100vh}
+h1,h2,h3,h4,h5{font-family:'Syne',sans-serif;font-weight:800;line-height:1.1}
+.mono{font-family:'JetBrains Mono',monospace}
+.italic{font-style:italic}
+
+/* HERO */
+.hero{background:var(--surface);border-bottom:1px solid var(--border);padding:2.5rem 1.5rem 2rem}
+.hero-inner{max-width:1100px;margin:0 auto}
+.hero-top{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-start;gap:1rem;margin-bottom:1.5rem}
+.hero-title{font-family:'Syne',sans-serif;font-size:clamp(1.8rem,5vw,3rem);font-weight:800;color:var(--text)}
+.hero-title span{color:var(--accent)}
+.hero-badges{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;margin-top:.5rem}
+.badge{font-family:'JetBrains Mono',monospace;font-size:.7rem;padding:.25rem .6rem;border-radius:4px;border:1px solid;letter-spacing:.05em;text-transform:uppercase}
+.badge-orange{border-color:var(--accent);color:var(--accent);background:rgba(249,115,22,.1)}
+.badge-blue{border-color:var(--blue);color:var(--blue);background:rgba(56,189,248,.1)}
+.badge-green{border-color:var(--green);color:var(--green);background:rgba(74,222,128,.1)}
+.badge-purple{border-color:var(--purple);color:var(--purple);background:rgba(192,132,252,.1)}
+.badge-amber{border-color:var(--amber);color:var(--amber);background:rgba(251,191,36,.1)}
+
+/* COUNTDOWN */
+.countdown-block{text-align:center;margin-bottom:1.5rem}
+.countdown-days{font-family:'JetBrains Mono',monospace;font-size:clamp(3rem,10vw,5.5rem);font-weight:700;color:var(--accent);line-height:1;letter-spacing:-.03em}
+.countdown-label{font-family:'JetBrains Mono',monospace;font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.15em;margin-bottom:.5rem}
+.countdown-hms{font-family:'JetBrains Mono',monospace;font-size:clamp(1.2rem,3vw,1.8rem);color:var(--accent2);letter-spacing:.05em}
+.phase-badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.8rem;padding:.35rem 1rem;border-radius:4px;margin-top:.75rem;border:1px solid var(--accent);color:var(--accent);background:rgba(249,115,22,.1)}
+
+/* PROGRESS BAR */
+.progress-bar-wrap{margin-top:1.2rem}
+.progress-bar-label{display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--muted);margin-bottom:.4rem}
+.progress-bar-bg{background:var(--surface3);border-radius:2px;height:6px;overflow:hidden}
+.progress-bar-fill{height:100%;background:var(--accent);border-radius:2px;transition:width .5s}
+
+/* HERO QUICK STATS */
+.hero-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:.75rem;margin-top:1.2rem}
+.hero-stat{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:.75rem 1rem}
+.hero-stat-val{font-family:'JetBrains Mono',monospace;font-size:1.3rem;font-weight:700;color:var(--text)}
+.hero-stat-label{font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-top:.2rem}
+
+/* EXPORT BUTTON */
+.export-btn{font-family:'Syne',sans-serif;font-size:.85rem;font-weight:700;background:var(--surface2);border:1px solid var(--border);color:var(--muted);padding:.6rem 1.2rem;border-radius:4px;cursor:pointer;transition:all .2s}
+.export-btn:hover{border-color:var(--accent);color:var(--accent)}
+
+/* MAIN LAYOUT */
+.main{max-width:1100px;margin:0 auto;padding:0 1.5rem 4rem}
+
+/* SECTION HEADERS */
+.section-header{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;color:var(--text);margin:2.5rem 0 1rem;padding-bottom:.5rem;border-bottom:1px solid var(--border)}
+
+/* NAV */
+.phase-nav{position:sticky;top:0;z-index:50;background:var(--bg);border-bottom:1px solid var(--border);padding:.75rem 1.5rem}
+.phase-nav-inner{max-width:1100px;margin:0 auto;display:flex;gap:.5rem;flex-wrap:wrap}
+.phase-tab{font-family:'Syne',sans-serif;font-size:.8rem;font-weight:700;padding:.4rem .9rem;border-radius:4px;border:1px solid var(--border);color:var(--muted);cursor:pointer;background:transparent;transition:all .2s;text-decoration:none}
+.phase-tab:hover,.phase-tab.active{border-color:var(--accent);color:var(--accent);background:rgba(249,115,22,.08)}
+
+/* VDOT PANEL */
+.vdot-panel{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1.5rem;margin:1.5rem 0}
+.vdot-controls{display:flex;flex-wrap:wrap;gap:1rem;align-items:center;margin-bottom:1.2rem}
+.vdot-label{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;color:var(--text)}
+.vdot-input-wrap{display:flex;align-items:center;gap:.75rem;flex:1;min-width:200px}
+#vdot-slider{flex:1;accent-color:var(--accent);height:4px;cursor:pointer}
+#vdot-number{font-family:'JetBrains Mono',monospace;font-size:1.4rem;font-weight:700;width:70px;background:var(--surface2);border:1px solid var(--border);color:var(--accent);padding:.3rem .5rem;border-radius:4px;text-align:center}
+.vdot-hint{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--muted);margin-top:.5rem}
+.pace-table{width:100%;border-collapse:collapse;margin-top:1rem}
+.pace-table th{font-family:'JetBrains Mono',monospace;font-size:.65rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);padding:.5rem .75rem;text-align:left;border-bottom:1px solid var(--border)}
+.pace-table td{font-family:'JetBrains Mono',monospace;font-size:.9rem;padding:.6rem .75rem;border-bottom:1px solid rgba(63,63,70,.4)}
+.pace-zone-dot{width:10px;height:10px;border-radius:50%;display:inline-block;margin-right:.5rem}
+.race-times{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:.75rem;margin-top:1.2rem;padding-top:1rem;border-top:1px solid var(--border)}
+.race-time-card{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:.75rem;text-align:center}
+.race-time-val{font-family:'JetBrains Mono',monospace;font-size:1.1rem;font-weight:700;color:var(--accent2)}
+.race-time-label{font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-top:.2rem}
+
+/* MILEAGE CHART */
+.chart-wrap{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1.5rem;margin:1.5rem 0;overflow-x:auto}
+.chart-bars{display:flex;align-items:flex-end;gap:4px;height:150px;min-width:600px}
+.chart-bar-wrap{display:flex;flex-direction:column;align-items:center;flex:1;height:100%;position:relative}
+.chart-bar{width:100%;border-radius:3px 3px 0 0;cursor:pointer;transition:opacity .2s;position:relative}
+.chart-bar:hover{opacity:.75}
+.chart-bar-actual{width:60%;border-radius:3px 3px 0 0;position:absolute;bottom:0;left:20%;background:rgba(56,189,248,.5)}
+.chart-week-label{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--muted);margin-top:.3rem}
+.chart-tooltip{position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:var(--surface3);border:1px solid var(--border);border-radius:4px;padding:.4rem .6rem;font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--text);white-space:nowrap;pointer-events:none;display:none;z-index:10}
+.chart-bar-wrap:hover .chart-tooltip{display:block}
+
+/* WEEK ACCORDION */
+.week-section{margin-bottom:.5rem}
+.week-header{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:1rem 1.25rem;cursor:pointer;display:flex;flex-wrap:wrap;align-items:center;gap:.75rem;text-align:left;transition:border-color .2s}
+.week-header:hover,.week-header.open{border-color:var(--accent)}
+.week-header-left{flex:1;min-width:0}
+.week-num{font-family:'Syne',sans-serif;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:.15rem}
+.week-dates{font-family:'Syne',sans-serif;font-size:1rem;font-weight:800;color:var(--text)}
+.week-header-right{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
+.week-miles-badge{font-family:'JetBrains Mono',monospace;font-size:.85rem;font-weight:700;color:var(--accent)}
+.week-chevron{font-size:1rem;color:var(--muted);transition:transform .2s;margin-left:.5rem}
+.week-header.open .week-chevron{transform:rotate(180deg)}
+.week-body{display:none;border:1px solid var(--border);border-top:none;border-radius:0 0 6px 6px;padding:1.25rem;background:var(--surface)}
+.week-body.open{display:block}
+
+/* DAY GRID */
+.day-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:.75rem;margin-bottom:1.25rem}
+
+/* DAY CARDS */
+.day-card{border:1px solid var(--border);border-radius:6px;padding:1rem;background:var(--surface2);border-left-width:3px;position:relative;transition:border-color .2s}
+.day-card.complete{background:rgba(74,222,128,.04)}
+.day-card.rest{border-left-color:var(--gray);opacity:.7}
+.day-card.easy{border-left-color:var(--green)}
+.day-card.mlr{border-left-color:var(--lime)}
+.day-card.workout{border-left-color:var(--orange)}
+.day-card.longrun{border-left-color:#fb923c}
+.day-card.strength{border-left-color:var(--purple)}
+.day-card.mobility{border-left-color:var(--pink)}
+
+.day-name{font-family:'Syne',sans-serif;font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-bottom:.25rem;display:flex;justify-content:space-between;align-items:center}
+.day-complete-icon{color:var(--green);font-size:.85rem}
+.day-title{font-family:'Syne',sans-serif;font-size:.95rem;font-weight:800;color:var(--text);margin-bottom:.5rem;line-height:1.3}
+.day-miles{font-family:'JetBrains Mono',monospace;font-size:.75rem;color:var(--accent);margin-bottom:.6rem}
+.day-prescription{font-family:'Lora',serif;font-style:italic;font-size:.82rem;color:var(--muted);line-height:1.5;margin-bottom:.6rem}
+.day-prescription .live-pace{color:var(--accent2);font-family:'JetBrains Mono',monospace;font-style:normal;font-size:.8rem}
+.day-science{font-family:'Lora',serif;font-style:italic;font-size:.75rem;color:#71717a;margin-top:.4rem;padding-top:.4rem;border-top:1px solid rgba(63,63,70,.4);line-height:1.45}
+
+.log-btn{font-family:'Syne',sans-serif;font-size:.7rem;font-weight:700;padding:.35rem .7rem;border-radius:3px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;transition:all .2s;margin-top:.5rem;text-transform:uppercase;letter-spacing:.06em;display:block;width:100%}
+.log-btn:hover{border-color:var(--accent);color:var(--accent)}
+
+/* LOG SECTION */
+.log-section{margin-top:.75rem;padding-top:.75rem;border-top:1px solid var(--border)}
+.log-section textarea{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:4px;color:var(--text);font-family:'Lora',serif;font-size:.8rem;padding:.5rem .6rem;resize:vertical;min-height:60px;line-height:1.5}
+.log-section textarea:focus{outline:none;border-color:var(--accent2)}
+.log-section textarea::placeholder{color:#52525b}
+.tags-wrap{display:flex;flex-wrap:wrap;gap:.35rem;margin:.5rem 0}
+.tag-chip{font-family:'JetBrains Mono',monospace;font-size:.65rem;padding:.2rem .5rem;border-radius:3px;border:1px solid var(--border);color:var(--muted);cursor:pointer;transition:all .15s;user-select:none}
+.tag-chip.selected{border-color:var(--accent2);color:var(--accent2);background:rgba(56,189,248,.08)}
+.stars-wrap{display:flex;gap:.25rem;margin:.4rem 0}
+.star{font-size:1rem;cursor:pointer;color:#3f3f46;transition:color .15s}
+.star.lit{color:var(--amber)}
+.complete-toggle{display:flex;align-items:center;gap:.5rem;margin-top:.6rem;cursor:pointer}
+.complete-toggle input{accent-color:var(--green);width:14px;height:14px;cursor:pointer}
+.complete-toggle label{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--muted);cursor:pointer;text-transform:uppercase;letter-spacing:.06em}
+
+/* WEEKLY SUMMARY */
+.week-summary{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:1rem;margin-top:.5rem}
+.week-summary-title{font-family:'Syne',sans-serif;font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:.75rem}
+.week-summary-row{display:flex;flex-wrap:wrap;gap:.75rem;align-items:center;margin-bottom:.6rem}
+.week-summary-row label{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--muted)}
+.week-summary-row input[type=number]{width:80px;background:var(--surface);border:1px solid var(--border);border-radius:3px;color:var(--text);font-family:'JetBrains Mono',monospace;font-size:.8rem;padding:.25rem .4rem}
+.week-summary-row input[type=number]:focus{outline:none;border-color:var(--accent)}
+
+/* PHASE SECTION */
+.phase-section{margin-top:2.5rem}
+.phase-title{font-family:'Syne',sans-serif;font-size:1.3rem;font-weight:800;margin-bottom:1rem;padding:.6rem 1rem;border-left:4px solid var(--accent)}
+
+/* LIBRARY CARDS */
+.library-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:.75rem;margin:1rem 0}
+.lib-card{background:var(--surface);border:1px solid var(--border);border-radius:6px;overflow:hidden}
+.lib-card-header{padding:.85rem 1rem;cursor:pointer;display:flex;justify-content:space-between;align-items:center;transition:background .2s}
+.lib-card-header:hover{background:var(--surface2)}
+.lib-card-title{font-family:'Syne',sans-serif;font-size:.9rem;font-weight:800}
+.lib-card-body{padding:1rem;border-top:1px solid var(--border);display:none;font-size:.82rem;line-height:1.6}
+.lib-card-body.open{display:block}
+.lib-card-body li{margin-left:1.2rem;margin-bottom:.25rem;color:var(--muted)}
+.lib-card-body strong{color:var(--text);font-family:'JetBrains Mono',monospace;font-size:.75rem}
+.lib-card-science{font-family:'Lora',serif;font-style:italic;font-size:.78rem;color:#71717a;margin-top:.75rem;padding-top:.75rem;border-top:1px solid rgba(63,63,70,.4)}
+
+/* SCIENCE CARDS */
+.science-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:.75rem;margin:1rem 0}
+.sci-card{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:1.1rem}
+.sci-card-num{font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--accent);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.4rem}
+.sci-card-title{font-family:'Syne',sans-serif;font-size:.95rem;font-weight:800;color:var(--text);margin-bottom:.5rem}
+.sci-card-body{font-family:'Lora',serif;font-style:italic;font-size:.8rem;color:var(--muted);line-height:1.55}
+
+/* MISC */
+.divider{border:none;border-top:1px solid var(--border);margin:2rem 0}
+.flex-between{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem}
+.text-muted{color:var(--muted)}
+.text-accent{color:var(--accent)}
+.text-blue{color:var(--accent2)}
+.mt-1{margin-top:.5rem}
+.mt-2{margin-top:1rem}
+
+@media(max-width:640px){
+  .hero{padding:1.5rem 1rem 1.2rem}
+  .main{padding:0 1rem 3rem}
+  .phase-nav{padding:.6rem 1rem}
+  .day-grid{grid-template-columns:1fr}
+  .chart-bars{gap:2px}
+}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-top">
+      <div>
+        <h1 class="hero-title">Chicago Marathon <span>Training Plan</span></h1>
+        <div class="hero-badges">
+          <span class="badge badge-orange">Ari's Plan</span>
+          <span class="badge badge-blue">VDOT <span id="vdot-badge">49.2</span></span>
+          <span class="badge badge-green">23 Weeks</span>
+          <span class="badge badge-amber" id="phase-badge-hero">Loading...</span>
+        </div>
+      </div>
+      <button class="export-btn" onclick="exportLog()">⬇ Export Log</button>
+    </div>
+
+    <div class="countdown-block">
+      <div class="countdown-label">Days to the Chicago Marathon</div>
+      <div class="countdown-days mono" id="days-remaining">—</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.75rem;color:var(--muted);margin-top:.5rem">October 11, 2026 · Chicago, IL</div>
+      <div style="display:flex;justify-content:center;gap:1.5rem;margin-top:.75rem;flex-wrap:wrap">
+        <div style="text-align:center"><div style="font-family:'JetBrains Mono',monospace;font-size:1rem;color:var(--accent)">3:05:00</div><div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em">Goal Time</div></div>
+        <div style="text-align:center"><div style="font-family:'JetBrains Mono',monospace;font-size:1rem;color:var(--green)">3:13:13</div><div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em">Marathon PR</div></div>
+        <div style="text-align:center"><div style="font-family:'JetBrains Mono',monospace;font-size:1rem;color:var(--blue)">1:34:47</div><div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em">Half PR</div></div>
+      </div>
+      <div id="phase-badge" class="phase-badge">Loading phase...</div>
+    </div>
+
+    <div class="progress-bar-wrap">
+      <div class="progress-bar-label">
+        <span class="mono">Training Progress</span>
+        <span class="mono" id="progress-pct">0%</span>
+      </div>
+      <div class="progress-bar-bg"><div class="progress-bar-fill" id="progress-fill" style="width:0%"></div></div>
+    </div>
+
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="hero-stat-val mono" id="stat-mpace">—</div><div class="hero-stat-label">M-Pace /mi</div></div>
+      <div class="hero-stat"><div class="hero-stat-val mono" id="stat-tpace">—</div><div class="hero-stat-label">T-Pace /mi</div></div>
+      <div class="hero-stat"><div class="hero-stat-val mono">62</div><div class="hero-stat-label">Peak Miles</div></div>
+      <div class="hero-stat"><div class="hero-stat-val mono">Oct 11</div><div class="hero-stat-label">Race Date</div></div>
+      <div class="hero-stat"><div class="hero-stat-val mono">3</div><div class="hero-stat-label">Peak 20-Milers</div></div>
+      <div class="hero-stat"><div class="hero-stat-val mono">3:05:00</div><div class="hero-stat-label">Goal Time</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- PHASE NAV -->
+<nav class="phase-nav" id="phase-nav">
+  <div class="phase-nav-inner">
+    <a class="phase-tab" href="#phase1" data-phase="1">Ph1 · Base</a>
+    <a class="phase-tab" href="#phase2" data-phase="2">Ph2 · Build</a>
+    <a class="phase-tab" href="#phase3" data-phase="3">Ph3 · Peak</a>
+    <a class="phase-tab" href="#phase4" data-phase="4">Ph4 · Taper</a>
+    <a class="phase-tab" href="#vdot-section">VDOT</a>
+    <a class="phase-tab" href="#chart-section">Chart</a>
+    <a class="phase-tab" href="#library-section">Library</a>
+    <a class="phase-tab" href="#science-section">Science</a>
+  </div>
+</nav>
+
+<div class="main">
+
+  <!-- VDOT PANEL -->
+  <div id="vdot-section">
+  <div class="vdot-panel">
+    <div class="vdot-controls">
+      <div class="vdot-label">VDOT Calculator</div>
+      <div class="vdot-input-wrap">
+        <input type="range" id="vdot-slider" min="25" max="85" step="0.1" value="49.2"/>
+        <input type="number" id="vdot-number" min="25" max="85" step="0.1" value="49.2"/>
+      </div>
+    </div>
+    <div class="vdot-hint">Your training paces update everywhere as you adjust VDOT.</div>
+    <table class="pace-table">
+      <thead><tr><th>Zone</th><th>Pace /mi</th><th>% VO2max</th><th>Physiological Description</th></tr></thead>
+      <tbody id="pace-table-body"></tbody>
+    </table>
+    <div class="race-times" id="race-times"></div>
+  </div>
+  </div>
+
+  <!-- MILEAGE CHART -->
+  <div id="chart-section">
+  <h2 class="section-header">23-Week Mileage Overview</h2>
+  <div class="chart-wrap">
+    <div class="chart-bars" id="mileage-chart"></div>
+  </div>
+  </div>
+
+  <!-- TRAINING PLAN -->
+  <div id="phase1" class="phase-section">
+    <h2 class="section-header">Phase 1 — Aerobic Base <span class="text-muted" style="font-size:.9rem;font-weight:400">Weeks 1–8 · May 4 – Jun 28</span></h2>
+    <div id="weeks-phase1"></div>
+  </div>
+
+  <div id="phase2" class="phase-section">
+    <h2 class="section-header">Phase 2 — Build & Quality <span class="text-muted" style="font-size:.9rem;font-weight:400">Weeks 9–16 · Jun 29 – Aug 23</span></h2>
+    <div id="weeks-phase2"></div>
+  </div>
+
+  <div id="phase3" class="phase-section">
+    <h2 class="section-header">Phase 3 — Peak <span class="text-muted" style="font-size:.9rem;font-weight:400">Weeks 17–19 · Aug 24 – Sep 13</span></h2>
+    <div id="weeks-phase3"></div>
+  </div>
+
+  <div id="phase4" class="phase-section">
+    <h2 class="section-header">Phase 4 — Taper <span class="text-muted" style="font-size:.9rem;font-weight:400">Weeks 20–23 · Sep 14 – Oct 11</span></h2>
+    <div id="weeks-phase4"></div>
+  </div>
+
+  <!-- STRENGTH & MOBILITY LIBRARY -->
+  <hr class="divider" id="library-section"/>
+  <h2 class="section-header">Strength & Mobility Library</h2>
+  <div class="library-grid" id="strength-library"></div>
+  <h2 class="section-header mt-2">Mobility Library</h2>
+  <div class="library-grid" id="mobility-library"></div>
+
+  <!-- SCIENCE SECTION -->
+  <hr class="divider" id="science-section"/>
+  <h2 class="section-header">Science & Physiology</h2>
+  <div class="science-grid" id="science-cards"></div>
+
+</div><!-- /main -->
+
+<script>
+// ─────────────────────────────────────────────
+// VDOT PACE ENGINE — EXACT JACK DANIELS TABLE
+// ─────────────────────────────────────────────
+// Source: Jack Daniels' Running Formula, Table 2 (Training Intensities)
+// All paces stored as seconds per mile. E = midpoint of Easy range.
+// M = Marathon pace per mile. T = Threshold per mile. I = Interval per mile.
+// R = Repetition pace per mile (200m rep pace × 8, i.e. per-mile equivalent).
+// Interpolation used for decimal VDOT values.
+
+const DANIELS_TABLE = {
+//  vdot: [E_secs, M_secs, T_secs, I_secs, R_secs]
+//  E: midpoint of E/L range (per mile). M: per mile. T: per mile. I: per mile. R: 200m×8 equiv per mile.
+  30: [719, 662, 618, 574, 534],
+  31: [703, 645, 602, 558, 520],
+  32: [688, 629, 587, 543, 504],
+  33: [673, 614, 573, 529, 491],
+  34: [658, 600, 560, 516, 480],
+  35: [644, 587, 547, 504, 468],
+  36: [630, 574, 535, 492, 457],
+  37: [617, 562, 524, 481, 446],
+  38: [604, 550, 513, 471, 436],
+  39: [591, 538, 502, 461, 426],
+  40: [579, 527, 492, 451, 416],
+  41: [567, 516, 482, 442, 407],
+  42: [556, 506, 472, 433, 398],
+  43: [545, 496, 463, 424, 390],
+  44: [534, 486, 454, 415, 382],
+  45: [524, 477, 445, 407, 374],
+  46: [514, 468, 437, 399, 366],
+  47: [504, 459, 428, 391, 359],
+  48: [495, 451, 420, 384, 352],
+  49: [486, 443, 413, 377, 345],
+  50: [477, 435, 405, 370, 338],
+  51: [469, 427, 398, 363, 332],
+  52: [461, 420, 391, 357, 326],
+  53: [453, 413, 384, 351, 320],
+  54: [445, 406, 378, 345, 314],
+  55: [437, 399, 371, 339, 308],
+  56: [430, 393, 365, 333, 302],
+  57: [423, 386, 359, 327, 297],
+  58: [416, 380, 353, 322, 292],
+  59: [409, 374, 347, 316, 287],
+  60: [403, 368, 342, 311, 282],
+  61: [396, 363, 336, 306, 277],
+  62: [390, 357, 331, 301, 272],
+  63: [385, 352, 326, 296, 268],
+  64: [379, 347, 321, 291, 263],
+  65: [373, 341, 316, 287, 259],
+  66: [368, 336, 311, 282, 255],
+  67: [363, 332, 306, 278, 251],
+  68: [358, 327, 302, 273, 247],
+  69: [353, 322, 297, 269, 243],
+  70: [344, 318, 293, 265, 239],
+  71: [338, 313, 289, 261, 235],
+  72: [333, 309, 285, 257, 232],
+  73: [328, 305, 281, 253, 228],
+  74: [323, 300, 277, 249, 225],
+  75: [318, 296, 273, 246, 221],
+  76: [314, 292, 269, 242, 218],
+  77: [309, 288, 265, 239, 215],
+  78: [305, 284, 262, 235, 212],
+  79: [301, 280, 258, 232, 209],
+  80: [297, 277, 255, 229, 206],
+  81: [293, 273, 251, 226, 203],
+  82: [289, 270, 248, 223, 200],
+  83: [285, 266, 245, 220, 197],
+  84: [281, 263, 242, 217, 194],
+  85: [277, 260, 239, 214, 192],
+};
+
+// Marathon race times from Daniels table (H:MM:SS → seconds), for race predictor display
+const DANIELS_MARATHON = {
+  30:17937,31:17517,32:17094,33:16683,34:16323,35:15963,36:15619,37:15290,38:14955,39:14634,
+  40:14385,41:14100,42:13843,43:13588,44:13347,45:13108,46:12864,47:12660,48:12449,49:12240,
+  50:12049,51:11859,52:11676,53:11521,54:11327,55:11161,56:11000,57:10845,58:10694,59:10545,
+  60:10405,61:10268,62:10118,63:9996,64:9838,65:9715,66:9630,67:9480,68:9407,69:9272,
+  70:9190,71:9086,72:8984,73:8885,74:8789,75:8695,76:8603,77:8514,78:8427,79:8342,
+  80:8258,81:8177,82:8097,83:8020,84:7944,85:7870
+};
+const DANIELS_HALF = {
+  30:8464,31:8277,32:8029,33:7830,34:7683,35:7467,36:7299,37:7114,38:6955,39:6834,
+  40:6699,41:6520,42:6443,43:6268,44:6137,45:5980,46:5907,47:5760,48:5649,49:5592,
+  50:5469,51:5402,52:5258,53:5187,54:5100,55:5058,56:4980,57:4903,58:4824,59:4757,
+  60:4689,61:4622,62:4607,63:4494,64:4418,65:4373,66:4356,67:4260,68:4233,69:4152,
+  70:4121,71:4071,72:3982,73:3905,74:3859,75:3804,76:3803,77:3716,78:3687,79:3634,
+  80:3594,81:3555,82:3515,83:3481,84:3445,85:3417
+};
+const DANIELS_10K = {
+  30:3640,31:3561,32:3326,33:3261,34:3206,35:3120,36:3044,37:2969,38:2897,39:2829,
+  40:2763,41:2701,42:2641,43:2584,44:2529,45:2476,46:2425,47:2376,48:2329,49:2284,
+  50:2241,51:2199,52:2159,53:2120,54:2082,55:2046,56:2011,57:1977,58:1944,59:1912,
+  60:1882,61:1852,62:1823,63:1795,64:1768,65:1741,66:1715,67:1690,68:1666,69:1643,
+  70:1620,71:1598,72:1576,73:1555,74:1535,75:1514,76:1495,77:1476,78:1457,79:1439,
+  80:1421,81:1403,82:1386,83:1370,84:1354,85:1339
+};
+
+const ZONES = [
+  {key:'E', name:'Easy',      color:'#4ade80', vo2:'65–79%', desc:'Aerobic base — conversational, mitochondrial development'},
+  {key:'M', name:'Marathon',  color:'#38bdf8', vo2:'80–89%', desc:'Race-specific fat oxidation, glycogen economy'},
+  {key:'T', name:'Threshold', color:'#fbbf24', vo2:'88–92%', desc:'Lactate threshold — 4 mmol/L blood lactate clearance'},
+  {key:'I', name:'Interval',  color:'#f97316', vo2:'95–100%', desc:'VO2max ceiling — 3–5 min maximal aerobic intervals'},
+  {key:'R', name:'Repetition',color:'#c084fc', vo2:'105–120%', desc:'Running economy — neuromuscular efficiency, strides'},
+];
+
+// Linear interpolation between two integer VDOT rows
+function calcPace(v, zone) {
+  const zoneIdx = {E:0, M:1, T:2, I:3, R:4}[zone];
+  const vLow = Math.floor(v), vHigh = Math.ceil(v);
+  const frac = v - vLow;
+  const vMin = Math.max(30, Math.min(85, vLow));
+  const vMax = Math.max(30, Math.min(85, vHigh));
+  const lo = DANIELS_TABLE[vMin][zoneIdx];
+  const hi = DANIELS_TABLE[vMax][zoneIdx];
+  return lo + (hi - lo) * frac;
+}
+
+function interpTable(table, v) {
+  const vLow = Math.max(30, Math.min(85, Math.floor(v)));
+  const vHigh = Math.max(30, Math.min(85, Math.ceil(v)));
+  const frac = v - Math.floor(v);
+  return table[vLow] + (table[vHigh] - table[vLow]) * frac;
+}
+
+function secsToMSS(s) {
+  s = Math.round(s);
+  const m = Math.floor(s/60), ss = s%60;
+  return `${m}:${ss.toString().padStart(2,'0')}`;
+}
+function secsToHMSS(s) {
+  s = Math.round(s);
+  const h = Math.floor(s/3600), m = Math.floor((s%3600)/60), ss = s%60;
+  return `${h}:${m.toString().padStart(2,'0')}:${ss.toString().padStart(2,'0')}`;
+}
+let currentVdot = parseFloat(localStorage.getItem('vdot') || '49.2');
+function getPace(zone) { return calcPace(currentVdot, zone); }
+function getPaceFmt(zone) { return secsToMSS(getPace(zone)); }
+
+function updateVdot(v) {
+  currentVdot = parseFloat(v);
+  localStorage.setItem('vdot', currentVdot);
+  document.getElementById('vdot-slider').value = currentVdot;
+  document.getElementById('vdot-number').value = currentVdot;
+  document.getElementById('vdot-badge').textContent = currentVdot;
+  document.getElementById('stat-mpace').textContent = getPaceFmt('M');
+  document.getElementById('stat-tpace').textContent = getPaceFmt('T');
+  // Race times — from real Daniels table with interpolation
+  const marathon = interpTable(DANIELS_MARATHON, currentVdot);
+  const half = interpTable(DANIELS_HALF, currentVdot);
+  const k10 = interpTable(DANIELS_10K, currentVdot);
+  document.getElementById('stat-marathon').textContent = secsToHMSS(marathon);
+  // Pace table
+  const tbody = document.getElementById('pace-table-body');
+  tbody.innerHTML = ZONES.map(z => `<tr>
+    <td><span class="pace-zone-dot" style="background:${z.color}"></span>${z.name}</td>
+    <td style="color:${z.color}" class="mono">${getPaceFmt(z.key)}/mi</td>
+    <td class="mono" style="color:#71717a">${z.vo2}</td>
+    <td style="color:#a1a1aa;font-size:.8rem">${z.desc}</td>
+  </tr>`).join('');
+  // Race times panel
+  document.getElementById('race-times').innerHTML = [
+    {label:'Marathon',val:secsToHMSS(marathon)},
+    {label:'Half Marathon',val:secsToHMSS(half)},
+    {label:'10K',val:secsToHMSS(k10)},
+  ].map(r=>`<div class="race-time-card"><div class="race-time-val">${r.val}</div><div class="race-time-label">${r.label}</div></div>`).join('');
+  // Update all live paces
+  document.querySelectorAll('.live-pace[data-zone]').forEach(el => {
+    el.textContent = getPaceFmt(el.dataset.zone) + '/mi';
+  });
+}
+
+document.getElementById('vdot-slider').addEventListener('input', e => updateVdot(e.target.value));
+document.getElementById('vdot-number').addEventListener('input', e => {
+  let v = Math.min(85, Math.max(25, parseFloat(e.target.value)||49.2));
+  updateVdot(v);
+});
+
+// ─────────────────────────────────────────────
+// COUNTDOWN
+// ─────────────────────────────────────────────
+const RACE_DATE = new Date('2026-10-11T07:30:00-05:00');
+const TRAIN_START = new Date('2026-05-04T00:00:00');
+const TRAIN_END = new Date('2026-10-11T00:00:00');
+const PHASES = [
+  {name:'Base Start',     start:'2026-05-04', end:'2026-05-10'},
+  {name:'Aerobic Base',   start:'2026-05-11', end:'2026-06-28'},
+  {name:'Build & Quality',start:'2026-06-29', end:'2026-08-23'},
+  {name:'Peak',           start:'2026-08-24', end:'2026-09-14'},
+  {name:'Taper',          start:'2026-09-15', end:'2026-10-10'},
+];
+
+function getCurrentPhase() {
+  const now = new Date();
+  for (let p of PHASES) {
+    if (now >= new Date(p.start) && now <= new Date(p.end)) return p.name;
+  }
+  if (now > new Date('2026-10-11')) return 'Race Complete — Chicago 2026';
+  if (now < new Date('2026-05-04')) return 'Pre-Training';
+  return 'Training';
+}
+
+function updateCountdown() {
+  const now = new Date();
+  const diff = RACE_DATE - now;
+  if (diff <= 0) {
+    document.getElementById('days-remaining').textContent = '🏅';
+    return;
+  }
+  const days = Math.floor(diff / 86400000);
+  document.getElementById('days-remaining').textContent = days;
+  const phase = getCurrentPhase();
+  document.getElementById('phase-badge').textContent = `📍 ${phase}`;
+  document.getElementById('phase-badge-hero').textContent = phase;
+  // Progress
+  const total = TRAIN_END - TRAIN_START;
+  const elapsed = Math.max(0, Math.min(total, now - TRAIN_START));
+  const pct = Math.round((elapsed/total)*100);
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-pct').textContent = pct + '%';
+}
+setInterval(updateCountdown, 60000);
+updateCountdown();
+
+// ─────────────────────────────────────────────
+// TRAINING DATA
+// ─────────────────────────────────────────────
+const TAGS = ['Felt Great','On Pace','Struggled','Cut Short','Extra Miles','Legs Heavy','Legs Fresh','Weather Issue','Skipped','Modified'];
+
+const weeks = [
+// Phase 1
+{wk:1,phase:1,dates:'May 4–10',miles:35,deload:false,days:[
+  {name:'Mon',type:'easy',title:'Easy Run',miles:6,presc:'6 miles at E-pace (<span class="live-pace" data-zone="E">—</span>). Aerobic base, fully conversational.'},
+  {name:'Tue',type:'easy',title:'Easy Run',miles:7,presc:'7 miles at E-pace (<span class="live-pace" data-zone="E">—</span>). Relax and run easy.'},
+  {name:'Wed',type:'mlr',title:'Mid-Week Long Run',miles:9,presc:'9 miles at E-pace (<span class="live-pace" data-zone="E">—</span>) — mid-week long run. Run continuously at full conversational effort. No watch pressure. Purpose: extend aerobic stimulus mid-week without long run recovery cost.',science:'MLR + Saturday long run = 40–45% of weekly volume (Daniels principle). Twin aerobic stimulus without excessive fatigue.'},
+  {name:'Thu',type:'strength',title:'Strength A — Glute & Hip',miles:0,presc:'Strength session A. 35–40 min. Bulgarian Split Squat · SL RDL · Hip Thrust · Step-Up · Lateral Band Walk · Copenhagen Plank.',science:'Hip abductor and glute strength reduce knee valgus and IT band stress — #1 injury pattern in marathon runners at high mileage.'},
+  {name:'Fri',type:'easy',title:'Easy Run',miles:5,presc:'5 miles at E-pace (<span class="live-pace" data-zone="E">—</span>). Recovery effort — keep it easy.'},
+  {name:'Sat',type:'longrun',title:'Long Run',miles:15,presc:'15 miles at E-pace (<span class="live-pace" data-zone="E">—</span>). Fuel every 40–45 min. Stay fully aerobic.',science:'Long run builds mitochondrial density, fat oxidation capacity, and mental resilience for the later miles.'},
+  {name:'Sun',type:'rest',title:'Full Rest',miles:0,presc:'Complete rest. No exceptions.'},
+]},
+{wk:2,phase:1,dates:'May 11–17',miles:39,deload:false,days:[
+  {name:'Mon',type:'easy',title:'Easy Run',miles:6,presc:'6 miles at E-pace (<span class="live-pace" data-zone="E">—</span>).'},
+  {name:'Tue',type:'easy',title:'Easy Run + Strides',miles:7,presc:'7 miles at E-pace (<span class="live-pace" data-zone="E">—</span>) + 6×20 sec strides at R-pace (<span class="live-pace" data-zone="R">—</span>) with 60 sec walk recovery.',science:'Strides activate fast-twitch fibers without aerobic fatigue — primes neuromuscular economy.'},
+  {name:'Wed',type:'mlr',title:'Mid-Week Long Run',miles:10,presc:'10 miles at E-pace (<span class="live-pace" data-zone="E">—</span>) — mid-week long run. Run continuously at full conversational effort.',science:'Extending weekly aerobic stimulus while protecting Saturday long run recovery.'},
+  {name:'Thu',type:'strength',title:'Strength B — Posterior Chain',miles:0,presc:'Strength session B. 35–40 min. Nordic Hamstring Curl · SL Calf Raise · Deadlift · Reverse Lunge · Glute Bridge March · Tibialis Raise.',science:'Nordic curls reduce hamstring injury risk by 51% (Petersen 2011). Tibialis raises counter medial tibial stress syndrome.'},
+  {name:'Fri',type:'easy',title:'Easy Run',miles:5,presc:'5 miles at E-pace (<span class="live-pace" data-zone="E">—</span>). Recovery effort.'},
+  {name:'Sat',type:'longrun',title:'Long Run',miles:17,presc:'17 miles at E-pace (<span class="live-pace" data-zone="E">—</span>). Fuel every 40–45 min. Walk breaks allowed as needed.',science:'Progressive long run buildup — adding 2 miles/week is a safe aerobic overload increment.'},
+  {name:'Sun',type:'rest',title:'Full Rest',miles:0,presc:'Complete rest. No exceptions.'},
+]},
+{wk:3,phase:1,dates:'May 18–24',miles:43,deload:false,days:[
+  {name:'Mon',type:'easy',title:'Easy Run',miles:6,presc:'6 miles at E-pace (<span class="live-pace" data-zone="E">—</span>).'},
+  {name:'Tue',type:'easy',title:'Easy Run + Strides',miles:8,presc:'8 miles at E-pace (<span class="live-pace" data-zone="E">—</span>) + 6×20 sec strides at R-pace (<span class="live-pace" data-zone="R">—</span>).'},
+  {name:'Wed',type:'mlr',title:'Mid-Week Long Run',miles:11,presc:'11 miles at E-pace (<span class="live-pace" data-zone="E">—</span>) — mid-week long run.',science:'Peak MLR of early base phase. Combined with Saturday 20-miler, this week delivers maximum aerobic volume.'},
+  {name:'Thu',type:'strength',title:'Strength A — Glute & Hip',miles:0,presc:'Strength session A. 35–40 min. Bulgarian Split Squat · SL RDL · Hip Thrust · Step-Up · Lateral Band Walk · Copenhagen Plank.'},
+  {name:'Fri',type:'easy',title:'Easy Run',miles:5,presc:'5 miles at E-pace (<span class="live-pace" data-zone="E">—</span>). Recovery effort.'},
+  {name:'Sat',type:'longrun',title:'Long Run — 20 Miles',miles:20,presc:'20 miles at E-pace (<span class="live-pace" data-zone="E">—</span>). First 20-miler of the plan. Fuel every 40–45 min. Treat this like race day prep.',science:'First 20-miler: glycogen depletion experience + psychological milestone. Most athletes feel this is a turning point in readiness.'},
+  {name:'Sun',type:'rest',title:'Full Rest',miles:0,presc:'Complete rest. No exceptions.'},
+]},
+{wk:4,phase:1,dates:'May 25–31',miles:33,deload:true,days:[
+  {name:'Mon',type:'easy',title:'Easy Run',miles:5,presc:'5 miles at E-pace (<span class="live-pace" data-zone="E">—</span>). Deload week — keep it easy.'},
+  {name:'Tue',type:'easy',title:'Easy Run',miles:6,presc:'6 miles at E-pace (<span class="live-pace" data-zone="E">—</span>). No strides this week.'},
+  {name:'Wed',type:'mlr',title:'MLR — Deload',miles:8,presc:'8 miles at E-pace (<span class="live-pace" data-zone="E">—</span>). Reduced volume deload MLR.',science:'Supercompensation principle: planned recovery allows the body to absorb and exceed prior fitness level.'},
+  {name:'Thu',type:'strength',title:'Core Circuit',miles:0,presc:'Core circuit. 20–25 min. Dead Bug · Pallof Press · Side Plank · Bird Dog · Mountain Climber · Hollow Body Rock.',science:'Anti-rotation core work reduces pelvic drop and energy leakage, improving running economy by 2–4%.'},
+  {name:'Fri',type:'easy',title:'Easy Run',miles:4,presc:'4 miles at E-pace (<span class="live-pace" data-zone="E">—</span>).'},
+  {name:'Sat',type:'longrun',title:'Long Run — Deload',miles:14,presc:'14 miles at E-pace (<span class="live-pace" data-zone="E">—</span>). Deload long run. Comfortable and controlled.',science:'Planned deload long run maintains long-run adaptations without excessive fatigue accumulation.'},
+  {name:'Sun',type:'rest',title:'Full Rest',miles:0,presc:'Complete rest. No exceptions.'},
+]},
+{wk:5,phase:1,dates:'Jun 1–7',miles:46,deload:false,days:[
+  {name:'Mon',type:'easy',title:'Easy Run',miles:7,presc:'7 miles at E-pace (<span class="live-pace" data-zone="E">—</span>).'},
+  {name:'Tue',type:'easy',title:'Easy Run + Strides',miles:8,presc:'8 miles at E-pace (<span class="live-pace" data-zone="E">—</span>) + 6×20 sec strides at R-pace (<span class="live-pace" data-zone="R">—</span>).'},
+  {name:'Wed',type:'mlr',title:'Mid-Week Long Run',miles:11,presc:'11 miles at E-pace (<span class="live-pace" data-zone="E">—</span>) — mid-week long run.',science:'Return to full aerobic stimulus post-deload. Supercompensation should feel like extra energy today.'},
+  {name:'Thu',type:'strength',title:'Strength B — Posterior Chain',miles:0,presc:'Strength session B. 35–40 min. Nordic Hamstring Curl · SL Calf Raise · Deadlift · Reverse Lunge · Glute Bridge March · Tibialis Raise.'},
+  {name:'Fri',type:'easy',title:'Easy Run',miles:5,presc:'5 miles at E-pace (<span class="live-pace" data-zone="E">—</span>).'},
+  {name:'Sat',type:'longrun',title:'Long Run — 20 Miles',miles:20,presc:'20 miles at E-pace (<span class="live-pace" data-zone="E">—</span>). Second 20-miler. Fuel every 40–45 min.',science:'Repeated 20-mile exposure builds glycogen depletion tolerance and teaches the body to economize fuel usage.'},
+  {name:'Sun',type:'rest',title:'Full Rest',miles:0,presc:'Complete rest. No exceptions.'},
+]},
+{wk:6,phase:1,dates:'Jun 8–14',miles:48,deload:false,days:[
+  {name:'Mon',type:'easy',title:'Easy Run',miles:7,presc:'7 miles at E-pace (<span class="live-pace" data-zone="E">—</span>).'},
+  {name:'Tue',type:'easy',title:'Easy Run + Strides',miles:8,presc:'8 miles at E-pace (<span class="live-pace" data-zone="E">—</span>) + 6×20 sec strides at R-pace (<span class="live-pace" data-zone="R">—</span>).'},
+  {name:'Wed',type:'mlr',title:'Mid-Week Long Run',miles:12,presc:'12 miles at E-pace (<span class="live-pace" data-zone="E">—</span>) — mid-week long run.',science:'Peak base-phase MLR. Together with 21-mile Saturday, this is the biggest aerobic week so far.'},
+  {name:'Thu',type:'strength',title:'Strength A — Glute & Hip',miles:0,presc:'Strength session A. 35–40 min. Bulgarian Split Squat · SL RDL · Hip Thrust · Step-Up · Lateral Band Walk · Copenhagen Plank.'},
+  {name:'Fri',type:'easy',title:'Easy Run',miles:5,presc:'5 miles at E-pace (<span class="live-pace" data-zone="E">—</span>).'},
+  {name:'Sat',type:'longrun',title:'Long Run — 21 Miles',miles:21,presc:'21 miles at E-pace (<span class="live-pace" data-zone="E">—</span>). Longest base-phase long run. Fuel every 40–45 min.',science:'Extended long run exposure teaches fat oxidation at aerobic pace — critical for the final 10K of a marathon.'},
+  {name:'Sun',type:'rest',title:'Full Rest',miles:0,presc:'Complete rest. No exceptions.'},
+]},
+{wk:7,phase:1,dates:'Jun 15–21',miles:38,deload:true,days:[
+  {name:'Mon',type:'easy',title:'Easy Run',miles:5,presc:'5 miles at E-pace (<span class="live-pace" data-zone="E">—</span>). Second deload week.'},
+  {name:'Tue',type:'easy',title:'Easy Run',miles:7,presc:'7 miles at E-pace (<span class="live-pace" data-zone="E">—</span>). No strides.'},
+  {name:'Wed',type:'mlr',title:'MLR — Deload',miles:9,presc:'9 miles at E-pace (<span class="live-pace" data-zone="E">—</span>). Reduced effort deload.',science:'Second deload in base phase. The body is primed to absorb Phase 2 quality work after this recovery window.'},
+  {name:'Thu',type:'strength',title:'Core Circuit',miles:0,presc:'Core circuit. 20–25 min. Dead Bug · Pallof Press · Side Plank · Bird Dog · Mountain Climber · Hollow Body Rock.'},
+  {name:'Fri',type:'easy',title:'Easy Run',miles:4,presc:'4 miles at E-pace (<span class="live-pace" data-zone="E">—</span>).'},
+  {name:'Sat',type:'longrun',title:'Long Run — Deload',miles:17,presc:'17 miles at E-pace (<span class="live-pace" data-zone="E">—</span>). Deload long run. Very controlled.',science:'Maintaining long-run pattern at reduced volume. Active recovery while preserving all adaptations built.'},
+  {name:'Sun',type:'rest',title:'Full Rest',miles:0,presc:'Complete rest. No exceptions.'},
+]},
+{wk:8,phase:1,dates:'Jun 22–28',miles:50,deload:false,days:[
+  {name:'Mon',type:'easy',title:'Easy Run',miles:7,presc:'7 miles at E-pace (<span class="live-pace" data-zone="E">—</span>).'},
+  {name:'Tue',type:'easy',title:'Easy Run + Strides',miles:8,presc:'8 miles at E-pace (<span class="live-pace" data-zone="E">—</span>) + 6×20 sec strides at R-pace (<span class="live-pace" data-zone="R">—</span>).'},
+  {name:'Wed',type:'mlr',title:'Mid-Week Long Run',miles:12,presc:'12 miles at E-pace (<span class="live-pace" data-zone="E">—</span>) — final base-phase MLR.',science:'Final base-phase MLR before quality begins. Arrive at Phase 2 aerobically prepared and fresh.'},
+  {name:'Thu',type:'strength',title:'Strength B — Posterior Chain',miles:0,presc:'Strength session B. 35–40 min. Nordic Hamstring Curl · SL Calf Raise · Deadlift · Reverse Lunge · Glute Bridge March · Tibialis Raise.'},
+  {name:'Fri',type:'easy',title:'Easy Run',miles:5,presc:'5 miles at E-pace (<span class="live-pace" data-zone="E">—</span>).'},
+  {name:'Sat',type:'longrun',title:'Long Run — 23 Miles',miles:23,presc:'23 miles at E-pace (<span class="live-pace" data-zone="E">—</span>). Longest purely easy long run of the plan. Fuel every 40–45 min. Stay patient.',science:'23-mile long run is a confidence builder and the aerobic apex of base phase. This prepares you psychologically for race distance.'},
+  {name:'Sun',type:'rest',title:'Full Rest',miles:0,presc:'Complete rest. No exceptions.'},
+]},
+// Phase 2
+{wk:9,phase:2,dates:'Jun 29–Jul 5',miles:53,deload:false,days:[
+  {name:'Mon',type:'easy',title:'Easy Run',miles:7,presc:'7 miles at E-pace (<span class="live-pace" data-zone="E">—</span>).'},
+  {name:'Tue',type:'easy',title:'Easy Run',miles:8,presc:'8 miles at E-pace (<span class="live-pace" data-zone="E">—</span>).'},
+  {name:'Wed',type:'workout',title:'Cruise Intervals',miles:11,presc:'2 mi E warm-up (<span class="live-pace" data-zone="E">—</span>) → 5×1 mile at T-pace (<span class="live-pace" data-zone="T">—</span>) with 60 sec jog recovery → 2 mi E cool-down (<span class="live-pace" data-zone="E">—</span>). Total quality: 5 miles at T-pace.',science:'Cruise intervals at T-pace elevate lactate threshold at ~4 mmol/L. 60-sec recovery allows near-complete lactate clearance between reps. Comfortably hard — breathing is labored but controlled.'},
+  {name:'Thu',type:'strength',title:'Strength A — Glute & Hip',miles:0,presc:'Strength session A. Increase load 5–10% from base phase. 35–40 min.'},
+  {name:'Fri',type:'easy',title:'Easy Run',miles:5,presc:'5 miles at E-pace (<span class="live-pace" data-zone="E">—</span>).'},
+  {name:'Sat',type:'longrun',title:'Long Run — 22 Miles',miles:22,presc:'22 miles at E-pace (<span class="live-pace" data-zone="E">—</span>). Fuel every 40–45 min.',science:'High-volume long run immediately following first quality week. Builds fatigue resistance — central marathon adaptation.'},
+  {name:'Sun',type:'rest',title:'Full Rest',miles:0,presc:'Complete rest. No exceptions.'},
+]},
+{wk:10,phase:2,dates:'Jul 6–12',miles:55,deload:false,days:[
+  {name:'Mon',type:'easy',title:'Easy Run',miles:7,presc:'7 miles at E-pace (<span class="live-pace" data-zone="E">—</span>).'},
+  {name:'Tue',type:'easy',title:'Easy Run',miles:8,presc:'8 miles at E-pace (<span class="live-pace" data-zone="E">—</span>).'},
+  {name:'Wed',type:'workout',title:'Continuous Tempo 2×20 min',miles:11,presc:'2 mi E warm-up (<span class="live-pace" data-zone="E">—</span>) → 20 min continuous at T-pace (<span class="live-pace" data-zone="T">—</span>) → 2 min easy jog → 20 min continuous at T-pace (<span class="live-pace" data-zone="T">—</span>) → 2 mi E cool-down (<span class="live-pace" data-zone="E">—</span>). Total quality: ~5.4 miles at T-pace.',science:'2×20 min is Daniels\' gold standard threshold session. Single 40-min tempo accumulates too much fatigue; two 20-min blocks maximize LT stimulus. Effort: sustained controlled discomfort — not a race, not a jog.'},
+  {name:'Thu',type:'strength',title:'Strength B — Posterior Chain',miles:0,presc:'Strength session B. Increase load 5–10%. 35–40 min.'},
+  {name:'Fri',type:'easy',title:'Easy Run',miles:5,presc:'5 miles at E-pace (<span class="live-pace" data-zone="E">—</span>).'},
+  {name:'Sat',type:'longrun',title:'Long Run — 22 Miles',miles:22,presc:'22 miles at E-pace (<span class="live-pace" data-zone="E">—</span>). Fuel every 40–45 min.',science:'Back-to-back 22-mile Saturdays reinforce glycogen economy and train sustained aerobic output.'},
+  {name:'Sun',type:'rest',title:'Full Rest',miles:0,presc:'Complete rest. No exceptions.'},
+]},
+{wk:11,phase:2,dates:'Jul 13–19',miles:57,deload:false,days:[
+  {name:'Mon',type:'easy',title:'Easy Run',miles:8,presc:'8 miles at E-pace (<span class="live-pace" data-zone="E">—</span>).'},
+  {name:'Tue',type:'easy',title:'Easy Run',miles:8,presc:'8 miles at E-pace (<span class="live-pace" data-zone="E">—</span>).'},
+  {name:'Wed',type:'workout',title:'MLR with M-Pace Finish',miles:12,presc:'7 mi at E-pace (<span class="live-pace" data-zone="E">—</span>) → 5 miles at M-pace (<span class="live-pace" data-zone="M">—</span>). Total: 12 miles.',science:'M-pace miles on tired legs build the fatigue resistance critical for miles 18–26 of the marathon. Most race-specific mid-week stimulus in the entire plan.'},
+  {name:'Thu',type:'strength',title:'Strength A — Glute & Hip',miles:0,presc:'Strength session A. 35–40 min. Progressive loading continues.'},
+  {name:'Fri',type:'easy',title:'Easy Run',miles:5,presc:'5 miles at E-pace (<span class="live-pace" data-zone="E">—</span>).'},
+  {name:'Sat',type:'longrun',title:'Long Run — 24 Miles',miles:24,presc:'24 miles at E-pace (<span class="live-pace" data-zone="E">—</span>). Fuel every 40–45 min. This is a big week — run easy and patient.',science:'24-mile long run is the maximum distance in the plan. Extends beyond race distance to build glycogen depletion tolerance.'},
+  {name:'Sun',type:'rest',title:'Full Rest',miles:0,presc:'Complete rest. No exceptions.'},
+]},
+{wk:12,phase:2,dates:'Jul 20–26',miles:44,deload:true,days:[
+  {name:'Mon',type:'easy',title:'Easy Run',miles:6,presc:'6 miles at E-pace (<span class="live-pace" data-zone="E">—</span>). Third deload week.'},
+  {name:'Tue',type:'easy',title:'Easy Run',miles:7,presc:'7 miles at E-pace (<span class="live-pace" data-zone="E">—</span>).'},
+  {name:'Wed',type:'workout',title:'Cruise Intervals — Deload',miles:9,presc:'2 mi E warm-up (<span class="live-pace" data-zone="E">—</span>) → 3×1 mile at T-pace (<span class="live-pace" data-zone="T">—</span>) with 60 sec jog recovery → 2 mi E cool-down. Deload version — 3 reps instead of 5.',science:'Maintaining quality stimulus at reduced volume. Lactate threshold adaptations are preserved while the body absorbs prior weeks.'},
+  {name:'Thu',type:'strength',title:'Core Circuit',miles:0,presc:'Core circuit. 20–25 min. Dead Bug · Pallof Press · Side Plank · Bird Dog · Mountain Climber · Hollow Body Rock.'},
+  {name:'Fri',type:'easy',title:'Easy Run',miles:4,presc:'4 miles at E-pace (<span class="live-pace" data-zone="E">—</span>).'},
+  {name:'Sat',type:'longrun',title:'Long Run — Deload',miles:18,presc:'18 miles at E-pace (<span class="live-pace" data-zone="E">—</span>). Controlled deload long run. Fuel as usual.',science:'Deload long run maintains aerobic base while allowing musculoskeletal recovery before peak block.'},
+  {name:'Sun',type:'rest',title:'Full Rest',miles:0,presc:'Complete rest. No exceptions.'},
+]},
+{wk:13,phase:2,dates:'Jul 27–Aug 2',miles:57,deload:false,days:[
+  {name:'Mon',type:'easy',title:'Easy Run',miles:8,presc:'8 miles at E-pace (<span class="live-pace" data-zone="E">—</span>).'},
+  {name:'Tue',type:'easy',title:'Easy Run',miles:8,presc:'8 miles at E-pace (<span class="live-pace" data-zone="E">—</span>).'},
+  {name:'Wed',type:'workout',title:'I-Pace Intervals 5×1000m',miles:12,presc:'2 mi E warm-up (<span class="live-pace" data-zone="E">—</span>) → 5×1000m at I-pace (<span class="live-pace" data-zone="I">—</span>) with equal-time jog recovery → 2 mi E cool-down (<span class="live-pace" data-zone="E">—</span>).',science:'I-pace intervals stress the cardiovascular system at 95–100% VO2max. Equal-time recovery maintains quality. Effort: hard — near max aerobic effort, sustainable for ~3–4 min. Raises VO2max ceiling directly.'},
+  {name:'Thu',type:'strength',title:'Strength B — Posterior Chain',miles:0,presc:'Strength session B. 35–40 min. Progressive loading.'},
+  {name:'Fri',type:'easy',title:'Easy Run',miles:5,presc:'5 miles at E-pace (<span class="live-pace" data-zone="E">—</span>).'},
+  {name:'Sat',type:'longrun',title:'Long Run — 24 Miles',miles:24,presc:'24 miles at E-pace (<span class="live-pace" data-zone="E">—</span>). Fuel every 40–45 min. Second 24-miler.',science:'Repeating the 24-mile stimulus builds glycogen depletion resilience and psychological toughness.'},
+  {name:'Sun',type:'rest',title:'Full Rest',miles:0,presc:'Complete rest. No exceptions.'},
+]},
+{wk:14,phase:2,dates:'Aug 3–9',miles:58,deload:false,days:[
+  {name:'Mon',type:'easy',title:'Easy Run',miles:8,presc:'8 miles at E-pace (<span class="live-pace" data-zone="E">—</span>).'},
+  {name:'Tue',type:'easy',title:'Easy Run',miles:8,presc:'8 miles at E-pace (<span class="live-pace" data-zone="E">—</span>).'},
+  {name:'Wed',type:'workout',title:'Threshold Combo — 3×2 Miles',miles:13,presc:'2 mi E warm-up (<span class="live-pace" data-zone="E">—</span>) → 3×2 miles at T-pace (<span class="live-pace" data-zone="T">—</span>) with 2 min jog recovery → 2 mi E cool-down (<span class="live-pace" data-zone="E">—</span>). Total quality: 6 miles at T-pace.',science:'Longer T-pace reps (2 miles) extend time above LT without full race-effort fatigue accumulation. Hardest threshold session in the plan — maximum LT adaptation. Effort: high, controlled, relentless.'},
+  {name:'Thu',type:'strength',title:'Strength A — Glute & Hip',miles:0,presc:'Strength session A. 35–40 min. Progressive loading continues.'},
+  {name:'Fri',type:'easy',title:'Easy Run',miles:5,presc:'5 miles at E-pace (<span class="live-pace" data-zone="E">—</span>).'},
+  {name:'Sat',type:'longrun',title:'Long Run — 24 Miles',miles:24,presc:'24 miles at E-pace (<span class="live-pace" data-zone="E">—</span>). Fuel every 40–45 min. Third 24-miler.',science:'Three 24-mile completions create deep glycogen depletion tolerance. Your body now knows how to run far.'},
+  {name:'Sun',type:'rest',title:'Full Rest',miles:0,presc:'Complete rest. No exceptions.'},
+]},
+{wk:15,phase:2,dates:'Aug 10–16',miles:46,deload:true,days:[
+  {name:'Mon',type:'easy',title:'Easy Run',miles:6,presc:'6 miles at E-pace (<span class="live-pace" data-zone="E">—</span>). Fourth deload week.'},
+  {name:'Tue',type:'easy',title:'Easy Run',miles:7,presc:'7 miles at E-pace (<span class="live-pace" data-zone="E">—</span>).'},
+  {name:'Wed',type:'workout',title:'Continuous Tempo 2×20 min',miles:9,presc:'2 mi E warm-up (<span class="live-pace" data-zone="E">—</span>) → 20 min at T-pace (<span class="live-pace" data-zone="T">—</span>) → 2 min easy → 20 min at T-pace (<span class="live-pace" data-zone="T">—</span>) → 2 mi E cool-down (<span class="live-pace" data-zone="E">—</span>). Deload week — reduced total volume.',science:'Maintaining quality threshold work at reduced load. This deload prepares the body for peak phase.'},
+  {name:'Thu',type:'strength',title:'Core Circuit',miles:0,presc:'Core circuit. 20–25 min. Dead Bug · Pallof Press · Side Plank · Bird Dog · Mountain Climber · Hollow Body Rock.'},
+  {name:'Fri',type:'easy',title:'Easy Run',miles:4,presc:'4 miles at E-pace (<span class="live-pace" data-zone="E">—</span>).'},
+  {name:'Sat',type:'longrun',title:'Long Run — Deload',miles:20,presc:'20 miles at E-pace (<span class="live-pace" data-zone="E">—</span>). Deload long run. Relaxed effort.',science:'Final deload before peak phase. Arrive at Week 17 physically fresh and mentally hungry.'},
+  {name:'Sun',type:'rest',title:'Full Rest',miles:0,presc:'Complete rest. No exceptions.'},
+]},
+{wk:16,phase:2,dates:'Aug 17–23',miles:60,deload:false,days:[
+  {name:'Mon',type:'easy',title:'Easy Run',miles:8,presc:'8 miles at E-pace (<span class="live-pace" data-zone="E">—</span>).'},
+  {name:'Tue',type:'easy',title:'Easy Run',miles:9,presc:'9 miles at E-pace (<span class="live-pace" data-zone="E">—</span>).'},
+  {name:'Wed',type:'workout',title:'I-Pace Peak — 6×1000m',miles:13,presc:'2 mi E warm-up (<span class="live-pace" data-zone="E">—</span>) → 6×1000m at I-pace (<span class="live-pace" data-zone="I">—</span>) with equal-time jog recovery → 2 mi E cool-down (<span class="live-pace" data-zone="E">—</span>). Hardest interval session of the plan.',science:'Six reps at VO2max pace drives maximum aerobic power adaptation. Maintain consistent pace across all 6 reps — not a sprint workout. This builds the VO2max ceiling that makes marathon pace feel sustainable.'},
+  {name:'Thu',type:'strength',title:'Strength B — Posterior Chain',miles:0,presc:'Strength session B. 35–40 min. Final progressive loading week.'},
+  {name:'Fri',type:'easy',title:'Easy Run',miles:6,presc:'6 miles at E-pace (<span class="live-pace" data-zone="E">—</span>).'},
+  {name:'Sat',type:'longrun',title:'Long Run — 24 Miles',miles:24,presc:'24 miles at E-pace (<span class="live-pace" data-zone="E">—</span>). Fuel every 40–45 min. Final 24-miler.',science:'The highest volume week of the plan. After this week, the quality shifts to race-specific peak work.'},
+  {name:'Sun',type:'rest',title:'Full Rest',miles:0,presc:'Complete rest. No exceptions.'},
+]},
+// Phase 3
+{wk:17,phase:3,dates:'Aug 24–30',miles:62,deload:false,days:[
+  {name:'Mon',type:'easy',title:'Easy Run',miles:8,presc:'8 miles at E-pace (<span class="live-pace" data-zone="E">—</span>).'},
+  {name:'Tue',type:'easy',title:'Easy Run',miles:9,presc:'9 miles at E-pace (<span class="live-pace" data-zone="E">—</span>).'},
+  {name:'Wed',type:'workout',title:'T-Pace Long — 3×3 Miles',miles:13,presc:'2 mi E warm-up (<span class="live-pace" data-zone="E">—</span>) → 3×3 miles at T-pace (<span class="live-pace" data-zone="T">—</span>) with 3 min jog recovery → 2 mi E cool-down (<span class="live-pace" data-zone="E">—</span>). Total quality: 9 miles at T-pace. BIGGEST WORKOUT OF THE BLOCK.',science:'9 miles at threshold is the peak lactate threshold overload. Be conservative on rep 1, consistent on rep 2, fight on rep 3. Executed once per plan — do not attempt again before Chicago.'},
+  {name:'Thu',type:'strength',title:'Strength A — Glute & Hip',miles:0,presc:'Strength session A. Reduce load 20% (peak running phase). 35–40 min.'},
+  {name:'Fri',type:'easy',title:'Easy Run',miles:6,presc:'6 miles at E-pace (<span class="live-pace" data-zone="E">—</span>).'},
+  {name:'Sat',type:'longrun',title:'Peak Long Run — 20 Miles w/ M-Pace Finish',miles:20,presc:'14 miles at E-pace (<span class="live-pace" data-zone="E">—</span>) → 6 miles at M-pace (<span class="live-pace" data-zone="M">—</span>). Total: 20 miles. Simulate race-day fueling exactly.',science:'The classic Daniels peak long run. First 14 miles build aerobic base; final 6 miles at goal race pace on tired legs is the most race-specific workout in this plan.'},
+  {name:'Sun',type:'rest',title:'Full Rest',miles:0,presc:'Complete rest. No exceptions.'},
+]},
+{wk:18,phase:3,dates:'Aug 31–Sep 6',miles:60,deload:false,days:[
+  {name:'Mon',type:'easy',title:'Easy Run',miles:8,presc:'8 miles at E-pace (<span class="live-pace" data-zone="E">—</span>).'},
+  {name:'Tue',type:'easy',title:'Easy Run',miles:8,presc:'8 miles at E-pace (<span class="live-pace" data-zone="E">—</span>).'},
+  {name:'Wed',type:'workout',title:'I-Pace 5×1200m',miles:12,presc:'2 mi E warm-up (<span class="live-pace" data-zone="E">—</span>) → 5×1200m at I-pace (<span class="live-pace" data-zone="I">—</span>) with 3 min jog recovery → 2 mi E cool-down (<span class="live-pace" data-zone="E">—</span>).',science:'1200m reps extend time at VO2max beyond 1000m reps. 3 min recovery clears lactate without full rest. Approx 1200m time: ~4:00–4:10. Maintain pace quality across all 5 reps.'},
+  {name:'Thu',type:'strength',title:'Core Circuit',miles:0,presc:'Core circuit. 20–25 min. Reduced loading during peak running phase.'},
+  {name:'Fri',type:'easy',title:'Easy Run',miles:6,presc:'6 miles at E-pace (<span class="live-pace" data-zone="E">—</span>).'},
+  {name:'Sat',type:'longrun',title:'Peak Long Run — 20 Miles w/ M-Pace Finish',miles:20,presc:'14 miles at E-pace (<span class="live-pace" data-zone="E">—</span>) → 6 miles at M-pace (<span class="live-pace" data-zone="M">—</span>). Total: 20 miles. Simulate race-day fueling exactly.',science:'Second peak M-pace long run. By now M-pace on tired legs should feel controlled. If it doesn\'t, you need more recovery.'},
+  {name:'Sun',type:'rest',title:'Full Rest',miles:0,presc:'Complete rest. No exceptions.'},
+]},
+{wk:19,phase:3,dates:'Sep 7–13',miles:58,deload:false,days:[
+  {name:'Mon',type:'easy',title:'Easy Run',miles:8,presc:'8 miles at E-pace (<span class="live-pace" data-zone="E">—</span>).'},
+  {name:'Tue',type:'easy',title:'Easy Run',miles:8,presc:'8 miles at E-pace (<span class="live-pace" data-zone="E">—</span>).'},
+  {name:'Wed',type:'workout',title:'Continuous Tempo 2×20 min',miles:12,presc:'2 mi E warm-up (<span class="live-pace" data-zone="E">—</span>) → 20 min at T-pace (<span class="live-pace" data-zone="T">—</span>) → 2 min easy → 20 min at T-pace (<span class="live-pace" data-zone="T">—</span>) → 2 mi E cool-down (<span class="live-pace" data-zone="E">—</span>).',science:'Final peak threshold session. Should feel controlled — your LT fitness is at an all-time high. The last hard workout before taper begins.'},
+  {name:'Thu',type:'strength',title:'Strength B — Posterior Chain',miles:0,presc:'Strength session B. Reduced load 20%. Last heavy-ish lifting before taper.'},
+  {name:'Fri',type:'easy',title:'Easy Run',miles:5,presc:'5 miles at E-pace (<span class="live-pace" data-zone="E">—</span>).'},
+  {name:'Sat',type:'longrun',title:'Peak Long Run — 20 Miles w/ M-Pace Finish',miles:20,presc:'14 miles at E-pace (<span class="live-pace" data-zone="E">—</span>) → 6 miles at M-pace (<span class="live-pace" data-zone="M">—</span>). Total: 20 miles. Third and final peak 20-miler.',science:'Final peak long run. Celebrate completing three 20-milers with M-pace finishes. You are ready to race Chicago.'},
+  {name:'Sun',type:'rest',title:'Full Rest',miles:0,presc:'Complete rest. No exceptions.'},
+]},
+// Phase 4
+{wk:20,phase:4,dates:'Sep 14–20',miles:46,deload:false,days:[
+  {name:'Mon',type:'easy',title:'Easy Run',miles:6,presc:'6 miles at E-pace (<span class="live-pace" data-zone="E">—</span>). Taper begins — trust the process.'},
+  {name:'Tue',type:'easy',title:'Easy Run',miles:7,presc:'7 miles at E-pace (<span class="live-pace" data-zone="E">—</span>).'},
+  {name:'Wed',type:'workout',title:'Cruise Intervals — Taper',miles:9,presc:'2 mi E warm-up (<span class="live-pace" data-zone="E">—</span>) → 5×1 mile at T-pace (<span class="live-pace" data-zone="T">—</span>) with 60 sec jog recovery → 2 mi E cool-down (<span class="live-pace" data-zone="E">—</span>).',science:'Maintaining quality stimulus during taper. Intensity stays high — only volume drops. This signals the body to stay sharp.'},
+  {name:'Thu',type:'strength',title:'Core Circuit',miles:0,presc:'Core circuit. 20–25 min. No heavy loading in taper phase.'},
+  {name:'Fri',type:'easy',title:'Easy Run',miles:5,presc:'5 miles at E-pace (<span class="live-pace" data-zone="E">—</span>).'},
+  {name:'Sat',type:'longrun',title:'Long Run — 16 Miles',miles:16,presc:'16 miles at E-pace (<span class="live-pace" data-zone="E">—</span>). Controlled taper long run.',science:'Volume drop signals recovery supercompensation. Glycogen stores will begin rebuilding to race-day peak levels.'},
+  {name:'Sun',type:'rest',title:'Full Rest',miles:0,presc:'Complete rest. No exceptions.'},
+]},
+{wk:21,phase:4,dates:'Sep 21–27',miles:32,deload:false,days:[
+  {name:'Mon',type:'easy',title:'Easy Run',miles:5,presc:'5 miles at E-pace (<span class="live-pace" data-zone="E">—</span>). Deep taper — feel the freshness building.'},
+  {name:'Tue',type:'easy',title:'Easy Run',miles:6,presc:'6 miles at E-pace (<span class="live-pace" data-zone="E">—</span>).'},
+  {name:'Wed',type:'workout',title:'M-Pace Sharpener',miles:8,presc:'2 mi E warm-up (<span class="live-pace" data-zone="E">—</span>) → 4 miles at M-pace (<span class="live-pace" data-zone="M">—</span>) → 2 mi E cool-down (<span class="live-pace" data-zone="E">—</span>). This should feel controlled and confident.',science:'Neuromuscular rehearsal of race pace. Confirms fitness and sharpens race-pace economy during taper. If M-pace doesn\'t feel manageable, you are not recovered enough yet.'},
+  {name:'Thu',type:'mobility',title:'Mobility Session',miles:0,presc:'Full mobility session. Mobility A or B. 30–40 min. Foam roll + stretching + activation.'},
+  {name:'Fri',type:'easy',title:'Easy Run',miles:4,presc:'4 miles at E-pace (<span class="live-pace" data-zone="E">—</span>).'},
+  {name:'Sat',type:'longrun',title:'Long Run — 13 Miles',miles:13,presc:'13 miles at E-pace (<span class="live-pace" data-zone="E">—</span>). Relaxed and controlled.',science:'Final double-digit long run. After this, all remaining runs are short tune-up efforts before race day.'},
+  {name:'Sun',type:'rest',title:'Full Rest',miles:0,presc:'Complete rest. No exceptions.'},
+]},
+{wk:22,phase:4,dates:'Sep 28–Oct 4',miles:22,deload:false,days:[
+  {name:'Mon',type:'easy',title:'Easy Run',miles:4,presc:'4 miles at E-pace (<span class="live-pace" data-zone="E">—</span>). Race week approaching — feel the freshness.'},
+  {name:'Tue',type:'easy',title:'Easy Run + Strides',miles:5,presc:'5 miles at E-pace (<span class="live-pace" data-zone="E">—</span>) + 4×20 sec strides at M-pace (<span class="live-pace" data-zone="M">—</span>). Wake up the legs.',science:'Strides at this stage prime fast-twitch recruitment without any fatigue cost.'},
+  {name:'Wed',type:'easy',title:'Easy Run',miles:5,presc:'5 miles at E-pace (<span class="live-pace" data-zone="E">—</span>). Easy and relaxed.'},
+  {name:'Thu',type:'mobility',title:'Mobility Session',miles:0,presc:'Full mobility session. 30–40 min. Foam roll + hip/ankle work. Focus on looseness, not discomfort.'},
+  {name:'Fri',type:'easy',title:'Easy Run',miles:3,presc:'3 miles at E-pace (<span class="live-pace" data-zone="E">—</span>). Short shakeout.'},
+  {name:'Sat',type:'easy',title:'Easy Run + Strides',miles:5,presc:'5 miles at E-pace (<span class="live-pace" data-zone="E">—</span>) + 4×20 sec strides at M-pace (<span class="live-pace" data-zone="M">—</span>). Final tune-up before race week.',science:'Race Activation: no static stretching. Prime the system, don\'t tire it. 4×20 sec at M-pace is all you need.'},
+  {name:'Sun',type:'rest',title:'Full Rest',miles:0,presc:'Complete rest. No exceptions.'},
+]},
+{wk:23,phase:4,dates:'Oct 5–11',miles:16,deload:false,days:[
+  {name:'Mon',type:'easy',title:'Easy Run',miles:3,presc:'3 miles at E-pace (<span class="live-pace" data-zone="E">—</span>). Race week — run by feel. Should feel like nothing.'},
+  {name:'Tue',type:'easy',title:'Easy Run + Strides',miles:4,presc:'4 miles at E-pace (<span class="live-pace" data-zone="E">—</span>) + 4×20 sec strides at M-pace (<span class="live-pace" data-zone="M">—</span>). Stay sharp.',science:'Final strides of the training block. Keep the legs quick without any fatigue.'},
+  {name:'Wed',type:'easy',title:'Easy Shakeout',miles:3,presc:'3 miles at E-pace (<span class="live-pace" data-zone="E">—</span>). Very easy. Could not feel easier.'},
+  {name:'Thu',type:'mobility',title:'Race-Week Activation',miles:0,presc:'5 min light foam roll only · 2×8 Hip Circles · 2×8 Leg Swings · 2×10 Glute Bridges · 4×20 sec Strides at M-pace (<span class="live-pace" data-zone="M">—</span>). No static stretching.',science:'Prime the system, don\'t tire it. This is the last time you prepare your body before race day.'},
+  {name:'Fri',type:'easy',title:'Final Shakeout',miles:2,presc:'2 miles at E-pace (<span class="live-pace" data-zone="E">—</span>). Last run before race day. Just spin the legs out.',science:'Final shakeout maintains neuromuscular readiness without adding any fatigue. Many elites run 2–3 miles the day before their marathon.'},
+  {name:'Sat',type:'rest',title:'Rest — Race Eve',miles:0,presc:'Full rest. Stay off your feet. Hydrate. Sleep. Eat your carbs. Lay out your gear. You are ready.',science:'Final glycogen loading and neural recovery. Everything that needed to be done has been done.'},
+  {name:'Sun',type:'longrun',title:'🏅 CHICAGO MARATHON — 26.2 Miles',miles:26.2,presc:'26.2 miles at M-pace (<span class="live-pace" data-zone="M">—</span>). Go get it, Ari. October 11, 2026. 07:30 AM gun time.',science:'23 weeks of work. Every early morning, every long run, every interval. This is what it was all for. Run smart, run strong.'},
+]},
+];
+
+// ─────────────────────────────────────────────
+// RENDER HELPERS
+// ─────────────────────────────────────────────
+const lsGet = (k, def='') => { try { const v=localStorage.getItem(k); return v===null?def:v; } catch(e){return def;} };
+const lsSet = (k, v) => { try { localStorage.setItem(k, v); } catch(e){} };
+
+function getKey(wk, d, type) { return `${type}_wk${wk}_day${d}`; }
+
+let debounceTimers = {};
+function debounce(key, fn, ms=500) {
+  clearTimeout(debounceTimers[key]);
+  debounceTimers[key] = setTimeout(fn, ms);
+}
+
+function renderDay(wk, dayIdx, day) {
+  const dayNum = dayIdx + 1;
+  const completeKey = getKey(wk, dayNum, 'complete');
+  const notesKey = getKey(wk, dayNum, 'notes');
+  const tagsKey = getKey(wk, dayNum, 'tags');
+  const ratingKey = getKey(wk, dayNum, 'rating');
+  const isComplete = lsGet(completeKey, 'false') === 'true';
+  const notes = lsGet(notesKey, '');
+  const tags = JSON.parse(lsGet(tagsKey, '[]'));
+  const rating = parseInt(lsGet(ratingKey, '0'));
+  const id = `day_wk${wk}_d${dayNum}`;
+
+  return `<div class="day-card ${day.type}${isComplete?' complete':''}" id="${id}">
+    <div class="day-name">
+      ${day.name}
+      ${isComplete ? '<span class="day-complete-icon">✓</span>' : ''}
+    </div>
+    <div class="day-title">${day.title}</div>
+    ${day.miles > 0 ? `<div class="day-miles mono">${day.miles === 26.2 ? '26.2' : day.miles} miles</div>` : ''}
+    <div class="day-prescription">${day.presc}</div>
+    ${day.science ? `<div class="day-science">${day.science}</div>` : ''}
+    ${day.type !== 'rest' ? `
+    <button class="log-btn" onclick="toggleLog('${id}')">
+      ${isComplete ? '✓ Logged' : '+ Log Workout'}
+    </button>
+    <div class="log-section" id="log_${id}" style="display:${isComplete || notes ? 'block' : 'none'}">
+      <textarea
+        placeholder="How did it feel? Pace, effort, conditions, how your body responded..."
+        oninput="debounce('${notesKey}', ()=>lsSet('${notesKey}', this.value))"
+      >${notes}</textarea>
+      <div class="tags-wrap" id="tags_${id}">
+        ${TAGS.map(t => `<span class="tag-chip${tags.includes(t)?' selected':''}"
+          onclick="toggleTag('${id}','${tagsKey}','${t}',this)">${t}</span>`).join('')}
+      </div>
+      <div class="stars-wrap" id="stars_${id}">
+        ${[1,2,3,4,5].map(i=>`<span class="star${i<=rating?' lit':''}"
+          onclick="setRating('${id}','${ratingKey}',${i})">●</span>`).join('')}
+      </div>
+      <label class="complete-toggle">
+        <input type="checkbox" ${isComplete?'checked':''} onchange="toggleComplete('${id}','${completeKey}',this.checked)"/>
+        <label>Mark as Complete</label>
+      </label>
+    </div>` : ''}
+  </div>`;
+}
+
+function toggleLog(id) {
+  const el = document.getElementById('log_' + id);
+  if (el) el.style.display = el.style.display === 'none' ? 'block' : 'none';
+}
+
+function toggleTag(id, key, tag, el) {
+  let tags = JSON.parse(lsGet(key, '[]'));
+  if (tags.includes(tag)) tags = tags.filter(t => t !== tag);
+  else tags.push(tag);
+  lsSet(key, JSON.stringify(tags));
+  el.classList.toggle('selected');
+}
+
+function setRating(id, key, val) {
+  lsSet(key, val);
+  const stars = document.querySelectorAll(`#stars_${id} .star`);
+  stars.forEach((s, i) => s.classList.toggle('lit', i < val));
+}
+
+function toggleComplete(id, key, val) {
+  lsSet(key, val);
+  const card = document.getElementById(id);
+  if (card) {
+    card.classList.toggle('complete', val);
+    const icon = card.querySelector('.day-complete-icon');
+    if (icon) icon.style.display = val ? 'inline' : 'none';
+    const btn = card.querySelector('.log-btn');
+    if (btn) btn.textContent = val ? '✓ Logged' : '+ Log Workout';
+  }
+}
+
+function renderWeek(w) {
+  const phaseColors = {1:'var(--green)',2:'var(--amber)',3:'var(--orange)',4:'var(--accent2)'};
+  const color = phaseColors[w.phase];
+  const id = `week_${w.wk}`;
+  return `<div class="week-section" id="${id}">
+    <button class="week-header" onclick="toggleWeek('${id}')" id="hdr_${id}">
+      <div class="week-header-left">
+        <div class="week-num">Week ${w.wk} ${w.deload?'· DELOAD':''}</div>
+        <div class="week-dates">${w.dates}</div>
+      </div>
+      <div class="week-header-right">
+        <span class="week-miles-badge mono">${w.miles} mi</span>
+        <span class="badge" style="border-color:${color};color:${color};background:transparent;font-size:.65rem">Ph${w.phase}</span>
+        <span class="week-chevron">▾</span>
+      </div>
+    </button>
+    <div class="week-body" id="body_${id}">
+      <div class="day-grid">
+        ${w.days.map((d, i) => renderDay(w.wk, i, d)).join('')}
+      </div>
+      <div class="week-summary">
+        <div class="week-summary-title">Week ${w.wk} Summary</div>
+        <div class="week-summary-row">
+          <label>Target miles: <strong class="mono">${w.miles}</strong></label>
+          <label>Actual miles:</label>
+          <input type="number" step="0.1" min="0" max="100"
+            value="${lsGet('actual_miles_wk'+w.wk,'')}"
+            oninput="debounce('ami${w.wk}', ()=>lsSet('actual_miles_wk${w.wk}', this.value)); updateChart()"
+            placeholder="0"/>
+        </div>
+        <textarea style="width:100%;background:var(--surface);border:1px solid var(--border);border-radius:4px;color:var(--text);font-family:'Lora',serif;font-size:.8rem;padding:.5rem .6rem;resize:vertical;min-height:50px;margin-top:.5rem"
+          placeholder="Week reflection — overall notes, how training felt, what you learned..."
+          oninput="debounce('ws${w.wk}', ()=>lsSet('week_summary_${w.wk}', this.value))"
+        >${lsGet('week_summary_'+w.wk,'')}</textarea>
+      </div>
+    </div>
+  </div>`;
+}
+
+function toggleWeek(id) {
+  const hdr = document.getElementById('hdr_'+id);
+  const body = document.getElementById('body_'+id);
+  hdr.classList.toggle('open');
+  body.classList.toggle('open');
+}
+
+// ─────────────────────────────────────────────
+// RENDER ALL WEEKS
+// ─────────────────────────────────────────────
+function renderAllWeeks() {
+  const containers = {1:'weeks-phase1',2:'weeks-phase2',3:'weeks-phase3',4:'weeks-phase4'};
+  Object.values(containers).forEach(id => document.getElementById(id).innerHTML = '');
+  weeks.forEach(w => {
+    const c = document.getElementById(containers[w.phase]);
+    if (c) c.innerHTML += renderWeek(w);
+  });
+}
+
+// ─────────────────────────────────────────────
+// MILEAGE CHART
+// ─────────────────────────────────────────────
+const phaseColors = ['','#4ade80','#fbbf24','#f97316','#38bdf8'];
+function updateChart() {
+  const maxMiles = 65;
+  const chart = document.getElementById('mileage-chart');
+  chart.innerHTML = weeks.map(w => {
+    const pct = (w.miles / maxMiles) * 100;
+    const actual = parseFloat(lsGet('actual_miles_wk'+w.wk, '0')) || 0;
+    const actualPct = (actual / maxMiles) * 100;
+    const color = phaseColors[w.phase];
+    const opacity = w.deload ? '0.5' : '1';
+    return `<div class="chart-bar-wrap">
+      <div class="chart-tooltip">Wk ${w.wk} · ${w.dates}<br>${w.miles} mi target${actual?`<br>${actual} mi actual`:''}</div>
+      <div style="position:relative;width:100%;height:100%;display:flex;align-items:flex-end">
+        <div class="chart-bar" style="height:${pct}%;background:${color};opacity:${opacity};width:100%"></div>
+        ${actual ? `<div class="chart-bar-actual" style="height:${Math.min(actualPct,100)}%"></div>` : ''}
+      </div>
+      <div class="chart-week-label">${w.wk}</div>
+    </div>`;
+  }).join('');
+}
+
+// ─────────────────────────────────────────────
+// STRENGTH LIBRARY
+// ─────────────────────────────────────────────
+const strengthData = [
+  {
+    title:'Strength Training — Overview & Schedule',
+    color:'var(--purple)',
+    weeks:'2× per week throughout training',
+    phase:'Early (Wks 1–8): Heavy weights, low reps — building raw strength. Mid-cycle (Wks 9–16): Moderate weights, higher reps + plyometrics for running-specific power. Peak/Taper (Wks 17–23): Reduced load and volume — maintenance only.',
+    timing:'Schedule on non-running days or easy run days. If on the same day as a run, allow at least 6 hours between sessions. Never on the same day as a quality workout (Wed) or long run (Sat).',
+    items:[],
+    science:'Strength training supports running economy and reduces injury risk. Heavier strength work early in the cycle builds the force production that translates to more efficient running mechanics later.',
+    progress:''
+  },
+  {
+    title:'Strength A — Glute & Hip Power',
+    color:'var(--purple)',
+    weeks:'Weeks 1, 3, 5, 9, 11, 13, 17',
+    phase:'Early phase: 4×6 heavy. Mid-cycle: 3×10–12 moderate + add jump squats or bounds. Peak/taper: 2×10 light maintenance.',
+    timing:'Thursday or Monday. At least 6 hours from any quality run.',
+    items:[
+      'Bulgarian Split Squat (each leg)',
+      'Single-Leg Romanian Deadlift (each leg)',
+      'Hip Thrust with 2-sec hold at top',
+      'Step-Up with knee drive (each leg)',
+      'Lateral Band Walk (each direction)',
+      'Copenhagen Plank (each side)',
+      'Mid-cycle add: Box Jumps or Lateral Bounds (plyometric power)',
+    ],
+    science:'Hip abductor and glute strength reduce knee valgus and IT band stress — the #1 injury pattern in marathon runners. Plyometrics in mid-cycle build the reactive stiffness and elastic energy return that improves running economy by 2–5%.',
+    progress:'Early: 4×6 heavy · Mid: 3×10–12 + plyos · Peak/Taper: 2×10 light'
+  },
+  {
+    title:'Strength B — Posterior Chain & Calf',
+    color:'var(--blue)',
+    weeks:'Weeks 2, 6, 8, 10, 14, 16, 19',
+    phase:'Early phase: 4×5 heavy deadlifts. Mid-cycle: 3×10 + single-leg plyos. Peak/taper: 2×10 light maintenance.',
+    timing:'Thursday or Monday. At least 6 hours from any quality run.',
+    items:[
+      'Nordic Hamstring Curl (4-sec eccentric lowering)',
+      'Single-Leg Calf Raise off step (each leg)',
+      'Deadlift or Trap Bar Deadlift',
+      'Reverse Lunge (alternating)',
+      'Glute Bridge with alternating march',
+      'Tibialis Raise (prevents shin splints)',
+      'Mid-cycle add: Single-Leg Box Jumps or Skater Bounds',
+    ],
+    science:'Nordic curls reduce hamstring injury risk by 51% (Petersen 2011). Tibialis raises directly counter medial tibial stress syndrome. Single-leg plyometrics in mid-cycle train the force absorption required during the landing phase of each stride.',
+    progress:'Early: 4×5 heavy · Mid: 3×10 + single-leg plyos · Peak/Taper: 2×10 light'
+  },
+  {
+    title:'Core Training — 3× Per Week',
+    color:'var(--green)',
+    weeks:'3 times per week, every week (10–15 min sessions)',
+    phase:'Can be done post-run, on rest days, or as a standalone session. Even 10-minute focused sessions count.',
+    timing:'Post easy run, or on Thursday alongside strength. Never skip during taper — core maintains posture when legs fatigue.',
+    items:[
+      'Dead Bug (alternating, slow and controlled)',
+      'Pallof Press (each side — anti-rotation)',
+      'Side Plank with Hip Dip (each side)',
+      'Bird Dog with 3-sec hold',
+      'Hollow Body Rock',
+      'Rotational Med Ball Slam (mid-cycle)',
+      'Plank — straight arm or forearm',
+    ],
+    science:'A strong core maintains upright posture and running efficiency as fatigue builds in long runs. Anti-rotation work (Pallof press, dead bug) reduces pelvic drop and energy leakage — directly improving running economy. Even 10-minute sessions 3× per week produce measurable posture improvements over a 23-week cycle.',
+    progress:'10–15 min · 3× per week · Every week including taper'
+  },
+];
+
+function renderStrengthLibrary() {
+  document.getElementById('strength-library').innerHTML = strengthData.map((s, i) => `
+    <div class="lib-card">
+      <div class="lib-card-header" onclick="toggleLib('str${i}')">
+        <div class="lib-card-title" style="color:${s.color}">${s.title}</div>
+        <span style="color:var(--muted);font-size:.8rem">▾</span>
+      </div>
+      <div class="lib-card-body" id="str${i}">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--muted);margin-bottom:.5rem">📅 ${s.weeks}</div>
+        ${s.phase ? `<div style="font-family:'Lora',serif;font-style:italic;font-size:.78rem;color:var(--accent);margin-bottom:.5rem">Phase progression: ${s.phase}</div>` : ''}
+        ${s.timing ? `<div style="font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--accent2);margin-bottom:.75rem">⏱ Timing: ${s.timing}</div>` : ''}
+        ${s.items.length ? `<ul>${s.items.map(it => `<li>${it}</li>`).join('')}</ul>` : ''}
+        ${s.progress ? `<div style="font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--accent);margin-top:.5rem">${s.progress}</div>` : ''}
+        <div class="lib-card-science">${s.science}</div>
+      </div>
+    </div>`).join('');
+}
+
+// ─────────────────────────────────────────────
+// MOBILITY LIBRARY
+// ─────────────────────────────────────────────
+const mobilityData = [
+  {
+    title:'Mobility — Overview & Schedule',
+    color:'var(--pink)',
+    freq:'3–5 short sessions per week · 10–15 minutes each',
+    timing:'Best done post-run while muscles are warm, or as a standalone daily session. Short daily sessions beat long infrequent ones.',
+    focus:'Hips, ankles, and thoracic spine — these three areas directly impact stride mechanics and are the most common sites of tightness in marathon runners.',
+    items:[],
+    science:'Short daily mobility work (10–15 min) improves range of motion more effectively than long infrequent sessions. Maintaining mobility during taper is especially important — it supports recovery and ensures you arrive at the start line with full joint range of motion.',
+  },
+  {
+    title:'Mobility A — Hips & Ankles',
+    color:'var(--pink)',
+    freq:'2–3× per week · 10–15 min · Post-run or standalone',
+    timing:'Post easy run is ideal. Can also be done in the evening.',
+    focus:'Hip flexors, glutes, and ankle dorsiflexion — the primary limiters of running economy.',
+    items:[
+      '5 min Foam Roll: calves, IT band, quads, hip flexors',
+      '2×60s Half-Kneeling Hip Flexor Stretch (each side)',
+      '2×10 90-90 Hip Switch (slow)',
+      '2×10 World\'s Greatest Stretch (each side)',
+      '2×10 Ankle Circles + Dorsiflexion Drill against wall',
+      '2×8 Leg Swings front-to-back and lateral (each leg)',
+      '2×10 Clamshells with band',
+    ],
+    science:'Restricted ankle dorsiflexion forces compensatory movement up the chain — causing knee tracking issues and hip flexor overload. Even 5 minutes of ankle mobility daily produces measurable stride improvements over a training cycle.',
+  },
+  {
+    title:'Mobility B — Thoracic Spine & Posterior',
+    color:'var(--blue)',
+    freq:'2–3× per week · 10–15 min · Post-run or standalone',
+    timing:'Evening sessions work well. Can pair with core training.',
+    focus:'Thoracic spine rotation and posterior chain — stiff T-spine forces the lower back to compensate, wasting energy and increasing injury risk.',
+    items:[
+      '5 min Foam Roll: thoracic spine, lats, upper back',
+      '2×10 Cat-Cow with full breath',
+      '2×10 Thread the Needle (each side)',
+      '2×60s Pigeon Pose (each side)',
+      '2×10 Thoracic Rotation in Quadruped',
+      '2×60s Doorway Chest Stretch',
+      '2×10 Shoulder CARs',
+    ],
+    science:'Thoracic spine stiffness is one of the most underaddressed limiters in marathon runners. A mobile T-spine allows proper arm swing, reduces lumbar compensation, and improves overall running posture — especially important in miles 18–26 when fatigue sets in.',
+  },
+  {
+    title:'Race-Week Activation (Wk 22–23)',
+    color:'var(--amber)',
+    freq:'Daily · 5–10 min · Light and activating only',
+    timing:'Morning of easy runs or standalone. Keep it short.',
+    focus:'Prime the neuromuscular system without adding any fatigue or soreness.',
+    items:[
+      '5 min light foam roll only — no aggressive pressure',
+      '2×8 Hip Circles',
+      '2×8 Leg Swings',
+      '2×10 Glute Bridges',
+      '4×20 sec Strides at M-pace',
+      'No static stretching — prime the system, don\'t tire it.',
+    ],
+    science:'Static stretching before a race temporarily reduces muscle stiffness and force production. In race week, all mobility work should be dynamic and activating — not restorative. Maintain mobility especially during taper to support recovery and neuromuscular readiness.',
+  },
+];
+
+function renderMobilityLibrary() {
+  document.getElementById('mobility-library').innerHTML = mobilityData.map((m, i) => `
+    <div class="lib-card">
+      <div class="lib-card-header" onclick="toggleLib('mob${i}')">
+        <div class="lib-card-title" style="color:${m.color}">${m.title}</div>
+        <span style="color:var(--muted);font-size:.8rem">▾</span>
+      </div>
+      <div class="lib-card-body" id="mob${i}">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--accent);margin-bottom:.4rem">📅 ${m.freq}</div>
+        ${m.timing ? `<div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--accent2);margin-bottom:.4rem">⏱ ${m.timing}</div>` : ''}
+        ${m.focus ? `<div style="font-family:'Lora',serif;font-style:italic;font-size:.78rem;color:var(--muted);margin-bottom:.75rem">Focus: ${m.focus}</div>` : ''}
+        ${m.items.length ? `<ul>${m.items.map(it => `<li>${it}</li>`).join('')}</ul>` : ''}
+        ${m.science ? `<div class="lib-card-science">${m.science}</div>` : ''}
+      </div>
+    </div>`).join('');
+}
+
+function toggleLib(id) {
+  const el = document.getElementById(id);
+  if (el) el.classList.toggle('open');
+}
+
+// ─────────────────────────────────────────────
+// SCIENCE CARDS
+// ─────────────────────────────────────────────
+const scienceData = [
+  {num:'01', title:'VDOT & Jack Daniels System', body:'VDOT is an index of aerobic capacity derived from race performance. Jack Daniels\' Running Formula uses VDOT to assign training paces across five zones, ensuring every workout produces the exact physiological stimulus it\'s designed for — no more, no less. Your VDOT of 49.2 places you in the competitive recreational runner tier.'},
+  {num:'02', title:'E-Pace — Aerobic Base', body:'Easy pace (65–79% VO2max) is the foundation of all endurance training. Running at E-pace increases mitochondrial density, develops aerobic enzymes, builds capillary networks, and trains fat oxidation — all without significant muscle breakdown. 80% of this plan is at E-pace.'},
+  {num:'03', title:'M-Pace — Race Specificity', body:'Marathon pace (80–89% VO2max) trains the exact metabolic demands of race day. M-pace workouts develop fat oxidation efficiency, glycogen-sparing economy, and the muscular endurance required for sustained fast running. M-pace feels comfortably hard after warm-up.'},
+  {num:'04', title:'T-Pace — Lactate Threshold', body:'Threshold pace (88–92% VO2max) elevates the point at which lactate begins to accumulate in the blood (~4 mmol/L). A higher lactate threshold means you can sustain a faster pace before acidosis slows you down. T-pace should feel "comfortably hard" — breathing is labored but controlled.'},
+  {num:'05', title:'I-Pace — VO2max Development', body:'Interval pace (95–100% VO2max) directly stresses the cardiovascular system at maximum aerobic power. 3–5 minute I-pace intervals force cardiac output to peak, expanding stroke volume and VO2max ceiling. More VO2max capacity makes all subthreshold paces feel easier.'},
+  {num:'06', title:'R-Pace — Running Economy', body:'Repetition pace (105–120% VO2max) trains neuromuscular efficiency. Strides at R-pace recruit fast-twitch fibers, improve ground contact mechanics, and sharpen stride rate — all without aerobic fatigue. Even short 20-second strides at the end of easy runs provide meaningful economy gains.'},
+  {num:'07', title:'80/20 Polarized Training', body:'Research on elite and recreational runners consistently shows optimal adaptation from keeping ~80% of weekly volume at easy effort and ~20% at moderate-to-hard intensity. This plan follows that distribution: hard sessions on Wednesday and Saturday long runs with M-pace finishes.'},
+  {num:'08', title:'Mid-Week Long Run (MLR)', body:'Daniels prescribes that the MLR + Saturday long run together should comprise 40–45% of weekly volume. The MLR extends aerobic stimulus mid-week without the recovery cost of a second long run — because its pace stays at E-pace, not the race-specific intensities of Saturday\'s runs.'},
+  {num:'09', title:'Three 20-Milers — Why It Matters', body:'Three 20-milers (Weeks 17–19) each including 6 miles at M-pace are the physiological and psychological cornerstone of this plan. Repeated glycogen depletion exposure teaches the body to oxidize fat more efficiently and builds the mental resilience required to race through the wall.'},
+  {num:'10', title:'Strength for Running Economy', body:'Well-designed strength training improves running economy by 2–8%. Hip abductor strength reduces lateral pelvic drop (a major source of energy waste), while posterior chain strength improves force production per stride. Strength work in this plan targets exactly these adaptations.'},
+  {num:'11', title:'Nordic Curls — Injury Prevention', body:'A landmark 2011 study by Petersen et al. demonstrated that the Nordic hamstring curl reduces hamstring injury risk by 51% in athletes who perform them regularly. The 4-second eccentric phase is the key mechanism — eccentric strength is what protects the hamstring at peak sprint speeds.'},
+  {num:'12', title:'Deload Weeks — Supercompensation', body:'Planned deload weeks (Weeks 4, 7, 12, 15) reduce volume by ~20% without dropping intensity. This allows accumulated fatigue to dissipate and triggers supercompensation — the body rebuilds stronger than before. Skipping deloads leads to stagnation or injury.'},
+  {num:'13', title:'3-Week Taper — Optimal for Marathon', body:'Mujika & Padilla (2003) established that a 3-week taper is optimal for marathon runners, producing a ~3% performance improvement. Volume drops sharply (Weeks 20–23) while intensity is maintained. Glycogen stores peak, muscle damage repairs, and neuromuscular freshness reaches its apex on race morning.'},
+];
+
+function renderScienceCards() {
+  document.getElementById('science-cards').innerHTML = scienceData.map(s => `
+    <div class="sci-card">
+      <div class="sci-card-num">${s.num}</div>
+      <div class="sci-card-title">${s.title}</div>
+      <div class="sci-card-body">${s.body}</div>
+    </div>`).join('');
+}
+
+// ─────────────────────────────────────────────
+// EXPORT
+// ─────────────────────────────────────────────
+function exportLog() {
+  const log = {exportDate: new Date().toISOString(), vdot: currentVdot, weeks: []};
+  weeks.forEach(w => {
+    const weekData = {week: w.wk, dates: w.dates, targetMiles: w.miles, actualMiles: parseFloat(lsGet('actual_miles_wk'+w.wk,'')||0), reflection: lsGet('week_summary_'+w.wk,''), days:[]};
+    w.days.forEach((d, i) => {
+      const dayNum = i + 1;
+      weekData.days.push({
+        day: d.name, workout: d.title,
+        complete: lsGet(getKey(w.wk, dayNum, 'complete'),'false')==='true',
+        notes: lsGet(getKey(w.wk, dayNum, 'notes'),''),
+        tags: JSON.parse(lsGet(getKey(w.wk, dayNum, 'tags'),'[]')),
+        rating: parseInt(lsGet(getKey(w.wk, dayNum, 'rating'),'0')),
+      });
+    });
+    log.weeks.push(weekData);
+  });
+  const blob = new Blob([JSON.stringify(log, null, 2)], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'chicago-2026-training-log.json';
+  a.click();
+  // Text version
+  let txt = 'CHICAGO MARATHON 2026 — TRAINING LOG\n';
+  txt += `Export Date: ${new Date().toLocaleDateString()}\n`;
+  txt += `VDOT: ${currentVdot}\n\n`;
+  log.weeks.forEach(w => {
+    txt += `\n═══ WEEK ${w.week} · ${w.dates} · Target: ${w.targetMiles}mi · Actual: ${w.actualMiles}mi ═══\n`;
+    if (w.reflection) txt += `Reflection: ${w.reflection}\n`;
+    w.days.forEach(d => {
+      txt += `  ${d.day}: ${d.workout}${d.complete?' ✓':''}\n`;
+      if (d.notes) txt += `    Notes: ${d.notes}\n`;
+      if (d.tags.length) txt += `    Tags: ${d.tags.join(', ')}\n`;
+      if (d.rating) txt += `    Rating: ${'●'.repeat(d.rating)}${'○'.repeat(5-d.rating)}\n`;
+    });
+  });
+  const tb = new Blob([txt], {type:'text/plain'});
+  const b = document.createElement('a');
+  b.href = URL.createObjectURL(tb);
+  b.download = 'chicago-2026-training-log.txt';
+  setTimeout(() => b.click(), 500);
+}
+
+// ─────────────────────────────────────────────
+// INIT
+// ─────────────────────────────────────────────
+renderAllWeeks();
+renderStrengthLibrary();
+renderMobilityLibrary();
+renderScienceCards();
+updateVdot(currentVdot);
+updateChart();
+
+// Auto-open current week
+function autoOpenCurrentWeek() {
+  const now = new Date();
+  for (let w of weeks) {
+    const parts = w.dates.split('–');
+    // Just try to open week 1 if before training start, or find current week
+    const start = new Date(TRAIN_START.getFullYear(), 0, 1);
+    // Simple: open the first week by default
+  }
+  // Open first week
+  const firstId = 'week_1';
+  const hdr = document.getElementById('hdr_'+firstId);
+  const body = document.getElementById('body_'+firstId);
+  if (hdr && body && !body.classList.contains('open')) {
+    hdr.classList.add('open');
+    body.classList.add('open');
+  }
+}
+autoOpenCurrentWeek();
+</script>
+</body>
+</html>
