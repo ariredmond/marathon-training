@@ -495,6 +495,144 @@
     flex-shrink: 0;
   }
 
+  /* ===== SYNC STATUS ===== */
+  .nav-right { margin-left: auto; display: flex; align-items: center; gap: 0; }
+  .sync-status {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 1px;
+    padding: 0 12px;
+    white-space: nowrap;
+    transition: color 0.2s;
+  }
+  .sync-status.synced  { color: var(--green); }
+  .sync-status.syncing { color: var(--amber); animation: pulse 1s infinite; }
+  .sync-status.pending { color: #888; }
+  .sync-status.error   { color: var(--red); }
+  .sync-status.none    { color: #555; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+  /* ===== SYNC MODAL ===== */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 32px 36px;
+    max-width: 480px;
+    width: 90%;
+    box-shadow: 0 8px 48px rgba(0,0,0,0.3);
+  }
+  .modal-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 26px;
+    color: var(--ink);
+    margin-bottom: 6px;
+  }
+  .modal-sub {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 20px;
+  }
+  .modal p { font-size: 13px; color: #555; line-height: 1.7; margin-bottom: 14px; }
+  .modal ol { font-size: 13px; color: #555; line-height: 1.9; padding-left: 18px; margin-bottom: 20px; }
+  .modal ol li code {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    background: var(--cream);
+    padding: 1px 5px;
+    border-radius: 2px;
+    color: var(--ink);
+  }
+  .modal-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 6px;
+    display: block;
+  }
+  .modal-input {
+    width: 100%;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    padding: 8px 12px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    background: white;
+    color: var(--ink);
+    margin-bottom: 16px;
+    box-sizing: border-box;
+  }
+  .modal-input:focus { outline: none; border-color: var(--amber); }
+  .modal-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+  .m-btn-primary {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 8px 18px;
+    background: var(--ink);
+    color: var(--paper);
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+  .m-btn-primary:hover { background: #333; }
+  .m-btn-secondary {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 8px 18px;
+    background: none;
+    color: var(--muted);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    cursor: pointer;
+  }
+  .m-btn-secondary:hover { background: var(--cream); color: var(--ink); }
+  .m-btn-danger {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 8px 18px;
+    background: none;
+    color: var(--red);
+    border: 1px solid #f5c0b8;
+    border-radius: 3px;
+    cursor: pointer;
+    margin-left: auto;
+  }
+  .m-btn-danger:hover { background: #fde8e5; }
+  .modal-connected-info {
+    background: #e8f4ee;
+    border: 1px solid #b8d8c4;
+    border-radius: 3px;
+    padding: 10px 14px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--green);
+    margin-bottom: 16px;
+    display: none;
+  }
+  .modal-connected-info.show { display: block; }
+
   /* ===== CUSTOMIZE / EDIT MODE ===== */
 
   .customize-btn {
@@ -857,7 +995,11 @@
   <button class="nav-btn" onclick="show('p4',this)">④ Peak</button>
   <button class="nav-btn" onclick="show('p5',this)">⑤ Taper</button>
   <button class="nav-btn" onclick="show('pn',this)">✦ Coach Notes</button>
-  <button class="customize-btn" id="customize-btn" onclick="toggleEditMode(this)" style="margin-left:auto;">✎ Customize Plan</button>
+  <div class="nav-right">
+    <span class="sync-status none" id="sync-status">○ Not synced</span>
+    <button class="customize-btn" id="sync-setup-btn" onclick="openSyncModal()">☁ Enable Sync</button>
+    <button class="customize-btn" id="customize-btn" onclick="toggleEditMode(this)">✎ Customize Plan</button>
+  </div>
 </nav>
 
 <!-- Edit mode floating toolbar -->
@@ -865,6 +1007,30 @@
   <span class="edit-toolbar-label">✎ Editing Plan</span>
   <button class="et-btn et-reset" onclick="resetAllEdits()">Reset All to Original</button>
   <button class="et-btn et-done" onclick="toggleEditMode(document.getElementById('customize-btn'))">✓ Done</button>
+</div>
+
+<!-- Sync Setup Modal -->
+<div class="modal-overlay" id="sync-modal" onclick="if(event.target===this)closeSyncModal()">
+  <div class="modal">
+    <div class="modal-sub">Cross-Device Sync</div>
+    <div class="modal-title">Sync via GitHub</div>
+    <div class="modal-connected-info" id="sync-connected-info">✓ Connected — syncing to your private Gist</div>
+    <p>Your plan edits, run logs, and completed weeks are saved to a <strong>private GitHub Gist</strong> — your own account, your data. Paste a token once on each device and everything stays in sync.</p>
+    <ol>
+      <li>Go to <strong>github.com/settings/tokens</strong></li>
+      <li>Click <em>Generate new token (classic)</em></li>
+      <li>Give it any name (e.g. <code>marathon-plan</code>)</li>
+      <li>Check only the <code>gist</code> scope</li>
+      <li>Copy the token and paste it below</li>
+    </ol>
+    <label class="modal-label" for="token-input">GitHub Personal Access Token</label>
+    <input class="modal-input" type="password" id="token-input" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" autocomplete="off">
+    <div class="modal-actions">
+      <button class="m-btn-primary" onclick="connectGitHub()">Connect & Sync</button>
+      <button class="m-btn-secondary" onclick="closeSyncModal()">Cancel</button>
+      <button class="m-btn-danger" id="disconnect-btn" onclick="disconnectSync()" style="display:none;">Disconnect</button>
+    </div>
+  </div>
 </div>
 
 <div class="main">
@@ -1730,6 +1896,194 @@
 </div><!-- end main -->
 
 <script>
+// ===== GITHUB GIST SYNC =====
+
+var GIST_FILENAME = 'marathon-plan-data.json';
+var _syncTimer = null;
+
+function getSyncCfg() {
+  return {
+    token: localStorage.getItem('gh_token') || '',
+    gistId: localStorage.getItem('gh_gist_id') || ''
+  };
+}
+
+function setSyncStatus(status, msg) {
+  var el = document.getElementById('sync-status');
+  if (!el) return;
+  var labels = { synced:'● Synced', syncing:'⟳ Syncing…', pending:'● Unsaved', error:'✕ Sync Error', none:'○ Not synced' };
+  el.textContent = msg || labels[status] || '';
+  el.className = 'sync-status ' + status;
+}
+
+function getAllData() {
+  return {
+    planEdits: getPlanEdits(),
+    runlog: getRunLog(),
+    marathon_completed: getCompleted(),
+    lastSync: new Date().toISOString()
+  };
+}
+
+function applyAllData(data) {
+  if (data.planEdits) {
+    localStorage.setItem('planEdits', JSON.stringify(data.planEdits));
+    Object.keys(data.planEdits).forEach(function(key) {
+      var el = document.querySelector('[data-ekey="' + key + '"]');
+      if (el) el.innerHTML = data.planEdits[key];
+    });
+  }
+  if (data.runlog) {
+    localStorage.setItem('runlog', JSON.stringify(data.runlog));
+    loadAllLogs();
+  }
+  if (data.marathon_completed) {
+    localStorage.setItem('marathon_completed', JSON.stringify(data.marathon_completed));
+    renderProgress();
+  }
+}
+
+function scheduleSyncPush() {
+  var cfg = getSyncCfg();
+  if (!cfg.token) return;
+  clearTimeout(_syncTimer);
+  setSyncStatus('pending');
+  _syncTimer = setTimeout(pushToGist, 2500);
+}
+
+function pushToGist() {
+  var cfg = getSyncCfg();
+  if (!cfg.token) return;
+  setSyncStatus('syncing');
+  var content = JSON.stringify(getAllData(), null, 2);
+  var body = JSON.stringify({ files: {} });
+  var url, method;
+
+  if (cfg.gistId) {
+    url = 'https://api.github.com/gists/' + cfg.gistId;
+    method = 'PATCH';
+    var files = {}; files[GIST_FILENAME] = { content: content };
+    body = JSON.stringify({ files: files });
+  } else {
+    url = 'https://api.github.com/gists';
+    method = 'POST';
+    var files2 = {}; files2[GIST_FILENAME] = { content: content };
+    body = JSON.stringify({ description: 'Ariana Marathon Plan — Training Data', public: false, files: files2 });
+  }
+
+  fetch(url, { method: method, headers: { 'Authorization': 'token ' + cfg.token, 'Content-Type': 'application/json' }, body: body })
+    .then(function(r) { return r.ok ? r.json() : Promise.reject(r.status); })
+    .then(function(data) {
+      if (!cfg.gistId && data.id) localStorage.setItem('gh_gist_id', data.id);
+      setSyncStatus('synced');
+    })
+    .catch(function() { setSyncStatus('error'); });
+}
+
+function pullFromGist() {
+  var cfg = getSyncCfg();
+  if (!cfg.token || !cfg.gistId) return Promise.resolve(false);
+  setSyncStatus('syncing');
+  return fetch('https://api.github.com/gists/' + cfg.gistId, {
+    headers: { 'Authorization': 'token ' + cfg.token }
+  })
+  .then(function(r) { return r.ok ? r.json() : Promise.reject(r.status); })
+  .then(function(gist) {
+    var file = gist.files && gist.files[GIST_FILENAME];
+    if (file && file.content) {
+      var data = JSON.parse(file.content);
+      applyAllData(data);
+      setSyncStatus('synced');
+      return true;
+    }
+    setSyncStatus('synced');
+    return false;
+  })
+  .catch(function() { setSyncStatus('error'); return false; });
+}
+
+function connectGitHub() {
+  var token = (document.getElementById('token-input') || {}).value || '';
+  token = token.trim();
+  if (!token) { alert('Please paste your GitHub token.'); return; }
+
+  setSyncStatus('syncing');
+
+  // Check token is valid and find existing gist
+  fetch('https://api.github.com/gists?per_page=100', {
+    headers: { 'Authorization': 'token ' + token }
+  })
+  .then(function(r) { return r.ok ? r.json() : Promise.reject('Invalid token — check it has gist scope.'); })
+  .then(function(gists) {
+    localStorage.setItem('gh_token', token);
+    var existing = gists.find(function(g) { return g.files && g.files[GIST_FILENAME]; });
+    if (existing) {
+      localStorage.setItem('gh_gist_id', existing.id);
+      return pullFromGist();
+    } else {
+      return pushToGist();
+    }
+  })
+  .then(function() {
+    updateSyncBtn();
+    closeSyncModal();
+  })
+  .catch(function(err) {
+    alert(typeof err === 'string' ? err : 'Connection failed. Check the token and try again.');
+    setSyncStatus('error');
+  });
+}
+
+function disconnectSync() {
+  if (!confirm('Disconnect sync? Your local data stays, but changes will no longer save to GitHub.')) return;
+  localStorage.removeItem('gh_token');
+  localStorage.removeItem('gh_gist_id');
+  setSyncStatus('none');
+  updateSyncBtn();
+  closeSyncModal();
+}
+
+function openSyncModal() {
+  var cfg = getSyncCfg();
+  var overlay = document.getElementById('sync-modal');
+  var connectedInfo = document.getElementById('sync-connected-info');
+  var disconnectBtn = document.getElementById('disconnect-btn');
+  var tokenInput = document.getElementById('token-input');
+  if (overlay) overlay.classList.add('open');
+  if (cfg.token) {
+    if (connectedInfo) connectedInfo.classList.add('show');
+    if (disconnectBtn) disconnectBtn.style.display = '';
+    if (tokenInput) tokenInput.value = cfg.token;
+  } else {
+    if (connectedInfo) connectedInfo.classList.remove('show');
+    if (disconnectBtn) disconnectBtn.style.display = 'none';
+    if (tokenInput) tokenInput.value = '';
+  }
+}
+
+function closeSyncModal() {
+  var overlay = document.getElementById('sync-modal');
+  if (overlay) overlay.classList.remove('open');
+}
+
+function updateSyncBtn() {
+  var btn = document.getElementById('sync-setup-btn');
+  var cfg = getSyncCfg();
+  if (btn) btn.textContent = cfg.token ? '☁ Sync Settings' : '☁ Enable Sync';
+}
+
+function initSync() {
+  updateSyncBtn();
+  var cfg = getSyncCfg();
+  if (cfg.token && cfg.gistId) {
+    pullFromGist(); // load latest from gist on page open
+  } else if (cfg.token) {
+    pushToGist();   // token but no gist yet — create it
+  } else {
+    setSyncStatus('none');
+  }
+}
+
 // ===== CUSTOMIZE / EDIT MODE =====
 
 function getPlanEdits() {
@@ -1738,6 +2092,7 @@ function getPlanEdits() {
 }
 function savePlanEdits(obj) {
   localStorage.setItem('planEdits', JSON.stringify(obj));
+  scheduleSyncPush();
 }
 
 function initEditable() {
@@ -1865,6 +2220,7 @@ function getRunLog() {
 }
 function saveRunLog(log) {
   localStorage.setItem('runlog', JSON.stringify(log));
+  scheduleSyncPush();
 }
 function logKey(week, day) { return 'w' + week + '_' + day; }
 
@@ -2091,6 +2447,7 @@ function getCompleted() {
 
 function saveCompleted(arr) {
   localStorage.setItem('marathon_completed', JSON.stringify(arr));
+  scheduleSyncPush();
 }
 
 function markComplete(weekNum, e) {
@@ -2197,6 +2554,7 @@ document.addEventListener('DOMContentLoaded', function() {
   initLogButtons();   // second: add log buttons, reads .d-miles for planned text
   renderProgress();
   initCurrentWeek();
+  initSync();         // last: pull from gist (may overwrite local with newer remote data)
 });
 </script>
 </body>
