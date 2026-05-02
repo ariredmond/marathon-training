@@ -728,6 +728,9 @@
     color: #444;
   }
   #mileage-graph { width: 100%; display: block; }
+  #mileage-graph .dot-group { cursor: pointer; }
+  #mileage-graph .dot-group:hover .dot-ring { opacity: 1; }
+  #mileage-graph .dot-group:hover .dot-label { fill: #ccc; }
   @media (max-width: 560px) {
     .graph-section { padding: 16px 20px 10px; }
   }
@@ -2721,6 +2724,42 @@ function initCurrentWeek() {
   }
 }
 
+// ===== GRAPH DOT NAVIGATION =====
+
+var WEEK_PHASE = {
+  1:'p1', 2:'p1', 3:'p1',
+  4:'p2', 5:'p2', 6:'p2', 7:'p2',
+  8:'p3', 9:'p3', 10:'p3', 11:'p3', 12:'p3',
+  13:'p4', 14:'p4', 15:'p4',
+  16:'p5', 17:'p5', 18:'p5'
+};
+
+function goToWeek(weekNum) {
+  var phaseId = WEEK_PHASE[weekNum];
+  if (!phaseId) return;
+
+  // Switch to the correct phase tab
+  var phaseBtn = null;
+  document.querySelectorAll('.nav-btn').forEach(function(btn) {
+    if (btn.getAttribute('onclick') && btn.getAttribute('onclick').indexOf("'" + phaseId + "'") !== -1) {
+      phaseBtn = btn;
+    }
+  });
+  if (phaseBtn) show(phaseId, phaseBtn);
+
+  // Open the week accordion if not already open
+  var wk = document.getElementById('w' + weekNum);
+  if (!wk) return;
+  if (!wk.classList.contains('open')) wk.classList.add('open');
+
+  // Scroll to the week card (after phase switch renders)
+  setTimeout(function() {
+    var navH = (document.querySelector('.nav') || {}).offsetHeight || 50;
+    var top = wk.getBoundingClientRect().top + window.scrollY - navH - 12;
+    window.scrollTo({ top: top, behavior: 'smooth' });
+  }, 60);
+}
+
 // ===== MILEAGE GRAPH =====
 
 function renderMileageGraph() {
@@ -2795,28 +2834,39 @@ function renderMileageGraph() {
   // Line
   svg += '<polyline points="' + pts + '" fill="none" stroke="#c03020" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/>';
 
-  // Dots + labels
+  // Dots + labels — each wrapped in a clickable <g>
   weeks.forEach(function(m, i) {
     var x = xOf(i), y = yOf(m);
     var col = dotColors[i] || '#c03020';
     var isMax = (m === maxM);
+    var wNum = i + 1;
 
-    // Dot (slightly larger for peak)
+    svg += '<g class="dot-group" onclick="goToWeek(' + wNum + ')" role="button" aria-label="Week ' + wNum + ': ' + m + ' mi">';
+
+    // Invisible large hit area
+    svg += '<circle cx="' + x + '" cy="' + y + '" r="14" fill="transparent"/>';
+
+    // Hover ring
     var r = isMax ? 5 : 4;
+    svg += '<circle class="dot-ring" cx="' + x + '" cy="' + y + '" r="' + (r + 5) + '" fill="none" stroke="' + col + '" stroke-width="1" opacity="0" stroke-dasharray="2,2"/>';
+
+    // Visible dot
     svg += '<circle cx="' + x + '" cy="' + y + '" r="' + r + '" fill="' + col + '" stroke="#1a1814" stroke-width="1.5"/>';
 
-    // Mileage label — above dot if enough room, else below
+    // Mileage label — above dot if room, else below
     var labelY = (y - padT > 18) ? (y - 9) : (y + 17);
     var labelFill = isMax ? '#e07050' : '#888';
     var labelSize = isMax ? 9 : 8;
-    svg += '<text x="' + x + '" y="' + labelY + '" text-anchor="middle"'
+    svg += '<text class="dot-label" x="' + x + '" y="' + labelY + '" text-anchor="middle"'
          + ' font-family="IBM Plex Mono,monospace" font-size="' + labelSize + '"'
          + ' fill="' + labelFill + '" font-weight="' + (isMax ? '500' : '400') + '">'
          + m + '</text>';
 
     // Week label at bottom
     svg += '<text x="' + x + '" y="' + (H - 4) + '" text-anchor="middle"'
-         + ' font-family="IBM Plex Mono,monospace" font-size="7" fill="#444">W' + (i + 1) + '</text>';
+         + ' font-family="IBM Plex Mono,monospace" font-size="7" fill="#555">W' + wNum + '</text>';
+
+    svg += '</g>';
   });
 
   svg += '</svg>';
