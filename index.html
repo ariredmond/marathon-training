@@ -289,7 +289,7 @@
     letter-spacing: 0.5px;
   }
 
-  .wk-badges { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+  .wk-badges { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; align-items: center; }
   .badge {
     font-family: 'IBM Plex Mono', monospace;
     font-size: 9px;
@@ -493,6 +493,91 @@
     border-radius: 1px;
     flex-shrink: 0;
   }
+
+  /* ===== PROGRESS TRACKING ===== */
+  .hero-progress {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid #2a2a2a;
+  }
+  .progress-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    max-width: 480px;
+  }
+  .progress-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #555;
+  }
+  .progress-count {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: #666;
+  }
+  .progress-count span { color: var(--paper); font-weight: 500; }
+  .progress-track {
+    height: 3px;
+    background: #2a2a2a;
+    border-radius: 2px;
+    overflow: hidden;
+    max-width: 480px;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--red-light);
+    border-radius: 2px;
+    transition: width 0.4s ease;
+    width: 0%;
+  }
+  .progress-status {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: #555;
+    margin-top: 6px;
+  }
+  .progress-status .ps-highlight { color: var(--amber); }
+
+  /* MARK COMPLETE BUTTON */
+  .mark-btn {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 3px 9px;
+    border-radius: 2px;
+    border: 1px solid var(--border);
+    background: none;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .mark-btn:hover { background: var(--cream); color: var(--ink); border-color: #b8b0a4; }
+
+  /* COMPLETED WEEK */
+  .wk.completed { opacity: 0.6; }
+  .wk.completed .wk-num { color: var(--green) !important; }
+  .wk.completed .mark-btn {
+    background: #e8f4ee;
+    border-color: #b8d8c4;
+    color: var(--green);
+  }
+  .wk.completed .mark-btn::before { content: '✓ '; }
+
+  /* CURRENT WEEK */
+  .wk.current-week {
+    box-shadow: 0 0 0 2px var(--amber);
+  }
+  .b-now {
+    background: var(--amber);
+    color: white;
+    border: 1px solid var(--amber);
+  }
 </style>
 </head>
 <body>
@@ -528,6 +613,14 @@
       <div class="hs-label">Tune-Up Race</div>
       <div class="hs-val">Aug 23 HM</div>
     </div>
+  </div>
+  <div class="hero-progress">
+    <div class="progress-header">
+      <span class="progress-label">Training Progress</span>
+      <span class="progress-count" id="progress-count"><span>0</span> / 18 weeks</span>
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+    <div class="progress-status" id="progress-status">—</div>
   </div>
 </div>
 
@@ -585,7 +678,7 @@
           <div class="wk-name">Return to Running</div>
           <div class="wk-date">Jun 15 – Jun 21</div>
         </div>
-        <div class="wk-badges"><span class="badge b-mi">~32 mi</span></div>
+        <div class="wk-badges"><span class="badge b-mi">~32 mi</span><button class="mark-btn" id="complete-btn-1" onclick="markComplete(1,event)">Mark Complete</button></div>
         <div class="wk-toggle">▾</div>
       </div>
       <div class="wk-body">
@@ -641,7 +734,7 @@
           <div class="wk-name">Rebuilding Rhythm</div>
           <div class="wk-date">Jun 22 – Jun 28</div>
         </div>
-        <div class="wk-badges"><span class="badge b-mi">~37 mi</span></div>
+        <div class="wk-badges"><span class="badge b-mi">~37 mi</span><button class="mark-btn" id="complete-btn-2" onclick="markComplete(2,event)">Mark Complete</button></div>
         <div class="wk-toggle">▾</div>
       </div>
       <div class="wk-body">
@@ -696,7 +789,7 @@
           <div class="wk-name">Transition — First Light Workout</div>
           <div class="wk-date">Jun 29 – Jul 5</div>
         </div>
-        <div class="wk-badges"><span class="badge b-mi">~39 mi</span></div>
+        <div class="wk-badges"><span class="badge b-mi">~39 mi</span><button class="mark-btn" id="complete-btn-3" onclick="markComplete(3,event)">Mark Complete</button></div>
         <div class="wk-toggle">▾</div>
       </div>
       <div class="wk-body">
@@ -767,7 +860,7 @@
           <div class="wk-name">Cruise Intervals — LT Foundation</div>
           <div class="wk-date">Jul 6 – Jul 12</div>
         </div>
-        <div class="wk-badges"><span class="badge b-mi">~44 mi</span></div>
+        <div class="wk-badges"><span class="badge b-mi">~44 mi</span><button class="mark-btn" id="complete-btn-4" onclick="markComplete(4,event)">Mark Complete</button></div>
         <div class="wk-toggle">▾</div>
       </div>
       <div class="wk-body">
@@ -802,7 +895,7 @@
           <div class="wk-name">Tempo Intervals — LT Extension</div>
           <div class="wk-date">Jul 13 – Jul 19</div>
         </div>
-        <div class="wk-badges"><span class="badge b-mi">~48 mi</span></div>
+        <div class="wk-badges"><span class="badge b-mi">~48 mi</span><button class="mark-btn" id="complete-btn-5" onclick="markComplete(5,event)">Mark Complete</button></div>
         <div class="wk-toggle">▾</div>
       </div>
       <div class="wk-body">
@@ -837,7 +930,7 @@
           <div class="wk-name">Cutback Week — Active Recovery</div>
           <div class="wk-date">Jul 20 – Jul 26</div>
         </div>
-        <div class="wk-badges"><span class="badge b-mi">~39 mi</span><span class="badge b-cut">Cutback</span></div>
+        <div class="wk-badges"><span class="badge b-mi">~39 mi</span><span class="badge b-cut">Cutback</span><button class="mark-btn" id="complete-btn-6" onclick="markComplete(6,event)">Mark Complete</button></div>
         <div class="wk-toggle">▾</div>
       </div>
       <div class="wk-body">
@@ -872,7 +965,7 @@
           <div class="wk-name">Continuous Tempo — First Real LT Test</div>
           <div class="wk-date">Jul 27 – Aug 2</div>
         </div>
-        <div class="wk-badges"><span class="badge b-mi">~54 mi</span><span class="badge b-6day">6 Days</span></div>
+        <div class="wk-badges"><span class="badge b-mi">~54 mi</span><span class="badge b-6day">6 Days</span><button class="mark-btn" id="complete-btn-7" onclick="markComplete(7,event)">Mark Complete</button></div>
         <div class="wk-toggle">▾</div>
       </div>
       <div class="wk-body">
@@ -927,7 +1020,7 @@
           <div class="wk-name">Yasso 800s + First 20-Miler</div>
           <div class="wk-date">Aug 3 – Aug 9</div>
         </div>
-        <div class="wk-badges"><span class="badge b-mi">~57 mi</span><span class="badge b-6day">6 Days</span></div>
+        <div class="wk-badges"><span class="badge b-mi">~57 mi</span><span class="badge b-6day">6 Days</span><button class="mark-btn" id="complete-btn-8" onclick="markComplete(8,event)">Mark Complete</button></div>
         <div class="wk-toggle">▾</div>
       </div>
       <div class="wk-body">
@@ -967,7 +1060,7 @@
           <div class="wk-name">Goal Pace Run + Long w/ MP Finish</div>
           <div class="wk-date">Aug 10 – Aug 16</div>
         </div>
-        <div class="wk-badges"><span class="badge b-mi">~58 mi</span><span class="badge b-6day">6 Days</span></div>
+        <div class="wk-badges"><span class="badge b-mi">~58 mi</span><span class="badge b-6day">6 Days</span><button class="mark-btn" id="complete-btn-9" onclick="markComplete(9,event)">Mark Complete</button></div>
         <div class="wk-toggle">▾</div>
       </div>
       <div class="wk-body">
@@ -1007,7 +1100,7 @@
           <div class="wk-name">⭐ Tune-Up Half Marathon — Aug 23</div>
           <div class="wk-date">Aug 17 – Aug 23</div>
         </div>
-        <div class="wk-badges"><span class="badge b-mi">~42 mi</span><span class="badge b-race">Race</span></div>
+        <div class="wk-badges"><span class="badge b-mi">~42 mi</span><span class="badge b-race">Race</span><button class="mark-btn" id="complete-btn-10" onclick="markComplete(10,event)">Mark Complete</button></div>
         <div class="wk-toggle">▾</div>
       </div>
       <div class="wk-body">
@@ -1042,7 +1135,7 @@
           <div class="wk-name">Post-Race Cutback — Absorb</div>
           <div class="wk-date">Aug 24 – Aug 30</div>
         </div>
-        <div class="wk-badges"><span class="badge b-mi">~45 mi</span><span class="badge b-cut">Cutback</span></div>
+        <div class="wk-badges"><span class="badge b-mi">~45 mi</span><span class="badge b-cut">Cutback</span><button class="mark-btn" id="complete-btn-11" onclick="markComplete(11,event)">Mark Complete</button></div>
         <div class="wk-toggle">▾</div>
       </div>
       <div class="wk-body">
@@ -1077,7 +1170,7 @@
           <div class="wk-name">400m Repeats + Second 20-Miler w/ MP</div>
           <div class="wk-date">Aug 31 – Sep 6</div>
         </div>
-        <div class="wk-badges"><span class="badge b-mi">~58 mi</span><span class="badge b-6day">6 Days</span></div>
+        <div class="wk-badges"><span class="badge b-mi">~58 mi</span><span class="badge b-6day">6 Days</span><button class="mark-btn" id="complete-btn-12" onclick="markComplete(12,event)">Mark Complete</button></div>
         <div class="wk-toggle">▾</div>
       </div>
       <div class="wk-body">
@@ -1132,7 +1225,7 @@
           <div class="wk-name">Extended Tempo + Third 20-Miler w/ MP</div>
           <div class="wk-date">Sep 7 – Sep 13</div>
         </div>
-        <div class="wk-badges"><span class="badge b-mi">~60 mi</span><span class="badge b-peak">Peak</span><span class="badge b-6day">6 Days</span></div>
+        <div class="wk-badges"><span class="badge b-mi">~60 mi</span><span class="badge b-peak">Peak</span><span class="badge b-6day">6 Days</span><button class="mark-btn" id="complete-btn-13" onclick="markComplete(13,event)">Mark Complete</button></div>
         <div class="wk-toggle">▾</div>
       </div>
       <div class="wk-body">
@@ -1172,7 +1265,7 @@
           <div class="wk-name">⭐ Yasso 800s ×10 + 22-Mile Peak Long Run</div>
           <div class="wk-date">Sep 14 – Sep 20</div>
         </div>
-        <div class="wk-badges"><span class="badge b-mi">~62 mi</span><span class="badge b-peak">Peak</span><span class="badge b-6day">6 Days</span></div>
+        <div class="wk-badges"><span class="badge b-mi">~62 mi</span><span class="badge b-peak">Peak</span><span class="badge b-6day">6 Days</span><button class="mark-btn" id="complete-btn-14" onclick="markComplete(14,event)">Mark Complete</button></div>
         <div class="wk-toggle">▾</div>
       </div>
       <div class="wk-body">
@@ -1212,7 +1305,7 @@
           <div class="wk-name">Extended Goal Pace Run + Final 20-Miler</div>
           <div class="wk-date">Sep 21 – Sep 27</div>
         </div>
-        <div class="wk-badges"><span class="badge b-mi">~60 mi</span><span class="badge b-peak">Peak</span><span class="badge b-6day">6 Days</span></div>
+        <div class="wk-badges"><span class="badge b-mi">~60 mi</span><span class="badge b-peak">Peak</span><span class="badge b-6day">6 Days</span><button class="mark-btn" id="complete-btn-15" onclick="markComplete(15,event)">Mark Complete</button></div>
         <div class="wk-toggle">▾</div>
       </div>
       <div class="wk-body">
@@ -1267,7 +1360,7 @@
           <div class="wk-name">Taper 1 — Volume Down, Edge Stays</div>
           <div class="wk-date">Sep 28 – Oct 4</div>
         </div>
-        <div class="wk-badges"><span class="badge b-mi">~43 mi</span><span class="badge b-taper">Taper</span></div>
+        <div class="wk-badges"><span class="badge b-mi">~43 mi</span><span class="badge b-taper">Taper</span><button class="mark-btn" id="complete-btn-16" onclick="markComplete(16,event)">Mark Complete</button></div>
         <div class="wk-toggle">▾</div>
       </div>
       <div class="wk-body">
@@ -1302,7 +1395,7 @@
           <div class="wk-name">Taper 2 — Race Sharpening</div>
           <div class="wk-date">Oct 5 – Oct 11</div>
         </div>
-        <div class="wk-badges"><span class="badge b-mi">~35 mi</span><span class="badge b-taper">Taper</span></div>
+        <div class="wk-badges"><span class="badge b-mi">~35 mi</span><span class="badge b-taper">Taper</span><button class="mark-btn" id="complete-btn-17" onclick="markComplete(17,event)">Mark Complete</button></div>
         <div class="wk-toggle">▾</div>
       </div>
       <div class="wk-body">
@@ -1337,7 +1430,7 @@
           <div class="wk-name">🏁 Race Week — October 11, 2026</div>
           <div class="wk-date">Oct 5 – Oct 11</div>
         </div>
-        <div class="wk-badges"><span class="badge b-mi">~12 mi</span><span class="badge b-race">Race Day</span></div>
+        <div class="wk-badges"><span class="badge b-mi">~12 mi</span><span class="badge b-race">Race Day</span><button class="mark-btn" id="complete-btn-18" onclick="markComplete(18,event)">Mark Complete</button></div>
         <div class="wk-toggle">▾</div>
       </div>
       <div class="wk-body">
@@ -1416,10 +1509,33 @@
 </div><!-- end main -->
 
 <script>
+// Week start dates (Monday of each week, ISO format)
+const WEEK_STARTS = [
+  '2026-06-15', // Week 1
+  '2026-06-22', // Week 2
+  '2026-06-29', // Week 3
+  '2026-07-06', // Week 4
+  '2026-07-13', // Week 5
+  '2026-07-20', // Week 6
+  '2026-07-27', // Week 7
+  '2026-08-03', // Week 8
+  '2026-08-10', // Week 9
+  '2026-08-17', // Week 10
+  '2026-08-24', // Week 11
+  '2026-08-31', // Week 12
+  '2026-09-07', // Week 13
+  '2026-09-14', // Week 14
+  '2026-09-21', // Week 15
+  '2026-09-28', // Week 16
+  '2026-10-05', // Week 17
+  '2026-10-05', // Week 18 (race week overlaps with w17 start)
+];
+
 function tog(id) {
   const el = document.getElementById(id);
   el.classList.toggle('open');
 }
+
 function show(phase, btn) {
   document.querySelectorAll('.phase').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
@@ -1427,6 +1543,121 @@ function show(phase, btn) {
   btn.classList.add('active');
   window.scrollTo({ top: document.querySelector('.nav').offsetTop - 4, behavior: 'smooth' });
 }
+
+// ===== PROGRESS TRACKING =====
+
+function getCompleted() {
+  try { return JSON.parse(localStorage.getItem('marathon_completed')) || []; }
+  catch { return []; }
+}
+
+function saveCompleted(arr) {
+  localStorage.setItem('marathon_completed', JSON.stringify(arr));
+}
+
+function markComplete(weekNum, e) {
+  e.stopPropagation();
+  const completed = getCompleted();
+  const idx = completed.indexOf(weekNum);
+  if (idx === -1) { completed.push(weekNum); }
+  else { completed.splice(idx, 1); }
+  saveCompleted(completed);
+  renderProgress();
+}
+
+function renderProgress() {
+  const completed = getCompleted();
+  const count = completed.length;
+  const pct = Math.round((count / 18) * 100);
+
+  // Update progress bar
+  const fill = document.getElementById('progress-fill');
+  const countEl = document.getElementById('progress-count');
+  if (fill) fill.style.width = pct + '%';
+  if (countEl) countEl.innerHTML = '<span>' + count + '</span> / 18 weeks';
+
+  // Update each week card
+  for (let i = 1; i <= 18; i++) {
+    const wk = document.getElementById('w' + i);
+    const btn = document.getElementById('complete-btn-' + i);
+    if (!wk) continue;
+    if (completed.includes(i)) {
+      wk.classList.add('completed');
+      if (btn) btn.textContent = 'Completed';
+    } else {
+      wk.classList.remove('completed');
+      if (btn) btn.textContent = 'Mark Complete';
+    }
+  }
+}
+
+// ===== CURRENT WEEK DETECTION =====
+
+function getCurrentWeek() {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const planStart = new Date('2026-06-15');
+  const raceEnd = new Date('2026-10-12'); // day after race
+
+  if (today < planStart) return 0;  // pre-plan
+  if (today >= raceEnd) return -1;  // post-race
+
+  // Find which week by matching the last WEEK_STARTS date that is <= today
+  // Use first 17 unique week starts (weeks 1-17), then check if we're in race week (w18)
+  const uniqueStarts = WEEK_STARTS.slice(0, 17); // weeks 1-17
+  let currentWeek = 1;
+  for (let i = 0; i < uniqueStarts.length; i++) {
+    const ws = new Date(uniqueStarts[i]);
+    if (today >= ws) currentWeek = i + 1;
+  }
+  // If in week 17 range (Oct 5-11) and it's race week (Sun Oct 11), we're in w18 territory
+  // but since w17 and w18 share the same start, just return w17 for the week indicator
+  return currentWeek;
+}
+
+function initCurrentWeek() {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const planStart = new Date('2026-06-15');
+  const raceDate = new Date('2026-10-11');
+  const raceEnd = new Date('2026-10-12');
+  const currentWeek = getCurrentWeek();
+
+  // Update status text in hero
+  const statusEl = document.getElementById('progress-status');
+  if (statusEl) {
+    if (currentWeek === 0) {
+      const msPerDay = 1000 * 60 * 60 * 24;
+      const daysUntil = Math.ceil((planStart - today) / msPerDay);
+      statusEl.innerHTML = 'Plan starts in <span class="ps-highlight">' + daysUntil + ' days</span> · Jun 15, 2026';
+    } else if (currentWeek === -1) {
+      statusEl.innerHTML = '<span class="ps-highlight">Race complete</span> · Oct 11, 2026';
+    } else {
+      statusEl.innerHTML = 'Currently in <span class="ps-highlight">Week ' + currentWeek + '</span>';
+    }
+  }
+
+  // Highlight the current week card
+  if (currentWeek > 0 && currentWeek <= 18) {
+    const wk = document.getElementById('w' + currentWeek);
+    if (wk) {
+      wk.classList.add('current-week');
+      const badges = wk.querySelector('.wk-badges');
+      if (badges && !badges.querySelector('.b-now')) {
+        const nowBadge = document.createElement('span');
+        nowBadge.className = 'badge b-now';
+        nowBadge.textContent = 'This Week';
+        badges.insertBefore(nowBadge, badges.firstChild);
+      }
+    }
+  }
+}
+
+// ===== INIT =====
+document.addEventListener('DOMContentLoaded', function() {
+  renderProgress();
+  initCurrentWeek();
+});
 </script>
 </body>
 </html>
