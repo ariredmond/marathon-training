@@ -494,6 +494,128 @@
     flex-shrink: 0;
   }
 
+  /* ===== RUN LOGGING ===== */
+
+  /* Day card hover shows log affordance */
+  .day:not(.rest):not(.off) { position: relative; cursor: default; }
+
+  /* Log button — appears at bottom of day card */
+  .log-btn {
+    display: block;
+    width: 100%;
+    margin-top: 8px;
+    padding: 4px 0;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    background: none;
+    border: 1px dashed var(--border);
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-align: center;
+  }
+  .log-btn:hover { background: var(--cream); color: var(--ink); border-style: solid; }
+  .log-btn.has-log {
+    border-style: solid;
+    border-color: #b8d8c4;
+    background: #f0f8f4;
+    color: var(--green);
+  }
+  .day.race .log-btn { border-color: #3a3028; color: #666; }
+  .day.race .log-btn:hover { background: #2a2020; color: #aaa; }
+  .day.race .log-btn.has-log { border-color: #2a5040; background: #1a2820; color: #6ab890; }
+
+  /* Inline log form */
+  .log-form {
+    display: none;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid var(--border);
+  }
+  .log-form.open { display: block; }
+  .day.race .log-form { border-top-color: #2a2a2a; }
+
+  .log-row { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 6px; }
+  .log-field { display: flex; flex-direction: column; gap: 2px; margin-bottom: 6px; }
+  .log-field label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 7px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .log-input, .log-textarea {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    padding: 4px 6px;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    background: white;
+    color: var(--ink);
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .log-textarea { resize: vertical; min-height: 44px; font-size: 10px; }
+  .log-input:focus, .log-textarea:focus { outline: none; border-color: var(--amber); }
+  .day.race .log-input, .day.race .log-textarea { background: #1a1814; color: var(--paper); border-color: #3a3028; }
+
+  .log-actions { display: flex; gap: 6px; margin-top: 4px; }
+  .log-save {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    background: var(--green);
+    color: white;
+    border: none;
+    border-radius: 2px;
+    cursor: pointer;
+  }
+  .log-save:hover { background: #155235; }
+  .log-cancel {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    background: none;
+    color: var(--muted);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    cursor: pointer;
+  }
+  .log-cancel:hover { background: var(--cream); }
+
+  /* Actual vs planned miles display */
+  .d-miles-row { display: flex; align-items: baseline; gap: 8px; margin-top: 6px; flex-wrap: wrap; }
+  .d-miles-planned {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 400;
+    font-size: 13px;
+    color: var(--muted);
+    text-decoration: line-through;
+  }
+  .d-miles-actual {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    color: var(--green);
+  }
+  .day.race .d-miles-actual { color: #6ab890; }
+  .d-log-note {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 8px;
+    color: var(--green);
+    margin-top: 3px;
+    line-height: 1.4;
+    font-style: italic;
+  }
+  .day.race .d-log-note { color: #6ab890; }
+
   /* ===== PROGRESS TRACKING ===== */
   .hero-progress {
     margin-top: 24px;
@@ -1509,6 +1631,196 @@
 </div><!-- end main -->
 
 <script>
+// ===== RUN LOG =====
+
+function getRunLog() {
+  try { return JSON.parse(localStorage.getItem('runlog')) || {}; }
+  catch { return {}; }
+}
+function saveRunLog(log) {
+  localStorage.setItem('runlog', JSON.stringify(log));
+}
+function logKey(week, day) { return 'w' + week + '_' + day; }
+
+function initLogButtons() {
+  document.querySelectorAll('.day:not(.rest):not(.off)').forEach(function(day) {
+    var wk = day.closest('.wk');
+    if (!wk) return;
+    var weekNum = parseInt(wk.id.replace('w', ''));
+    var labelEl = day.querySelector('.d-label');
+    if (!labelEl) return;
+    var dayKey = labelEl.textContent.trim().toLowerCase().replace(/[^a-z]/g, '').substring(0, 3);
+    var key = logKey(weekNum, dayKey);
+
+    // Wrap existing .d-miles in a container we can replace
+    var milesEl = day.querySelector('.d-miles');
+    if (milesEl) {
+      var plannedText = milesEl.textContent.trim();
+      milesEl.setAttribute('data-planned', plannedText);
+    }
+
+    // Log button
+    var btn = document.createElement('button');
+    btn.className = 'log-btn';
+    btn.id = 'log-btn-' + key;
+    btn.setAttribute('data-week', weekNum);
+    btn.setAttribute('data-day', dayKey);
+    btn.textContent = '+ Log Run';
+    btn.onclick = function(e) { e.stopPropagation(); openLogForm(weekNum, dayKey); };
+    day.appendChild(btn);
+
+    // Log form
+    var form = document.createElement('div');
+    form.className = 'log-form';
+    form.id = 'log-form-' + key;
+    form.innerHTML =
+      '<div class="log-row">' +
+        '<div class="log-field"><label>Actual Miles</label>' +
+          '<input type="number" step="0.1" min="0" placeholder="0.0" class="log-input" id="log-miles-' + key + '"></div>' +
+        '<div class="log-field"><label>Actual Pace</label>' +
+          '<input type="text" placeholder="8:30" class="log-input" id="log-pace-' + key + '"></div>' +
+      '</div>' +
+      '<div class="log-field"><label>Notes (optional)</label>' +
+        '<textarea class="log-textarea" id="log-notes-' + key + '" placeholder="How did it feel?"></textarea>' +
+      '</div>' +
+      '<div class="log-actions">' +
+        '<button class="log-save" onclick="saveLog(' + weekNum + ',\'' + dayKey + '\')">Save</button>' +
+        '<button class="log-cancel" onclick="closeLogForm(' + weekNum + ',\'' + dayKey + '\')">Cancel</button>' +
+        '<button class="log-cancel" style="color:var(--red);border-color:#f5c0b8" onclick="clearLog(' + weekNum + ',\'' + dayKey + '\')">Clear</button>' +
+      '</div>';
+    day.appendChild(form);
+  });
+
+  loadAllLogs();
+}
+
+function openLogForm(week, day) {
+  var key = logKey(week, day);
+  // Close any other open forms first
+  document.querySelectorAll('.log-form.open').forEach(function(f) { f.classList.remove('open'); });
+
+  var form = document.getElementById('log-form-' + key);
+  if (!form) return;
+  form.classList.add('open');
+
+  // Pre-fill with saved data
+  var log = getRunLog();
+  var entry = log[key] || {};
+  var milesInput = document.getElementById('log-miles-' + key);
+  var paceInput = document.getElementById('log-pace-' + key);
+  var notesInput = document.getElementById('log-notes-' + key);
+  if (milesInput) milesInput.value = entry.miles || '';
+  if (paceInput) paceInput.value = entry.pace || '';
+  if (notesInput) notesInput.value = entry.notes || '';
+  if (milesInput) milesInput.focus();
+}
+
+function closeLogForm(week, day) {
+  var key = logKey(week, day);
+  var form = document.getElementById('log-form-' + key);
+  if (form) form.classList.remove('open');
+}
+
+function saveLog(week, day) {
+  var key = logKey(week, day);
+  var milesVal = (document.getElementById('log-miles-' + key) || {}).value;
+  var paceVal = (document.getElementById('log-pace-' + key) || {}).value;
+  var notesVal = (document.getElementById('log-notes-' + key) || {}).value;
+
+  var log = getRunLog();
+  if (!milesVal && !paceVal && !notesVal) {
+    delete log[key];
+  } else {
+    log[key] = { miles: milesVal, pace: paceVal, notes: notesVal };
+  }
+  saveRunLog(log);
+  closeLogForm(week, day);
+  renderLogEntry(week, day);
+}
+
+function clearLog(week, day) {
+  var key = logKey(week, day);
+  var log = getRunLog();
+  delete log[key];
+  saveRunLog(log);
+  closeLogForm(week, day);
+  renderLogEntry(week, day);
+}
+
+function renderLogEntry(week, day) {
+  var key = logKey(week, day);
+  var log = getRunLog();
+  var entry = log[key];
+  var btn = document.getElementById('log-btn-' + key);
+
+  // Find the day element via the week card + day label
+  var wk = document.getElementById('w' + week);
+  if (!wk) return;
+  var dayEl = null;
+  wk.querySelectorAll('.day').forEach(function(d) {
+    var lbl = d.querySelector('.d-label');
+    if (lbl && lbl.textContent.trim().toLowerCase().replace(/[^a-z]/g, '').substring(0, 3) === day) {
+      dayEl = d;
+    }
+  });
+  if (!dayEl) return;
+
+  var milesEl = dayEl.querySelector('.d-miles');
+
+  // Remove previous actual display
+  var prevActual = dayEl.querySelector('.d-miles-row');
+  if (prevActual) prevActual.remove();
+  var prevNote = dayEl.querySelector('.d-log-note');
+  if (prevNote) prevNote.remove();
+  if (milesEl) milesEl.style.display = '';
+
+  if (entry && (entry.miles || entry.pace)) {
+    // Hide the original d-miles and show planned vs actual row
+    if (milesEl) milesEl.style.display = 'none';
+    var row = document.createElement('div');
+    row.className = 'd-miles-row';
+    if (milesEl && milesEl.getAttribute('data-planned')) {
+      var planned = document.createElement('span');
+      planned.className = 'd-miles-planned';
+      planned.textContent = milesEl.getAttribute('data-planned');
+      row.appendChild(planned);
+    }
+    if (entry.miles) {
+      var actual = document.createElement('span');
+      actual.className = 'd-miles-actual';
+      actual.textContent = entry.miles + ' mi';
+      if (entry.pace) actual.textContent += ' · ' + entry.pace;
+      row.appendChild(actual);
+    }
+    // Insert before log-btn
+    if (btn) dayEl.insertBefore(row, btn);
+    else dayEl.appendChild(row);
+
+    // Notes line
+    if (entry.notes) {
+      var noteEl = document.createElement('div');
+      noteEl.className = 'd-log-note';
+      noteEl.textContent = '"' + entry.notes + '"';
+      if (btn) dayEl.insertBefore(noteEl, btn);
+      else dayEl.appendChild(noteEl);
+    }
+
+    if (btn) { btn.textContent = '✎ Edit Log'; btn.classList.add('has-log'); }
+  } else {
+    if (btn) { btn.textContent = '+ Log Run'; btn.classList.remove('has-log'); }
+  }
+}
+
+function loadAllLogs() {
+  var log = getRunLog();
+  Object.keys(log).forEach(function(key) {
+    var parts = key.match(/^w(\d+)_([a-z]+)$/);
+    if (parts) renderLogEntry(parseInt(parts[1]), parts[2]);
+  });
+}
+
+// ===== WEEK START DATES =====
+
 // Week start dates (Monday of each week, ISO format)
 const WEEK_STARTS = [
   '2026-06-15', // Week 1
@@ -1655,6 +1967,7 @@ function initCurrentWeek() {
 
 // ===== INIT =====
 document.addEventListener('DOMContentLoaded', function() {
+  initLogButtons();   // must run before renderProgress so d-miles data-planned is set
   renderProgress();
   initCurrentWeek();
 });
