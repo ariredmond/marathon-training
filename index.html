@@ -320,12 +320,82 @@
     gap: 8px;
     margin-top: 16px;
   }
+  .day-grid.has-total {
+    grid-template-columns: repeat(7, 1fr) 90px;
+  }
+
+  /* Weekly total column */
+  .week-total {
+    background: var(--cream);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 10px 12px;
+    min-height: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .wt-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .wt-miles {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+    color: var(--ink);
+    line-height: 1.1;
+  }
+  .wt-unit {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    color: var(--muted);
+    font-weight: 400;
+    display: block;
+    margin-top: 2px;
+  }
+
+  /* Miles field: editable number + locked unit */
+  .d-miles-num {
+    /* inherits d-miles font/color from parent */
+  }
+  .d-miles-unit {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--muted);
+    letter-spacing: 0;
+    margin-left: 2px;
+  }
+  .day.race .d-miles-unit { color: #666; }
+
+  /* Edit mode: number-only field gets a clear input style */
+  .edit-mode .d-miles-num[contenteditable="true"] {
+    outline: 2px solid var(--amber) !important;
+    background: rgba(255,248,225,0.9);
+    border-radius: 2px;
+    padding: 1px 4px;
+    min-width: 1.5ch;
+    display: inline-block;
+  }
+  .edit-mode .d-miles-num[contenteditable="true"]:focus {
+    background: white;
+  }
+  .edit-mode .d-miles-unit {
+    cursor: not-allowed;
+    user-select: none;
+  }
 
   @media (max-width: 900px) {
     .day-grid { grid-template-columns: repeat(4, 1fr); }
+    .day-grid.has-total { grid-template-columns: repeat(4, 1fr); }
   }
   @media (max-width: 560px) {
     .day-grid { grid-template-columns: repeat(2, 1fr); }
+    .day-grid.has-total { grid-template-columns: repeat(2, 1fr); }
     .main { padding: 20px; }
     .hero { padding: 36px 24px 36px; }
     .nav { padding: 0 16px; }
@@ -2119,18 +2189,47 @@ function initEditable() {
       var lbl = day.querySelector('.d-label');
       if (!lbl) return;
       var dk = lbl.textContent.trim().toLowerCase().replace(/[^a-z]/g, '').substring(0, 3);
-      [['d-main','main'],['d-detail','detail'],['d-miles','miles']].forEach(function(pair) {
-        var el = day.querySelector('.' + pair[0]);
+
+      // d-main and d-detail: fully editable as before
+      ['d-main','d-detail'].forEach(function(cls) {
+        var el = day.querySelector('.' + cls);
         if (!el) return;
-        var key = 'w' + w + '_' + dk + '_' + pair[1];
+        var key = 'w' + w + '_' + dk + '_' + cls.replace('d-','');
         el.setAttribute('data-ekey', key);
         el.setAttribute('data-orig', el.innerHTML);
       });
+
+      // d-miles: split into editable number + locked " mi" unit
+      var milesEl = day.querySelector('.d-miles');
+      if (milesEl && !milesEl.querySelector('.d-miles-num')) {
+        var rawText = milesEl.textContent.trim();
+        var numOnly = rawText.replace(/[^0-9.]/g, '') || '0';
+        milesEl.innerHTML =
+          '<span class="d-miles-num">' + numOnly + '</span>' +
+          '<span class="d-miles-unit"> mi</span>';
+        var numSpan = milesEl.querySelector('.d-miles-num');
+        var key = 'w' + w + '_' + dk + '_miles';
+        numSpan.setAttribute('data-ekey', key);
+        numSpan.setAttribute('data-orig', numOnly);
+      }
     });
 
-    // Add per-week Reset button to wk-head badges area
+    // Inject weekly total as 8th column in day-grid
+    var dayGrid = wk.querySelector('.day-grid');
+    if (dayGrid && !dayGrid.querySelector('.week-total')) {
+      dayGrid.classList.add('has-total');
+      var tot = document.createElement('div');
+      tot.className = 'week-total';
+      tot.innerHTML =
+        '<div class="wt-label">Week Total</div>' +
+        '<div><div class="wt-miles" id="wt-' + w + '">—</div>' +
+        '<span class="wt-unit">miles</span></div>';
+      dayGrid.appendChild(tot);
+    }
+
+    // Per-week Reset button
     var badges = wk.querySelector('.wk-badges');
-    if (badges) {
+    if (badges && !badges.querySelector('.wk-reset-btn')) {
       var rb = document.createElement('button');
       rb.className = 'wk-reset-btn';
       rb.textContent = '↺ Reset Week';
@@ -2146,6 +2245,25 @@ function initEditable() {
     var el = document.querySelector('[data-ekey="' + key + '"]');
     if (el) el.innerHTML = edits[key];
   });
+
+  // Calculate all week totals from current (possibly restored) values
+  updateAllWeekTotals();
+}
+
+function updateWeekTotal(weekNum) {
+  var wk = document.getElementById('w' + weekNum);
+  if (!wk) return;
+  var total = 0;
+  wk.querySelectorAll('.d-miles-num').forEach(function(el) {
+    var v = parseFloat(el.textContent.replace(/[^0-9.]/g, ''));
+    if (!isNaN(v)) total += v;
+  });
+  var el = document.getElementById('wt-' + weekNum);
+  if (el) el.textContent = total > 0 ? (Math.round(total * 10) / 10) : '—';
+}
+
+function updateAllWeekTotals() {
+  for (var w = 1; w <= 18; w++) updateWeekTotal(w);
 }
 
 var _editHandler = null;
@@ -2166,18 +2284,31 @@ function toggleEditMode(btn) {
       var edits = getPlanEdits();
       edits[key] = e.target.innerHTML;
       savePlanEdits(edits);
+      // If this is a miles field, update the weekly total live
+      if (e.target.classList.contains('d-miles-num')) {
+        var wk = e.target.closest('.wk');
+        if (wk) updateWeekTotal(parseInt(wk.id.replace('w', '')));
+      }
     };
     _keydownHandler = function(e) {
+      var el = e.target;
+      // Miles number field: digits + decimal only, Enter/Escape to blur
+      if (el.classList.contains('d-miles-num')) {
+        var allowed = ['Backspace','Delete','ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Tab','Enter','Escape'];
+        if (allowed.indexOf(e.key) === -1 && !/^[0-9.]$/.test(e.key)) {
+          e.preventDefault();
+          return;
+        }
+        if (e.key === 'Enter' || e.key === 'Escape') { e.preventDefault(); el.blur(); return; }
+      }
       if (e.key === 'Enter') {
-        var el = e.target;
         // Single-line fields: prevent newline, blur instead
-        if (el.classList.contains('d-main') || el.classList.contains('d-miles') ||
-            el.classList.contains('wk-name')) {
+        if (el.classList.contains('d-main') || el.classList.contains('wk-name')) {
           e.preventDefault();
           el.blur();
         }
       }
-      if (e.key === 'Escape') { e.target.blur(); }
+      if (e.key === 'Escape') { el.blur(); }
     };
     document.querySelectorAll('[data-ekey]').forEach(function(el) {
       el.contentEditable = 'true';
@@ -2202,6 +2333,7 @@ function resetWeekEdits(weekNum) {
     delete edits[el.getAttribute('data-ekey')];
   });
   savePlanEdits(edits);
+  updateWeekTotal(weekNum);
 }
 
 function resetAllEdits() {
@@ -2210,6 +2342,7 @@ function resetAllEdits() {
   document.querySelectorAll('[data-ekey]').forEach(function(el) {
     el.innerHTML = el.getAttribute('data-orig');
   });
+  updateAllWeekTotals();
 }
 
 // ===== RUN LOG =====
