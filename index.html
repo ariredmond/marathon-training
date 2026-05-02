@@ -703,6 +703,35 @@
   }
   .modal-connected-info.show { display: block; }
 
+  /* ===== TYPE DROPDOWN ===== */
+
+  /* Hide tag, show select in edit mode */
+  .type-select { display: none; }
+  .edit-mode .type-select { display: block; }
+  .edit-mode .d-tag { display: none; }
+
+  .type-select {
+    width: 100%;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.5px;
+    padding: 3px 5px;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    background: white;
+    color: var(--ink);
+    cursor: pointer;
+    margin-bottom: 5px;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='5'%3E%3Cpath d='M0 0l4 5 4-5z' fill='%238a8278'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 6px center;
+    padding-right: 18px;
+  }
+  .type-select:focus { outline: none; border-color: var(--amber); }
+  .day.race .type-select { background-color: #1f1e1a; color: var(--paper); border-color: #3a3028; }
+
   /* ===== MILEAGE GRAPH ===== */
   .graph-section {
     background: var(--dark);
@@ -2039,6 +2068,22 @@ function applyAllData(data) {
   if (data.planEdits) {
     localStorage.setItem('planEdits', JSON.stringify(data.planEdits));
     Object.keys(data.planEdits).forEach(function(key) {
+      // Type selections are applied via select elements, not data-ekey
+      if (key.endsWith('_type')) {
+        var parts = key.match(/^w(\d+)_([a-z]+)_type$/);
+        if (parts) {
+          var wk = document.getElementById('w' + parts[1]);
+          if (wk) wk.querySelectorAll('.day').forEach(function(d) {
+            var lbl = d.querySelector('.d-label');
+            if (lbl && lbl.textContent.trim().toLowerCase().replace(/[^a-z]/g,'').substring(0,3) === parts[2]) {
+              applyType(d, data.planEdits[key], false);
+              var sel = d.querySelector('.type-select');
+              if (sel) sel.value = data.planEdits[key];
+            }
+          });
+        }
+        return;
+      }
       var el = document.querySelector('[data-ekey="' + key + '"]');
       if (el) el.innerHTML = data.planEdits[key];
     });
@@ -2724,6 +2769,138 @@ function initCurrentWeek() {
   }
 }
 
+// ===== RUN TYPE DROPDOWN =====
+
+var RUN_TYPES = [
+  { id:'easy',      label:'Easy / Recovery',       pace:'8:30–9:15/mi',              dayCls:'easy',         tagCls:'dt-easy',    tagTxt:'Easy' },
+  { id:'thu',       label:'Easy (Thu volume)',      pace:'8:45–9:15/mi',              dayCls:'easy',         tagCls:'dt-thu',     tagTxt:'Easy' },
+  { id:'shakeout',  label:'Shakeout / Strides',     pace:'Very easy + strides',       dayCls:'easy',         tagCls:'dt-easy',    tagTxt:'Shakeout' },
+  { id:'mp',        label:'Marathon Pace',          pace:'7:04/mi',                   dayCls:'workout',      tagCls:'dt-workout', tagTxt:'MP' },
+  { id:'hm',        label:'HM / Cruise',            pace:'6:50–7:00/mi',              dayCls:'workout',      tagCls:'dt-workout', tagTxt:'HM/T' },
+  { id:'tempo',     label:'Tempo / LT',             pace:'6:40–6:50/mi',              dayCls:'workout',      tagCls:'dt-workout', tagTxt:'Tempo' },
+  { id:'10k',       label:'10K Pace',               pace:'6:20–6:30/mi',              dayCls:'workout',      tagCls:'dt-workout', tagTxt:'10K' },
+  { id:'5k',        label:'5K / Rep Pace',          pace:'6:05–6:15/mi',              dayCls:'workout',      tagCls:'dt-workout', tagTxt:'5K' },
+  { id:'yasso',     label:'Yasso 800s',             pace:'3:05 per 800m · equal jog', dayCls:'workout',      tagCls:'dt-workout', tagTxt:'Yasso' },
+  { id:'workout',   label:'Quality Workout',        pace:'Mixed — see detail',        dayCls:'workout',      tagCls:'dt-workout', tagTxt:'Workout' },
+  { id:'long-easy', label:'Long Run (Easy)',         pace:'8:30–9:15/mi',              dayCls:'long-easy',    tagCls:'dt-long',    tagTxt:'Long Easy' },
+  { id:'long-mp',   label:'Long Run + MP Finish',   pace:'Easy → last 6mi @ 7:04',   dayCls:'long-quality', tagCls:'dt-longq',   tagTxt:'Long+MP' },
+  { id:'race',      label:'Race Day',               pace:'7:04 goal pace',            dayCls:'race',         tagCls:'dt-race',    tagTxt:'🏁 Race' },
+  { id:'rest',      label:'Rest',                   pace:'',                           dayCls:'rest',         tagCls:'dt-rest',    tagTxt:'Rest' },
+  { id:'off',       label:'Off / Cross-Train',      pace:'',                           dayCls:'off',          tagCls:'dt-rest',    tagTxt:'Off' }
+];
+
+var DAY_CLS_ALL = ['easy','workout','long-easy','long-quality','race','rest','off'];
+
+function typeFromDay(day) {
+  if (day.classList.contains('race'))         return 'race';
+  if (day.classList.contains('off'))          return 'off';
+  if (day.classList.contains('rest'))         return 'rest';
+  if (day.classList.contains('long-quality')) return 'long-mp';
+  if (day.classList.contains('long-easy'))    return 'long-easy';
+  if (day.classList.contains('workout'))      return 'workout';
+  var tag = day.querySelector('.d-tag');
+  if (tag && tag.classList.contains('dt-thu')) return 'thu';
+  return 'easy';
+}
+
+function applyType(day, typeId, updateDetail) {
+  var t = RUN_TYPES.find(function(r) { return r.id === typeId; });
+  if (!t) return;
+
+  // Swap day CSS class
+  DAY_CLS_ALL.forEach(function(c) { day.classList.remove(c); });
+  day.classList.add(t.dayCls);
+
+  // Update tag text + class
+  var tag = day.querySelector('.d-tag');
+  if (tag) {
+    tag.className = 'd-tag ' + t.tagCls;
+    tag.textContent = t.tagTxt;
+  }
+
+  // Auto-fill detail pace if requested and pace is non-empty
+  if (updateDetail && t.pace) {
+    var detail = day.querySelector('.d-detail');
+    if (detail) {
+      detail.textContent = t.pace;
+      // Save to planEdits
+      var key = detail.getAttribute('data-ekey');
+      if (key) {
+        var edits = getPlanEdits();
+        edits[key] = t.pace;
+        savePlanEdits(edits);
+      }
+    }
+  }
+}
+
+function onTypeChange(weekNum, dayKey, selectEl) {
+  var typeId = selectEl.value;
+  var wk = document.getElementById('w' + weekNum);
+  if (!wk) return;
+
+  // Find the right day by label
+  var dayEl = null;
+  wk.querySelectorAll('.day').forEach(function(d) {
+    var lbl = d.querySelector('.d-label');
+    if (lbl && lbl.textContent.trim().toLowerCase().replace(/[^a-z]/g,'').substring(0,3) === dayKey) dayEl = d;
+  });
+  if (!dayEl) return;
+
+  applyType(dayEl, typeId, true);
+
+  // Save type selection to planEdits
+  var key = 'w' + weekNum + '_' + dayKey + '_type';
+  var edits = getPlanEdits();
+  edits[key] = typeId;
+  savePlanEdits(edits);
+}
+
+function initTypeSelects() {
+  var edits = getPlanEdits();
+
+  for (var w = 1; w <= 18; w++) {
+    var wk = document.getElementById('w' + w);
+    if (!wk) continue;
+
+    wk.querySelectorAll('.day').forEach(function(day) {
+      var lbl = day.querySelector('.d-label');
+      if (!lbl) return;
+      var dk = lbl.textContent.trim().toLowerCase().replace(/[^a-z]/g,'').substring(0,3);
+
+      // Restore saved type first (before reading typeFromDay which checks classes)
+      var savedType = edits['w' + w + '_' + dk + '_type'];
+      if (savedType) applyType(day, savedType, false);
+
+      // Detect current type
+      var currentType = savedType || typeFromDay(day);
+
+      // Build select
+      var sel = document.createElement('select');
+      sel.className = 'type-select';
+      sel.setAttribute('data-week', w);
+      sel.setAttribute('data-day', dk);
+
+      var wCopy = w, dkCopy = dk;
+      sel.onchange = function() { onTypeChange(wCopy, dkCopy, this); };
+      sel.onclick = function(e) { e.stopPropagation(); };
+
+      RUN_TYPES.forEach(function(t) {
+        var opt = document.createElement('option');
+        opt.value = t.id;
+        opt.textContent = t.label;
+        if (t.id === currentType) opt.selected = true;
+        sel.appendChild(opt);
+      });
+
+      // Insert after d-label (before d-tag)
+      var tag = day.querySelector('.d-tag');
+      if (tag) day.insertBefore(sel, tag);
+      else day.insertBefore(sel, day.firstChild);
+    });
+  }
+}
+
 // ===== GRAPH DOT NAVIGATION =====
 
 var WEEK_PHASE = {
@@ -2880,7 +3057,8 @@ function renderMileageGraph() {
 // ===== INIT =====
 document.addEventListener('DOMContentLoaded', function() {
   initEditable();       // first: tag fields + restore saved customizations
-  initLogButtons();     // second: add log buttons, reads .d-miles for planned text
+  initTypeSelects();    // inject type dropdowns + restore saved types
+  initLogButtons();     // reads .d-miles for planned text
   renderProgress();
   initCurrentWeek();
   renderMileageGraph(); // draw graph from initial/restored miles
