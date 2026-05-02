@@ -162,6 +162,7 @@
     position: sticky;
     top: 0;
     z-index: 100;
+    align-items: stretch;
   }
   .nav::-webkit-scrollbar { display: none; }
   .nav-btn {
@@ -494,6 +495,96 @@
     flex-shrink: 0;
   }
 
+  /* ===== CUSTOMIZE / EDIT MODE ===== */
+
+  .customize-btn {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 14px 16px;
+    border: none;
+    border-bottom: 3px solid transparent;
+    background: none;
+    color: var(--muted);
+    cursor: pointer;
+    margin-bottom: -2px;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .customize-btn:hover { color: var(--ink); }
+  .customize-btn.editing { color: var(--green); border-bottom-color: var(--green); }
+
+  /* Editable fields in edit mode */
+  .edit-mode [data-ekey] {
+    outline: 1px dashed rgba(192, 120, 32, 0.5);
+    border-radius: 2px;
+    cursor: text;
+    min-height: 1em;
+    transition: outline 0.1s;
+  }
+  .edit-mode [data-ekey]:hover { outline: 2px solid var(--amber); }
+  .edit-mode [data-ekey]:focus {
+    outline: 2px solid var(--amber);
+    background: rgba(255, 248, 230, 0.6);
+  }
+  .edit-mode .day.race [data-ekey]:focus { background: rgba(40, 32, 20, 0.8); }
+  .edit-mode .wk-name[data-ekey]:focus { background: rgba(255, 248, 230, 0.6); }
+
+  /* Edit mode floating toolbar */
+  .edit-toolbar {
+    display: none;
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--ink);
+    color: var(--paper);
+    padding: 12px 20px;
+    border-radius: 6px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+    display: none;
+    align-items: center;
+    gap: 16px;
+    z-index: 999;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    white-space: nowrap;
+  }
+  .edit-toolbar.visible { display: flex; }
+  .edit-toolbar-label { color: #888; letter-spacing: 1px; text-transform: uppercase; font-size: 9px; }
+  .et-btn {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 5px 12px;
+    border-radius: 3px;
+    cursor: pointer;
+    border: none;
+  }
+  .et-done { background: var(--green); color: white; }
+  .et-done:hover { background: #155235; }
+  .et-reset { background: none; color: #888; border: 1px solid #333; }
+  .et-reset:hover { color: var(--paper); border-color: #666; }
+
+  /* Week-level reset button (only in edit mode) */
+  .wk-reset-btn {
+    display: none;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border: 1px solid #f5c0b8;
+    border-radius: 2px;
+    background: none;
+    color: var(--red);
+    cursor: pointer;
+    margin-left: 4px;
+  }
+  .edit-mode .wk-reset-btn { display: inline-block; }
+
   /* ===== RUN LOGGING ===== */
 
   /* Day card hover shows log affordance */
@@ -766,7 +857,15 @@
   <button class="nav-btn" onclick="show('p4',this)">④ Peak</button>
   <button class="nav-btn" onclick="show('p5',this)">⑤ Taper</button>
   <button class="nav-btn" onclick="show('pn',this)">✦ Coach Notes</button>
+  <button class="customize-btn" id="customize-btn" onclick="toggleEditMode(this)" style="margin-left:auto;">✎ Customize Plan</button>
 </nav>
+
+<!-- Edit mode floating toolbar -->
+<div class="edit-toolbar" id="edit-toolbar">
+  <span class="edit-toolbar-label">✎ Editing Plan</span>
+  <button class="et-btn et-reset" onclick="resetAllEdits()">Reset All to Original</button>
+  <button class="et-btn et-done" onclick="toggleEditMode(document.getElementById('customize-btn'))">✓ Done</button>
+</div>
 
 <div class="main">
 
@@ -1631,6 +1730,133 @@
 </div><!-- end main -->
 
 <script>
+// ===== CUSTOMIZE / EDIT MODE =====
+
+function getPlanEdits() {
+  try { return JSON.parse(localStorage.getItem('planEdits')) || {}; }
+  catch { return {}; }
+}
+function savePlanEdits(obj) {
+  localStorage.setItem('planEdits', JSON.stringify(obj));
+}
+
+function initEditable() {
+  for (var w = 1; w <= 18; w++) {
+    var wk = document.getElementById('w' + w);
+    if (!wk) continue;
+
+    // Week name (in wk-head)
+    var wkName = wk.querySelector('.wk-name');
+    if (wkName) {
+      wkName.setAttribute('data-ekey', 'w' + w + '_name');
+      wkName.setAttribute('data-orig', wkName.innerHTML);
+    }
+
+    // Coach note
+    var note = wk.querySelector('.coach-note');
+    if (note) {
+      note.setAttribute('data-ekey', 'w' + w + '_coachnote');
+      note.setAttribute('data-orig', note.innerHTML);
+    }
+
+    // Day fields
+    wk.querySelectorAll('.day').forEach(function(day) {
+      var lbl = day.querySelector('.d-label');
+      if (!lbl) return;
+      var dk = lbl.textContent.trim().toLowerCase().replace(/[^a-z]/g, '').substring(0, 3);
+      [['d-main','main'],['d-detail','detail'],['d-miles','miles']].forEach(function(pair) {
+        var el = day.querySelector('.' + pair[0]);
+        if (!el) return;
+        var key = 'w' + w + '_' + dk + '_' + pair[1];
+        el.setAttribute('data-ekey', key);
+        el.setAttribute('data-orig', el.innerHTML);
+      });
+    });
+
+    // Add per-week Reset button to wk-head badges area
+    var badges = wk.querySelector('.wk-badges');
+    if (badges) {
+      var rb = document.createElement('button');
+      rb.className = 'wk-reset-btn';
+      rb.textContent = '↺ Reset Week';
+      rb.setAttribute('data-wk', w);
+      rb.onclick = function(e) { e.stopPropagation(); resetWeekEdits(parseInt(this.getAttribute('data-wk'))); };
+      badges.appendChild(rb);
+    }
+  }
+
+  // Restore saved edits
+  var edits = getPlanEdits();
+  Object.keys(edits).forEach(function(key) {
+    var el = document.querySelector('[data-ekey="' + key + '"]');
+    if (el) el.innerHTML = edits[key];
+  });
+}
+
+var _editHandler = null;
+var _keydownHandler = null;
+
+function toggleEditMode(btn) {
+  var isEditing = document.body.classList.toggle('edit-mode');
+  btn.textContent = isEditing ? '✓ Done Editing' : '✎ Customize Plan';
+  btn.classList.toggle('editing', isEditing);
+
+  var toolbar = document.getElementById('edit-toolbar');
+  if (toolbar) toolbar.classList.toggle('visible', isEditing);
+
+  if (isEditing) {
+    _editHandler = function(e) {
+      var key = e.target.getAttribute('data-ekey');
+      if (!key) return;
+      var edits = getPlanEdits();
+      edits[key] = e.target.innerHTML;
+      savePlanEdits(edits);
+    };
+    _keydownHandler = function(e) {
+      if (e.key === 'Enter') {
+        var el = e.target;
+        // Single-line fields: prevent newline, blur instead
+        if (el.classList.contains('d-main') || el.classList.contains('d-miles') ||
+            el.classList.contains('wk-name')) {
+          e.preventDefault();
+          el.blur();
+        }
+      }
+      if (e.key === 'Escape') { e.target.blur(); }
+    };
+    document.querySelectorAll('[data-ekey]').forEach(function(el) {
+      el.contentEditable = 'true';
+      el.addEventListener('input', _editHandler);
+      el.addEventListener('keydown', _keydownHandler);
+    });
+  } else {
+    document.querySelectorAll('[data-ekey]').forEach(function(el) {
+      el.contentEditable = 'false';
+      if (_editHandler) el.removeEventListener('input', _editHandler);
+      if (_keydownHandler) el.removeEventListener('keydown', _keydownHandler);
+    });
+  }
+}
+
+function resetWeekEdits(weekNum) {
+  var wk = document.getElementById('w' + weekNum);
+  if (!wk) return;
+  var edits = getPlanEdits();
+  wk.querySelectorAll('[data-ekey]').forEach(function(el) {
+    el.innerHTML = el.getAttribute('data-orig');
+    delete edits[el.getAttribute('data-ekey')];
+  });
+  savePlanEdits(edits);
+}
+
+function resetAllEdits() {
+  if (!confirm('Reset the entire plan back to the original? All your customizations will be lost.')) return;
+  localStorage.removeItem('planEdits');
+  document.querySelectorAll('[data-ekey]').forEach(function(el) {
+    el.innerHTML = el.getAttribute('data-orig');
+  });
+}
+
 // ===== RUN LOG =====
 
 function getRunLog() {
@@ -1967,7 +2193,8 @@ function initCurrentWeek() {
 
 // ===== INIT =====
 document.addEventListener('DOMContentLoaded', function() {
-  initLogButtons();   // must run before renderProgress so d-miles data-planned is set
+  initEditable();     // first: tag fields + restore saved customizations
+  initLogButtons();   // second: add log buttons, reads .d-miles for planned text
   renderProgress();
   initCurrentWeek();
 });
